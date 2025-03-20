@@ -1,0 +1,49 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.SurveyVoteQA.QA
+@page "/encuesta/{SurveyId}"
+@inherits SurveyQABase
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title customBreakWord">
+                        Encuesta
+                    </h3>
+                </div>
+            </div>
+      
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+
+                    <QA Id="@SurveyId"></QA>
+
+
+                 
+            </div>
+            <!-- End Card -->
+               
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+@code {
+
+}

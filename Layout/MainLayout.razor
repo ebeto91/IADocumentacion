@@ -1,0 +1,323 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@* @page "/"  *@
+@inherits MainBase
+<div class="page">
+    @*     <div class="sidebar">
+    <NavMenu />
+    </div> *@
+    <!-- Topbar Start -->
+    <div class="w-100">
+        <!-- Topbar Start -->
+        <div class="container-fluid bg-dark px-0">
+            <div class="row g-0 d-none d-lg-flex">
+                <div class="col-lg-12 container-first-navbar">
+                    <div class="h-100 d-inline-flex align-items-center">
+                        <a href="#" class="icon-color">
+                            <div class="container-link-ref">
+
+                                <div class="icon-link-ref">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </div>
+                                <span class="text-hover"> <a href="tel:2550-4400"> <span class="text-hover"> (+506) 2550-4400</span> </a> </span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="h-100 d-inline-flex align-items-center">
+                        <a href="#" class="icon-color">
+                            <div class="container-link-ref">
+
+                                <div class="icon-link-ref">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
+                                <span class="text-hover"> portal@muni-carta.go.cr</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="icon-social-media">
+                        <div class="icon icon-facebook">
+                            <a href="https://www.facebook.com/munidecartago/" target="_blank" class="icon-color"><i class="bi bi-facebook"></i></a>
+                        </div>
+                        <div class="icon icon-twitter">
+                            <a href="https://x.com/cartagomuni" target="_blank" class="icon-color"><i class="bi bi-twitter-x "></i></a>
+                        </div>
+                        <div class="icon icon-youtube">
+                            <a href="https://www.youtube.com/channel/UCxV_61V-gV_Id3siT9wZGGQ/videos" target="_blank" class="icon-color"><i class="bi bi-youtube"></i></a>
+                        </div>
+                        <div class="icon icon-instagram">
+                            <a href="https://www.instagram.com/municartago/" target="_blank" class="icon-color"><i class="bi bi-instagram "></i></a>
+                        </div>
+                        <div class="icon icon-tiktok">
+                            <a href="https://www.tiktok.com/discover/municipalidad-de-cartago" target="_blank" class="icon-color"><i class="bi bi-tiktok "></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="container-navbar">
+                <div class="image-container">
+                    <img src="https://www.muni-carta.go.cr/wp-content/uploads/2023/10/logo-municipalidad-cartago.png" alt="logo municipalidad cartago" class="image-logo" />
+
+                    <div class="item-menu-container">
+
+                      @*   <a href="#"
+                           class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+                           data-toggle="collapse"
+                           data-target="#main-navbar">
+                            <span></span>
+                        </a> *@
+                        @*
+                        <button type="button" class="navbar-toggler me-0 site-menu-toggle js-menu-toggle" data-bs-toggle="collapse" data-bs-target="#main-navbar">
+                        <i class="bi bi-list"></i>
+                        </button>
+                        *@
+                        @*          <button type="button" class="navbar-toggler me-0" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <i class="bi bi-list"></i>
+                        </button> *@
+                    </div>
+                </div>
+
+                <div class="text-principal-container">
+                    <h1>
+                        Sistema de Gestión Ciudad Municipal
+                    </h1>
+                </div>
+                <AuthorizeView>
+                    <Authorized>
+                        <div class="container-profile-user">
+                            @if (!string.IsNullOrEmpty(userId))
+                            {
+                                @if (roleName != ROLEAUDITORIA.Usuario)
+                                {
+                                    <Notifications UserId="@userId"></Notifications>
+                                }
+                            }
+                        
+
+
+
+                            <div class="item-user-container">
+
+                                <div class="menu-container">
+                                    <div class="user-menu">
+                                        <span class="user-name"> <i class="bi bi-person-fill"></i>@name</span>
+                                        <div class="dropdown-menu-custom">
+                                            <a href="miperfil"><span class="customLogout"><i class="bi bi-person-fill"></i></span>Mi Perfil</a>
+                                            <a class="customLogout" @onclick="HandleLogout"><span class="customLogout"><i class="bi bi-box-arrow-in-left"></i></span> Salir</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </Authorized>
+                    <NotAuthorized>
+                        <div class="item-user-container">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            <a style="font-size:17px;color:white;" href="login">Ingresar</a>
+                        </div>
+                    </NotAuthorized>
+                </AuthorizeView>
+
+
+            </div>
+
+        </div>
+        <!-- Topbar End -->
+
+
+        <div>
+
+            <div class="site-mobile-menu site-navbar-target">
+                <div class="site-mobile-menu-header">
+                    <div class="site-mobile-menu-close">
+                        <span class="icofont-close js-menu-toggle"></span>
+                    </div>
+                </div>
+                <div class="site-mobile-menu-body"></div>
+            </div>
+
+
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top navbar-style">
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav js-clone-nav">
+                        <AuthorizeView>
+                            <Authorized>
+                                @foreach (var item in menuDtos)
+                                {
+                                    if (item.ListMenuDto != null && item.ListMenuDto.Count > 0)
+                                    {
+                                        <div class="nav-item-style nav-item dropdown">
+                                            <a href="#" class="nav-item-style nav-link dropdown-toggle" data-bs-toggle="dropdown">@item.Name</a>
+                                            <div class="dropdown-menu dropdown-menu-sub-items m-0">
+                                                @foreach (var itemSub in item.ListMenuDto)
+                                                {
+                                                    <a @onclick="()=>HandleNav(item.ModuleUrl+'/'+itemSub.MenuModuleItemUrl)" class="dropdown-item dropdown-sub-item">@itemSub.Name</a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <a class="nav-item nav-link nav-item-style" @onclick="()=>HandleNav(item.ModuleUrl)">@item.Name  </a>
+                                    }
+
+                                }
+                                @*   <a href="index.html" class="nav-item nav-link nav-item-style">Gestion ciudadana</a>
+                                <a href="about.html" class="nav-item-style nav-item nav-link  active ">Memoria institucional</a>
+                                <a href="service.html" class="nav-item nav-link nav-item-style">Encuestas y votaciones</a>
+                                <a href="product.html" class="nav-item nav-link nav-item-style">Participación ciudadana</a>
+                                <div class="nav-item-style nav-item dropdown">
+                                <a href="#" class="nav-item-style nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                                <div class="dropdown-menu bg-light m-0">
+                                <a href="gallery.html" class="dropdown-item">Gallery</a>
+                                <a href="feature.html" class="dropdown-item">Features</a>
+                                <a href="team.html" class="dropdown-item">Our Team</a>
+                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                                <a href="404.html" class="dropdown-item">404 Page</a>
+                                </div>
+                                </div>
+                                <a href="contact.html" class="nav-item nav-link nav-item-style">Estadísticas</a>
+
+                                <a href="contact.html" class="nav-item nav-link nav-item-style">Catálogos</a> *@
+
+                            </Authorized>
+                        </AuthorizeView>
+                    </div>
+                </div>
+            </nav>
+
+            <AuthorizeView>
+                <Authorized>
+                    <button class="hamburger" onclick="toggleMenu()">☰</button>
+                    <nav class="navLateral" id="sidebar">
+
+                        <ul>
+                            @foreach (var item in menuDtos)
+                            {
+                                if (item.ListMenuDto != null && item.ListMenuDto.Count > 0)
+                                {
+                                    <li>
+                                        <a>@item.Name</a>
+                                        <ul>
+                                            @foreach (var itemSub in item.ListMenuDto)
+                                            {
+                                                <li><a @onclick="()=>HandleNav(item.ModuleUrl+'/'+itemSub.MenuModuleItemUrl)">@itemSub.Name</a></li>
+
+                                            }
+
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li><a @onclick="()=>HandleNav(item.ModuleUrl)">@item.Name</a></li>
+                                }
+                            }
+
+
+                        </ul>
+                    </nav>
+                </Authorized>
+            </AuthorizeView>
+
+            @*             <nav class="site-nav">
+            <div class="container">
+            <div class="menu-bg-wrap">
+            <div class="site-navigation">
+            <a href="index.html" class="logo m-0 float-start">Property</a>
+
+            <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+            <li><a href="index.html">Home</a></li>
+            <li class="has-children">
+            <a href="properties.html">Properties</a>
+            <ul class="dropdown">
+            <li><a href="#">Buy Property</a></li>
+            <li><a href="#">Sell Property</a></li>
+            <li class="has-children">
+            <a href="#">Dropdown</a>
+            <ul class="dropdown">
+            <li><a href="#">Sub Menu One</a></li>
+            <li><a href="#">Sub Menu Two</a></li>
+            <li><a href="#">Sub Menu Three</a></li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><a href="services.html">Services</a></li>
+            <li class="active"><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+
+
+            </div>
+            </div>
+            </div>
+            </nav> *@
+
+            <!-- Navbar End -->
+            <div class="content px-4 main-wrapper">
+                <AuthorizeView>
+                    <Authorized>
+                        @Body
+                    </Authorized>
+                    <NotAuthorized>
+                       <RAS823_MC_CiudadMunicipal_FrontEnd.Layout.AnimationLogOut.LoginAgainAnimation></RAS823_MC_CiudadMunicipal_FrontEnd.Layout.AnimationLogOut.LoginAgainAnimation>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+            <div style="color-scheme: light;">
+                <BlazorSpinner.Spinner Icon="loading.svg" Text="Cargando, Por Favor Espera..."></BlazorSpinner.Spinner>
+            </div>
+            <div class="njs-sticky-side body-append image_button_cover placement-right now-show">
+                <Accessibility />
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+@code {
+    private IJSObjectReference? module;
+
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; }
+
+
+
+
+
+
+    public async ValueTask DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import",
+                "./Layout/MainLayout.razor.js");
+            await module.InvokeVoidAsync("siteMenuClone");
+        }
+
+    }
+
+    public async Task HandleMenuPerfil()
+    {
+        await module.InvokeVoidAsync("SeeMenu");
+    }
+
+
+}

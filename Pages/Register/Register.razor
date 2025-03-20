@@ -1,0 +1,84 @@
+﻿@inherits RegisterBase
+@page "/registro"
+@layout LoginLayou
+
+@using System.ComponentModel.DataAnnotations
+@inject IJSRuntime JSRuntime
+<div class="containerLogin">
+    <h3 style="">Registrarse</h3>
+    <div class="containerText">
+        <p>Rellene todos los campos para crear una cuenta.</p>
+    </div>
+
+    <div class="containerForm">
+
+        <div class="container-register">
+            <p>¿Ya tiene una cuenta?</p>
+            <a href="/login" style="color: #1E98D7;">Inicie Sesión</a>
+        </div>
+        <EditForm Model="userRegisterDto" FormName="Login" OnValidSubmit="HandleRegister" OnInvalidSubmit="HandleInvalidSubmit">
+            <DataAnnotationsValidator />
+            <div class="customGrid">
+
+                <div class="form-group marginCustom">
+                    <label for="tipoCedula">Tipo Cédula</label>
+                    <Select OnSelectedItemChanged="OnItemChanged" Items="items" id="tipoCedula" @bind-Value="userRegisterDto.IdentificationTypeId"></Select>
+                    <ValidationMessage id="msgErrorLengt" For="@(() => userRegisterDto.IdentificationTypeId)" />
+                </div>
+                <div class="form-group marginCustom">
+                    <label for="cedula">Cédula</label>
+                    <InputText id="cedula"  class="form-control customInput" type="text" @bind-Value="userRegisterDto.Identification"></InputText>
+                    <ValidationMessage For="@(() => userRegisterDto.Identification)" />
+                </div>
+
+                <div class="form-group marginCustom">
+                    <label for="nombre">Nombre</label>
+                    <InputText id="nombre" class="form-control customInput" type="text" @bind-Value="userRegisterDto.Name"></InputText>
+                    <ValidationMessage For="@(() => userRegisterDto.Name)" />
+                </div>
+
+                <div class="form-group marginCustom">
+                    <label for="apellidos">Apellidos</label>
+                    <InputText id="apellidos" class="form-control customInput" type="text" @bind-Value="userRegisterDto.Lastname"></InputText>
+                    <ValidationMessage For="@(() => userRegisterDto.Lastname)" />
+                </div>
+
+            <div class="form-group marginCustom">
+                <label for="email">Correo Electrónico</label>
+                    <InputText id="email" class="form-control customInput" type="email" @bind-Value="userRegisterDto.EmailAddress"></InputText>
+                    <ValidationMessage For="@(() => userRegisterDto.EmailAddress)" />
+            </div>
+
+
+                <div class="form-group marginCustom ">
+                    <label for="telefono">Teléfono</label>
+                    <InputText id="telefono" class="form-control customInput"  @bind-Value="userRegisterDto.PhoneNumber" type="number"></InputText>
+                    <ValidationMessage For="@(() => userRegisterDto.PhoneNumber)" />
+                </div>
+
+                <div class="form-group marginCustom">
+                <label for="contrasena">Contraseña</label>
+                    <InputText id="contrasena" class="form-control customInput" type="password" @bind-Value="userRegisterDto.Password"></InputText>
+                    <ValidationMessage For="@(() => userRegisterDto.Password)" />
+            </div>
+
+                 <div class="form-group marginCustom">
+                    <label for="contrasenaConfirmar">Confirmar Contraseña</label>
+                    <InputText id="contrasenaConfirmar" class="form-control customInput" type="password" @bind-Value="userRegisterDto.PasswordConfirmar"></InputText>
+                    <ValidationMessage For="@(() => userRegisterDto.PasswordConfirmar)" />
+                </div> 
+            </div>
+           
+            <div class="containerMainBtn">
+            <div class="containerBtn">
+                    <input type="submit" class="customButton" disabled="@(!isFormValid)" value="Registrarme" />
+                <i class="bi bi-lock customIcon"></i>
+            </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+   
+}

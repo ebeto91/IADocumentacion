@@ -1,0 +1,52 @@
+﻿.input-submit-icon {
+    position: relative;
+    display: inline-block;
+}
+
+    .input-submit-icon input {
+        font-size: 16px;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        width: 150px;
+    }
+
+        .input-submit-icon input:hover {
+            background-color: #0056b3;
+        }
+
+/*.input-submit-icon::before {
+        content: "\F64D";*/ /* Código Unicode del ícono (Font Awesome) */
+/*font-family: "bootstrap-icons";
+        font-weight: 900;
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        font-size: 18px;
+    }*/
+.custom-button-close {
+    border: 2px solid var(--bb-red);
+    background-color: var(--bb-red);
+}
+
+    .custom-button-close:hover {
+        background-color: var(--bb-red-hover);
+    }
+
+.custom-buttons {
+    margin-top: 10px;
+    row-gap: 5px;
+}
+
+@media (max-width: 767px) {
+    .custom-buttons {
+        gap: 8px;
+    }
+
+    .input-submit-icon input {
+        width: 100%;
+    }
+}

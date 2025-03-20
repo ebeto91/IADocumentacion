@@ -1,0 +1,22 @@
+{
+  "name": "RAS823_MC_CiudadMunicipal_FrontEnd",
+  "short_name": "RAS823_MC_CiudadMunicipal_FrontEnd",
+  "id": "./",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#03173d",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
+}

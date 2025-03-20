@@ -1,0 +1,262 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Survey
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@inherits SecondStepSurveyEditBase
+<div>
+    <EditForm Model="@ModelData" Context="formContext">
+        <div class="row">
+
+
+            <div class="mt-4 col-lg-12 col-sm-12 text-center mb-2">
+                <div class="form-group ">
+                    <label>
+                        Imagen Principal
+                    </label>
+
+
+                    <div class="containerInput">
+                        <InputFile style="display:none !important;" class="noShow" id="inputNewFile" OnChange="OnInputFilePrincipalImageChange" accept="image/*"></InputFile>
+                        <label for="inputNewFile">
+                            <i class="bi bi-cloud-arrow-up"></i> &nbsp; Seleccionar nuevo(s)
+                        </label>
+                    </div>
+                    @if (!string.IsNullOrEmpty(ModelData.UrlPrincipal))
+                    {
+                        <div class="containerImage">
+
+                            <img class="customImg" src="@ModelData.UrlPrincipal" />
+
+                        </div>
+                        <div class="container-button-delete">
+                            <Button Text="Borrar" Size="Size.Large" Color="Color.Danger" Icon="bi bi-x-circle" @onclick='()=>HandleDeleteImage()' />
+                        </div>
+
+                    }
+
+
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="text-center">
+                <h3 class="principal-title">
+                    Documentos de encuesta
+                </h3>
+            </div>
+            <div class="row custom-buttons">
+                <div class="d-flex-center col-12 mt-2 mb-2">
+
+                    <div class="containerInput">
+                        <InputFile style="display:none !important;" class="noShow" id="inputFile" OnChange="OnInputFileChange" multiple accept=".pdf,.gif,.csv,.xlsx,.jpg,.jpeg,.png,.doc,.docx"></InputFile>
+                        <label for="inputFile">
+                            <i class="bi bi-cloud-arrow-up"></i> &nbsp; Seleccionar nuevo(s)
+                        </label>
+                    </div>
+
+
+                </div>
+            </div>
+            <div>
+                <Table TItem="SurveyAttachedDocumentDto" @ref="Table" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                       OnQueryAsync="@OnQueryAsync"
+                       IsStriped="true" IsBordered="true"
+                       ShowSkeleton="true">
+                    <TableColumns>
+                        <TableColumn @bind-Field="@context.FileName" Width="170" TextWrap="true" Filterable="false" Text="Nombre">
+                            <Template Context="value">
+                                <div> <a href="@value.Row.FilePath" target=”_blank”> <i class="bi bi-box-arrow-in-up-right"></i> @value.Row.FileName </a></div>
+                            </Template>
+                        </TableColumn>
+
+                        <TableColumn @bind-Field="@context.MimeType" Width="170" TextWrap="true" Filterable="false" Text="Tipo">
+                            <Template Context="value">
+                                <div>    @value.Row.MimeType  </div>
+                            </Template>
+                        </TableColumn>
+
+                        <TableColumn @bind-Field="@context.Id" Text="" Width="80">
+                            @* Template Botones *@
+                            <Template Context="v">
+                                <div class="custom-button-container">
+                                    <AuthorizeScopeDirective Scope="Edit:WorkTask">
+                                        <Button Text="Eliminar" Icon="bi bi-trash-fill item-button" @onclick='(() => deleteInfo(v))' Color="Color.Danger" />
+                                    </AuthorizeScopeDirective>
+                                </div>
+                            </Template>
+                        </TableColumn>
+
+                    </TableColumns>
+                </Table>
+            </div>
+        </div>
+        <div>
+            <div>
+                <div class="divider-data mt-2 mb-2"></div>
+                <div class="text-center">
+                    <h3 class="principal-title">
+                        Agregar Imagenes Preguntas
+                    </h3>
+                </div>
+                @if (isReadyPage)
+                {
+                    <Row ItemsPerRow="ItemsPerRow.One">
+                        <ListView TItem="SurveyQuestionDto" Items="@ModelData.SurveyQuestions">
+                            <BodyTemplate>
+                                <Card IsShadow="true">
+                                    <BodyTemplate>
+                                        <div id="@context.Id">
+                                            <div class="container-buttons-survey">
+                                                <div class="col-lg-3 col-sm-12">
+                                                    <div class="form-group ">
+
+
+                                                        <div class="form-floating">
+                                                            <InputText class="form-control disable" @bind-Value="@context.OrderString" type="number" placeholder="Número de orden" readonly />
+                                                            <label for="floatingInput">Número de orden</label>
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="divider-data mt-2 mb-2"></div>
+
+                                            <div class="container-data-survey">
+                                                <div class="row">
+                                                    <div class="mt-2 col-lg-12 col-sm-12">
+                                                        <div class="form-group ">
+                                                            <label><strong> @GetTypeToShow(context.Type) </strong> </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-2 col-lg-12 col-sm-12">
+                                                        <div class="form-group ">
+                                                            <label>Pregunta. @context.Order * </label>
+                                                            <InputText class="form-control disable" @bind-Value="@context.Title" readonly></InputText>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                                @if(context.Type != SURVEYQUESTIONTYPE.SHORT_RESPONSE){
+                                                <div class="row  align-center">
+                                                    <div class="mt-2 col-lg-9 col-sm-12">
+                                                        <div class="form-group ">
+                                                            <label>Nota Adicional </label>
+                                                            <InputText class="form-control disable" @bind-Value="@context.Note" readonly></InputText>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-2 col-lg-3 col-sm-12">
+
+                                                        <span class="form-check-label TextSwitch">
+                                                            Agregar: Respuesta Abierta @(context.AllowOtherValue ? "Si" : "No")
+                                                        </span>
+
+                                                    </div>
+                                                </div>
+                                                }
+
+                                                <div class="row custom-margin-questions"
+                                                     style="@(context.Type != SURVEYQUESTIONTYPE.SHORT_RESPONSE ? "display: block" : "display:none")">
+                                                    @for (int i = 0; i < context.SurveyQuestionOptions.Count; i++)
+                                                    {
+                                                        var item = context.SurveyQuestionOptions[i];
+
+                                                        <EditForm Model="@item" Context="formContextItem">
+                                                            <DataAnnotationsValidator />
+                                                            <div class="row">
+                                                                <div class="col-lg-6 col-sm-12 mt-2">
+                                                                    <div class="form-group">
+                                                                        <label> Respuesta. @item.Order </label>
+
+                                                                        <InputText class="form-control disable" @bind-Value="@item.Description" readonly></InputText>
+
+
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                                <div class="col-lg-6 col-sm-12 container-items-response mt-2">
+
+                                                                    <div class="mt-2">
+                                                                        @{
+                                                                            string name = @GetIdItem("input-file-", item.Id);
+                                                                            <div class="containerInput">
+                                                                                <InputFile style="display:none !important;" class="noShow" id="@name" OnChange="((e) => OnInputFileItemChangeFromItemList(e,item))" accept="image/*"></InputFile>
+                                                                                <label for="@name">
+                                                                                    <i class="bi bi-cloud-arrow-up"></i> &nbsp; Seleccionar nuevo(s)
+                                                                                </label>
+                                                                            </div>
+                                                                            @if (!string.IsNullOrEmpty(item.Url))
+                                                                            {
+                                                                                <div class="containerImage">
+
+                                                                                    <img class="customImg" src="@item.Url" />
+
+                                                                                </div>
+                                                                                <div class="container-button-delete">
+                                                                                    <Button Text="Borrar" Size="Size.Large" Color="Color.Danger" Icon="bi bi-x-circle" @onclick='()=>HandleDeleteImageFromItemList(item)' />
+                                                                                </div>
+                                                                            }
+                                                                        }
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="divider-data mt-2 mb-2"></div>
+
+                                                        </EditForm>
+
+                                                    }
+
+
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+
+                                    </BodyTemplate>
+                                </Card>
+                            </BodyTemplate>
+
+                        </ListView>
+
+                    </Row>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="mt-2">
+
+            <div class="row custom-buttons">
+
+                <div class="d-flex-center col-md-6 col-sm-12">
+                    <button type="button" class="back-button button-general-form" @onclick="backToFirstStep">
+                        Paso Anterior
+                    </button>
+                </div>
+
+                <div class="d-flex-center col-md-6 col-sm-12">
+
+                    <AuthorizeScopeDirective Scope="Create:Survey">
+                        <Button Text="Guardar" Color="Color.Success" Icon="bi bi-check" @onclick="()=>sendToSave(formContext)" />
+                    </AuthorizeScopeDirective>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </EditForm>
+</div>

@@ -1,0 +1,132 @@
+﻿@page "/gestionCiudadana/denuncias/editar/seguimiento/{workTaskId}"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.CatalogDto
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Users
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.WorkTask
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.WorkTask.WorkTaskKanban
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.ControlInternalComplaint.ControlInternalComplaintFollowing.Tabs.Details
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.ControlInternalComplaint.ControlInternalComplaintFollowing.Tabs.Historial
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Templates.TableFilters
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.WorkTasks.Edit.Tabs.Attachments
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.WorkTasks.Edit.Tabs.Details
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.WorkTasks.Edit.Tabs.Historial
+@inherits ControlInternalComplaintFollowingBase
+
+<div>
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">
+                        Denuncia - detalle
+                    </h3>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a>Gestión Ciudadana</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <a>Denuncia</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    <div class="mb-2">
+                        <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goToList" />
+                    </div>
+
+                    <div>
+                        <div>
+
+                            <div class="w-100">
+
+
+                                <Tab IsBorderCard="true" Text="Count" @ref="TabSetTemplate">
+                                    <TabItem Text="Detail">
+                                        <HeaderTemplate>
+                                            <div class="@GetClassString(context)" @onclick="() => OnClickTabItem(context)">
+                                                <i class="bi bi-info-lg"></i>
+                                                <h6 class="mx-2">Detalles</h6>
+                                            </div>
+                                        </HeaderTemplate>
+                                        <ChildContent>
+                                            @* userForListWithDepartment="userForListWithDepartment" *@
+                                            <EditComplaintDetails @ref="editComplaintDetails" IsActive="IsActiveDetail" 
+                                                                 departmentListData="departmentListData"
+                                                                  listCatalogData="listCatalogData"
+                                                                  ActionChild="ActionComponentFather"
+                                                                  workTaskResponseDetail="workTaskResponseDetail"
+                                                                  ></EditComplaintDetails>
+
+                                        </ChildContent>
+
+                                    </TabItem>
+                                    @*      <TabItem Text="Attachments">
+                                    <HeaderTemplate>
+                                    <div class="@GetClassString(context)" @onclick="() => OnClickTabItem(context)">
+                                    <i class="bi bi-paperclip"></i>
+                                    <h6 class="mx-2">Documentos</h6>
+
+                                    </div>
+                                    </HeaderTemplate>
+                                    <ChildContent>
+                                    <EditWorkTasksAttachments IsActive="IsActiveAttachments"></EditWorkTasksAttachments>
+                                    </ChildContent>
+                                    </TabItem>
+                                    *@
+
+                                    <TabItem Text="History">
+                                        <HeaderTemplate>
+                                            <div class="@GetClassString(context)" @onclick="() => OnClickTabItem(context)">
+                                                <i class="bi bi-hourglass-split"></i>
+                                                <h6 class="mx-2">Historial</h6>
+                                            </div>
+                                        </HeaderTemplate>
+                                        <ChildContent>
+                                            <EditComplaintHistorial @ref="editComplaintHistorial"></EditComplaintHistorial>
+                                        </ChildContent>
+                                    </TabItem>
+                                </Tab>
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+
+

@@ -1,0 +1,219 @@
+﻿@page "/encuestas"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@inherits ControlInternalSurveyListBase
+
+
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">Manejo de encuestas y votaciones</h3>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a>Encuestas y votaciones</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    @if (surveyInputDto != null)
+                    {
+                        <div>
+                            <div class="row align-center">
+                                <div class="mt-3 col-lg-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label>Buscar por título</label>
+                                        <InputText class="form-control" @bind-Value="surveyInputDto.Title"></InputText>
+
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 col-lg-6 col-sm-12 customBtnCreateResults" style="display:flex;justify-content:space-around;">
+                                    <Button Text="Crear nuevo" Icon="bi bi-plus" @onclick="()=>createNewInternal()" />
+                                    <Button Text="Resultados" Icon="bi bi-graph-up-arrow" @onclick="()=>viewResultsInternal()" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="mt-3 col-lg-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label>Filtrar por Estado</label>
+                                        <Select Items="listSelectStatus" @bind-Value="surveyInputDto.Status"></Select>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 col-lg-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label>Filtrar por Tipo</label>
+                                        <Select Items="listSelectType" @bind-Value="surveyInputDto.TypeSurvey"></Select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mt-3 col-lg-6 col-sm-12 text-center">
+                                    <Button Text="Buscar" Icon="bi bi-search" @onclick="()=>searchData()" />
+                                </div>
+
+
+
+                            </div>
+
+                            @if (listSurvey != null && listSurvey.items != null)
+                            {
+                                <div class="row container-list-task mt-3">
+                                    @foreach (var item in listSurvey.items)
+                                    {
+                                        <div class="col-lg-5 col-sm-12 card custom-card">
+                                            <div class="card-header card-header-kanban-item">
+                                                <p class="card-header-kanban-item-tittle"> @item.Title </p>
+                                                <div class="item-icons">
+                                                    <AuthorizeScopeDirective Scope="Detail:Survey">
+                                                        <i class="bi bi-eye-fill" style="cursor:pointer;" @onclick="()=>goToProcessDetail(item)"></i>
+                                                    </AuthorizeScopeDirective>
+                                                    @* item.Status == CONFIG_APROVE.NOTPUBLISHED || item.Status == CONFIG_APROVE.PUBLISHED || *@
+                                                    @if (item.Status == CONFIG_APROVE.INREVIEW)
+                                                    {
+                                                        <AuthorizeScopeDirective Scope="Edit:Survey">
+                                                            <i class="bi bi-clipboard2-pulse" style="cursor:pointer;" @onclick="()=>goToProcessReview(item)"></i>
+                                                        </AuthorizeScopeDirective>
+                                                    }
+
+                                                    @if (item.AllowInformationEdit && (item.Status != CONFIG_APROVE.FINISHED && item.Status != CONFIG_APROVE.DENIED) && (item.DueRate > DateTime.Today))
+                                                    {
+                                                        <AuthorizeScopeDirective Scope="Edit:Survey">
+                                                            <i class="bi bi-pencil-square" style="cursor:pointer;" @onclick="()=>goToProcessEditProcess(item)"></i>
+                                                        </AuthorizeScopeDirective>
+                                                    }
+
+
+                                                </div>
+
+                                            </div>
+                                            <div class="card-body">
+                                                <p> @item.Description </p>
+                                            </div>
+
+                                            <div class="card-footer card-footer-custom text-body-secondary">
+                                                <div class="footer-card-kanban">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <p class="card-text">Fecha Inicio: @getDateFormatDisplay(item.StartDate)</p>
+                                                        </div>
+                                                        <div class="col-sm-12">
+                                                            <p class="card-text">Fecha Finalización: @getDateFormatDisplay(item.DueRate)</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="divider-data mt-2"></div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-sm-12">
+                                                            <p class="card-text">Tipo: @getDisplayData(item.TypeSurvey)</p>
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-sm-12">
+                                                            <p class="card-text">Estado: @getDisplayData(item.Status)</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="divider-data mt-2"></div>
+
+                                                    <div class="row mt-1">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-sm-12">
+                                                                <p class="card-text">
+                                                                    ¿Mostrar resultados siempre? @(item.ShowResultsAlways ? "Si" : "Al finalizar")
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="col-lg-6 col-sm-12">
+                                                                <p class="card-text">Dirigido a: @getDisplayData(item.TypeCreation)</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="row mt-1">
+                                                    @if(item.DueRate > DateTime.Today){
+                                                        @if (item.Status != null)
+                                                        {
+                                                            <div class="col-lg-6 col-sm-12 mt-1">
+                                                                @if ((item.Status == CONFIG_APROVE.PUBLISHED))
+                                                                {
+                                                                    <Button Text="Cambiar a no publicada" Icon="bi bi-ban" @onclick="()=>changeStatusPublication(item, CONFIG_APROVE.NOTPUBLISHED)" />
+                                                                }
+                                                                else
+                                                                {
+                                                                    if ((item.Status == CONFIG_APROVE.NOTPUBLISHED))
+                                                                    {
+                                                                        <Button Text="Cambiar a publicada" Icon="bi bi-clipboard2-check" @onclick="()=>changeStatusPublication(item, CONFIG_APROVE.PUBLISHED)" />
+                                                                    }
+                                                                }
+
+                                                            </div>
+
+                                                        }
+                                                        @if (item.Status != null && item.Status == CONFIG_APROVE.PUBLISHED)
+                                                        {
+                                                            @if (item.AllowVoteOpen == true)
+                                                            {
+                                                                <div class="col-lg-6 col-sm-12 mt-1">
+                                                                    <Button Text="Copiar enlace" Icon="bi bi-copy" @onclick="()=>copyLink(item)" />
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <Pagination PageCount="@totalAcountPages" PageIndex="@actualPageIndex" ShowPageInfo="true" OnPageLinkClick="@OnPageClick" Alignment="Alignment.Left" />
+                                </div>
+                            }
+
+                        </div>
+
+
+
+                    }
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+

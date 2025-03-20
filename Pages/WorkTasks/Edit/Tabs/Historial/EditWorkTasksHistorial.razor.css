@@ -1,0 +1,43 @@
+﻿.container-button {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0px 5px 10px 0px;
+}
+
+
+
+
+
+.container-message-detail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container-message-detail-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.container-button {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0px 5px 10px 0px;
+}
+
+
+
+@media (max-width: 767px) {
+    .custom-buttons {
+        gap: 8px;
+    }
+
+    .input-submit-icon input {
+        width: 100%;
+    }
+
+    .container-message-detail {
+        flex-direction: column;
+    }
+}

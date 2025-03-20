@@ -1,0 +1,248 @@
+﻿@page "/resultados/opinion/{SurveyId}"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Survey
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@inherits ProgressInternalResultsBase
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title customBreakWord">
+                        Resultados
+                    </h3>
+
+                </div>
+            </div>
+
+            <!-- end col -->
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <Button Icon="bi bi-arrow-left" OnClick="Back" Text="Volver"></Button>
+            </div>
+            <div class="m-1 col-6">
+                <div class="form-group container-download">
+                    <div style="float:right;">
+                        <Button Text="Descargar Resultados" Icon="bi bi-file-earmark-arrow-down" @onclick="GenerateFileExcel" Color="Color.Secondary" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+
+
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+
+
+                    <div class="container-fluid customMargin">
+                        <div class="containerGrid">
+                            <div class="form-group">
+                                <label for="nombre">Título</label>
+                                <InputText @bind-Value="ModelData.Title" disabled class="form-control"></InputText>
+                            </div>
+                            <div class="form-group">
+                                <label for="nombre">Fecha de Inicio</label>
+                                <DateTimePicker @bind-Value="ModelData.StartDate" IsDisabled="true"></DateTimePicker>
+                            </div>
+                            <div class="form-group">
+                                <label for="nombre">Fecha de Finalización</label>
+                                <DateTimePicker @bind-Value="ModelData.DueRate" IsDisabled="true"></DateTimePicker>
+                            </div>
+                        </div>
+
+                        <div class="containerGrid">
+                            <div style="display:flex;">
+                                @*  <label for="nombre" style="margin-right:5px;">Interna</label>
+                                <Checkbox TValue="CheckboxState" State="chkInternal" IsDisabled="true"></Checkbox>
+                                *@ 
+                                <div class="checkbox-group">
+                                    <input id="onlyIntern" type="checkbox" @bind="allowOnlyIntern" disabled />
+                                    <label for="onlyIntern">Publicación Interna</label>
+                                </div>
+
+                            </div>
+                            <div style="display:flex;">
+                                <div class="checkbox-group">
+                                    <input id="allowOnlyExtern" type="checkbox" @bind="allowOnlyExtern" disabled />
+                                    <label for="allowOnlyExtern">Publicación al Ciudadano Registrado</label>
+                                </div>
+
+                            </div>
+                            <div style="display:flex;">
+                                @*  <label for="nombre" style="margin-right:5px;">Abierta</label>
+                                <Checkbox TValue="CheckboxState" State="chkOpen" IsDisabled="true"></Checkbox> *@
+
+                                <div class="checkbox-group">
+                                    <input id="allowVoteOpen" type="checkbox" @bind-value="ModelData.AllowVoteOpen" checked="@ModelData.AllowVoteOpen" disabled />
+                                    <label for="allowVoteOpen">
+                                        Publicación Abierta
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div style="display:flex;">
+                                @*              <label for="nombre" style="margin-right:5px;">Mostrar Resultados Siempre</label>
+                                <Checkbox TValue="CheckboxState" State="chkShowResults" IsDisabled="true"></Checkbox> *@
+
+                                <div class="checkbox-group">
+                                    <input id="showResults" type="checkbox" @bind-value="ModelData.ShowResultsAlways" checked="@ModelData.ShowResultsAlways" disabled />
+                                    <label for="showResults">
+                                        Mostrar resultados Siempre
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="containerGrid">
+                            <div class="form-group">
+                                <label for="nombre">Descripción</label>
+                                <Textarea @bind-Value="ModelData.Description" IsDisabled="true" class="form-control"></Textarea>
+                                <p style="display: flex;justify-content: flex-end;">
+                                    @($"{characterCount}/280")
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    @if (Modeldefinition != null && Modeldefinition.SurveyQuestions != null && Modeldefinition.SurveyQuestions.Count > 0)
+                    {
+                        @foreach (var question in Modeldefinition.SurveyQuestions)
+                        {
+                            <div class="container-fluid customMargin">
+
+                                <p>@question.Title</p>
+                                <p>Total de respuestas: @question.TotalVotesQuestions</p>
+
+                                <div class="containerMainAnswer">
+                                    @foreach (var answer in question.SurveyQuestionOptions)
+                                    {
+                                        <div class="container-fluid cardAnswer">
+                                            @if (question.Type != SURVEYQUESTIONTYPE.SHORT_RESPONSE)
+                                            {
+                                                <p>Respuesta: @answer.Description</p>
+                                                <p>Total respuestas: @answer.Total</p>
+                                                <div class="progress-container">
+                                                    <svg class="progress-ring" width="100" height="100">
+                                                        <circle class="progress-ring-background" cx="50" cy="50" r="45" stroke-width="8"></circle>
+                                                        <circle id="@($"circle_{answer.Id.ToString()}_{answer.TotalPercentage}")" class="progress-ring-foreground circle" cx="50" cy="50" r="45" stroke-width="8"></circle>
+                                                    </svg>
+                                                    <div id="@($"text_circle_{answer.Id.ToString()}_{answer.TotalPercentage}")" class="progress-value">0%</div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <p>Respuestas de usuario: @answer.Total</p>
+                                                <div class="container-fluid">
+                                                    @foreach (var answerShort in answer.QuestionOptionsComments)
+                                                    {
+                                                        <p>@answerShort.CommentValue</p>
+                                                    }
+                                                </div>
+                                            }
+                                            @if (answer.SurveyQuestionOptionDocumentResponse != null && !string.IsNullOrEmpty(answer.SurveyQuestionOptionDocumentResponse.FilePath))
+                                            {
+                                                <Button class="marginCustomTop" @onclick="()=>View(answer.SurveyQuestionOptionDocumentResponse.FilePath)" Text="Ver Imagen"></Button>
+                                            }
+                                            @if (answer.IsOtherValue && answer.QuestionOptionsComments != null && answer.QuestionOptionsComments.Count > 0)
+                                            {
+                                                <Button class="marginCustomTop" OnClick="()=>OpenModal(answer.QuestionOptionsComments)" Text="Ver Comentario"></Button>
+                                            }
+
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <script>
+                            @*llamada despues de pintar las cards para hacer la animacion del progreso *@
+                                window.highlightElement();
+                        </script>
+                    }
+
+
+
+                </div>
+                <!-- End Card -->
+
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+<div class="col-12 col-sm-4 col-lg-auto">
+    <Modal @ref="SmallFullScreenModal">
+        <ModalDialog ShowCloseButton="false" FullScreenSize="FullScreenSize.Always" Title="Comentarios">
+            <BodyTemplate>
+                <div class="container-fluid">
+
+                    <ListView TItem="QuestionComment" Items="Comments">
+                        <BodyTemplate>
+                            <div class="container-fluid">
+                                <p>@context.CommentValue</p>
+
+                                <AuthorizeScopeDirective Scope="CreateNewWorkTask:Survey">
+                                    <Collapse>
+                                        <CollapseItems>
+
+                                            @if (context.AllowForTask)
+                                            {
+                                                <CollapseItem Text="Enviar a tarea" hidden="@context.Hide">
+                                                    <div class="form-group" style="width:100%;">
+                                                        @if (!context.Hide)
+                                                        {
+                                                            <label for="">Titulo de la Tarea(Requerido)</label>
+                                                            <InputText @bind-Value="context.Title" type="text" id="@($"title_{context.SurveyQuestionOptionUserId}")" class="form-control"> </InputText>
+                                                            <label for="">Descripción de la Tarea(Requerido)</label>
+                                                            <Textarea @bind-Value="context.Descripcion" id="@($"text_{context.SurveyQuestionOptionUserId}")" rows="3" class="form-control"></Textarea>
+                                                            <div style="margin-top:20px;">
+                                                                <Button hidden="@context.Hide" OnClick="()=>CheckSendToTask(context)" Text="Enviar a tarea"></Button>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>Tarea Creada</p>
+                                                        }
+                                                    </div>
+
+
+                                                </CollapseItem>
+                                            }
+
+                                        </CollapseItems>
+                                    </Collapse>
+                                </AuthorizeScopeDirective>
+
+                            </div>
+                        </BodyTemplate>
+                    </ListView>
+
+                </div>
+            </BodyTemplate>
+        </ModalDialog>
+    </Modal>
+</div>
+
+
+<ImagePreviewer @ref="ImagePreviewer" PreviewList="PreviewList"></ImagePreviewer>
+
+@code {
+
+}

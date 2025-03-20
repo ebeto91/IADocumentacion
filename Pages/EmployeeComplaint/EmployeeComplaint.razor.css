@@ -1,0 +1,210 @@
+﻿
+.container-grid-first-card {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 40px;
+    row-gap: 20px;
+}
+
+
+.container-grid {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    column-gap: 40px;
+    row-gap: 20px;
+}
+
+.textAreaCustom {
+    grid-column: 1/3;
+}
+
+.containerMainImages {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.containerImage {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #e5dfdf;
+    padding: 10px;
+    position: relative;
+}
+
+.customImg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
+
+.containerInput {
+    min-width: 230px;
+    position: relative;
+}
+
+input[type="file"] {
+    display: none !important;
+}
+
+.noShow {
+    display: none !important;
+}
+
+.containerInput label {
+    display: flex;
+    position: relative;
+    background-color: #025bee;
+    color: white;
+    text-align: center;
+    width: 230px;
+    margin: auto;
+    border-radius: 5px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    padding: 5px;
+}
+
+.closeCustomIcon {
+    position: absolute;
+    top: -15px;
+    right: -10px;
+}
+
+.container-Create {
+    margin-top: 20px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    row-gap: 20px;
+    column-gap: 30px;
+}
+
+.Coordenadas {
+    text-align: center;
+}
+
+.grid-ubication {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.containerSubmit {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-top: 30px;
+}
+
+.customButton {
+    width: fit-content;
+    height: 45px;
+    background: #63A103;
+    border: none;
+    color: white;
+    position: relative;
+}
+
+.customBreakWord{
+    word-break:break-all;
+}
+
+.customStart {
+    grid-column: 1/2;
+}
+
+.containerBtn {
+    position: relative;
+    width: 250px;
+}
+
+.customIcon {
+    position: absolute;
+    left: 20px;
+    top: 9px;
+    color: white;
+    font-size: 18px;
+}
+
+.customErrorCounter{
+    display:flex;
+   justify-content:space-between;
+
+}
+
+.noErrorCustom{
+    display:flex;
+    justify-content:flex-end;
+}
+
+.customPositionP {
+   display:flex !important;
+   justify-content:flex-end !important;
+}
+
+.customDivMargin{
+    margin-top:15px;
+}
+
+.customCheckLabel{
+    display:flex;
+    align-items:baseline;
+
+}
+
+.customButtomMargin{
+    margin-bottom:10px;
+}
+
+.customCheck {
+    position: relative;
+    top: 2px;
+}
+
+.margintopcards{
+    margin-top:25px;
+}
+
+@media screen and (max-width: 792px) {
+    .container-grid, .container-grid-first-card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .containerInput {
+        min-width: 100%;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .container-Create {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .containerInput label {
+        width: 100%;
+    }
+}
+
+
+
+#map {
+    height: 460px;
+}

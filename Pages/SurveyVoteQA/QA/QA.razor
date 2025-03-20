@@ -1,0 +1,293 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Survey
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@inherits QABase
+@if (ModelDefinition != null && ModelDefinition != null)
+{
+    @if (ModelDefinition.SurveyQuestions != null && ModelDefinition.SurveyQuestions.Count > 0)
+    {
+        <div class="mainContainerQA">
+
+            <div class="m-3">
+
+                <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goToList" />
+
+            </div>
+
+            <div style="text-align:center;" class="container-fluid customMarginPerQ">
+                <p>@ModelDefinition.Title</p>
+                <div class="containerImage">
+                    @if (ModelDefinition.PrincipalImage != null)
+                    {
+                        <div class="containerImageMain">
+                            <img src="@ModelDefinition.PrincipalImage.FilePath" />
+                        </div>
+                    }
+                    @if (ModelDefinition.SurveyAttachedDocuments != null && ModelDefinition.SurveyAttachedDocuments.Count > 1)
+                    {
+                        <div class="containerFiles">
+                            @foreach (var file in ModelDefinition.SurveyAttachedDocuments)
+                            {
+                                <div class="fileDownload">
+                                    <i class="bi bi-folder"></i>
+                                    <a style="cursor:pointer;" href="@file.FilePath" target="_blank">@file.FileName <i class="bi bi-cloud-arrow-down"></i> </a>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <EditForm Model="ModelDefinition" Context="form">
+                <DataAnnotationsValidator />
+                <ListView TItem="SurveyQuestionResponse" Items="@ModelDefinition.SurveyQuestions">
+                    <BodyTemplate>
+                        <Card IsShadow="true">
+                            <BodyTemplate>
+
+                                @* class="container-fluid customMarginPerQ" *@
+                                <div id="@context.Id">
+
+                                    <label><strong> @GetTypeToShow(context.Type) </strong> </label>
+
+                                    <div class="divider-data mt-2 mb-2"></div>
+                                    <p><strong> Pregunta @context.Order: </strong> </p>
+                                    <p>@context.Title  </p>
+                                    <div class="divider-data"></div>
+                                    @if (context.Type != SURVEYQUESTIONTYPE.SHORT_RESPONSE)
+                                    {
+                                        <p><strong> Respuestas  </strong> </p>
+                                        <div class="divider-data"></div>
+                                        <div class="answer">
+                                            @if (context.Type == SURVEYQUESTIONTYPE.SINGLE)
+                                            {
+                                                <div class="row gap-3">
+                                                    @* @bind-Value="context.ItemUniqueSelected" *@
+                                                    @*Value="context.ItemUniqueSelected"*@
+                                                    <InputRadioGroup ValueChanged="@((e) => OnRadiochange(e, context))" TValue="string" ValueExpression="() => context.ItemUniqueSelected">
+
+                                                        @foreach (var state in context.SurveyQuestionOptions)
+                                                        {
+                                                            <EditForm Model="@state" Context="formContextItem">
+                                                                <DataAnnotationsValidator />
+                                                                @if (state.SurveyQuestionOptionDocuments == null)
+                                                                {
+                                                                    <div class="col-12 mt-2 mb-2">
+                                                                        @if (!state.IsOtherValue)
+                                                                        {
+                                                                            @* <InputRadio  Value="state.Id.ToString()" id="@($"{state.Id.ToString()}")" checked=@state.Checked  /> *@
+
+                                                                            <input type="radio" id="@($"{state.Id.ToString()}")" value="@($"{state.Id.ToString()}")" @onchange="EventArgs => { SelectionChanged(EventArgs, context); }" checked=@state.Checked />
+
+                                                                            <label for="@($"{state.Id.ToString()}")">
+                                                                                @state.Description
+                                                                            </label>
+                                                                        }
+                                                                        else
+                                                                        {
+
+                                                                            <input type="radio" id="@($"{state.Id.ToString()}")" value="@($"{state.Id.ToString()}")" @onchange="EventArgs => { SelectionChanged(EventArgs, context); }" checked=@state.Checked />
+
+                                                                            <label for="@($"{state.Id.ToString()}")">
+                                                                                @state.Description
+                                                                            </label>
+
+                                                                            <InputText class="form-control" style="margin-bottom:5px;" @bind-Value="state.CommentValue" @onfocusout="EventArgs => { HandleFocusOut(EventArgs, formContextItem); }"></InputText>
+                                                                            <ValidationMessage For="@(() => state.CommentValue)" />
+
+
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="col-12 mt-2 mb-2">
+                                                                        @if (!state.IsOtherValue)
+                                                                        {
+
+                                                                            <div class="row">
+                                                                                <div class="col-md-12 align-content-center col-sm-12">
+                                                                                    <input type="radio" id="@($"{state.Id.ToString()}")" value="@($"{state.Id.ToString()}")" @onchange="EventArgs => { SelectionChanged(EventArgs, context); }" checked=@state.Checked />
+                                                                                    <label for="@($"{state.Id.ToString()}")">
+                                                                                        @state.Description
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div class="images img-ph mt-3" style="width:130px;">
+                                                                                        <div class="images-item">
+                                                                                            <ImageViewer style="cursor:pointer;" @onclick="()=>View(state.SurveyQuestionOptionDocuments.FilePath)" Alt="@state.SurveyQuestionOptionDocuments.FileName" Url="@state.SurveyQuestionOptionDocuments.FilePath" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="row">
+                                                                                <div class="col-md-12 align-content-center col-sm-12">
+                                                                                    <input type="radio" id="@($"{state.Id.ToString()}")" value="@($"{state.Id.ToString()}")" @onchange="EventArgs => { SelectionChanged(EventArgs, context); }" checked=@state.Checked />
+                                                                                    <label for="@($"{state.Id.ToString()}")">
+                                                                                        @state.Description
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div class="images img-ph mt-3" style="width:130px;">
+                                                                                        <div class="images-item">
+                                                                                            <ImageViewer style="cursor:pointer;" @onclick="()=>View(state.SurveyQuestionOptionDocuments.FilePath)" Alt="@state.SurveyQuestionOptionDocuments.FileName" Url="@state.SurveyQuestionOptionDocuments.FilePath" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+
+
+                                                                            <InputText class="form-control" style="margin-bottom:5px;" @bind-Value="state.CommentValue" @onfocusout="EventArgs => { HandleFocusOut(EventArgs, formContextItem); }"></InputText>
+                                                                            <ValidationMessage For="@(() => state.CommentValue)" />
+                                                                        }
+                                                                    </div>
+                                                                }
+
+                                                            </EditForm>
+
+
+                                                        }
+                                                    </InputRadioGroup>
+
+
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class="row gap-3">
+
+
+                                                    @foreach (var state in context.SurveyQuestionOptions)
+                                                    {
+                                                        <EditForm Model="@state" Context="formContextItem">
+                                                            <DataAnnotationsValidator />
+                                                            <div class="col-12 mt-2 mb-2">
+                                                                @if (state.SurveyQuestionOptionDocuments == null)
+                                                                {
+
+                                                                    @if (!state.IsOtherValue)
+                                                                    {
+                                                                        <InputCheckbox @bind-Value="state.Checked" id="@($"{state.Id.ToString()}")" @oninput="EventArgs => { SelectionChangedCheckBox(EventArgs, context, state); }" />
+                                                                        <label for="@($"{state.Id.ToString()}")">
+                                                                            @state.Description
+                                                                        </label>
+                                                                    }
+                                                                    else
+                                                                    {
+
+                                                                        <InputCheckbox @bind-Value="state.Checked" id="@($"{state.Id.ToString()}")" @oninput="EventArgs => { SelectionChangedCheckBox(EventArgs, context, state); }" />
+                                                                        <label for="@($"{state.Id.ToString()}")">
+                                                                            @state.Description
+                                                                        </label>
+
+                                                                        <InputText class="form-control" style="margin-bottom:5px;" @bind-Value="state.CommentValue" @onfocusout="EventArgs => { HandleFocusOut(EventArgs, formContextItem); }"></InputText>
+                                                                        <ValidationMessage For="@(() => state.CommentValue)" />
+
+
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @if (!state.IsOtherValue)
+                                                                    {
+                                                                        <InputCheckbox @bind-Value="state.Checked" id="@($"{state.Id.ToString()}")" @oninput="EventArgs => { SelectionChangedCheckBox(EventArgs, context, state); }" />
+                                                                        <label for="@($"{state.Id.ToString()}")">
+                                                                            @state.Description
+                                                                        </label>
+
+                                                                        <div class="images img-ph mt-3" style="width:130px;">
+                                                                            <div class="images-item">
+                                                                                <ImageViewer style="cursor:pointer;" @onclick="()=>View(state.SurveyQuestionOptionDocuments.FilePath)" Alt="@state.SurveyQuestionOptionDocuments.FileName" Url="@state.SurveyQuestionOptionDocuments.FilePath" />
+                                                                            </div>
+                                                                        </div>
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <InputCheckbox @bind-Value="state.Checked" id="@($"{state.Id.ToString()}")" @oninput="EventArgs => { SelectionChangedCheckBox(EventArgs, context, state); }" />
+                                                                        <label for="@($"{state.Id.ToString()}")">
+                                                                            @state.Description
+                                                                        </label>
+
+                                                                        <div class="images img-ph mt-3" style="width:130px;">
+                                                                            <div class="images-item">
+                                                                                <ImageViewer style="cursor:pointer;" @onclick="()=>View(state.SurveyQuestionOptionDocuments.FilePath)" Alt="@state.SurveyQuestionOptionDocuments.FileName" Url="@state.SurveyQuestionOptionDocuments.FilePath" />
+                                                                            </div>
+                                                                        </div>
+                                                                        @* HandleFocusOut(e, @ans.Id.ToString()) *@
+                                                                        <InputText class="form-control" style="margin-bottom:5px;" @bind-Value="state.CommentValue" @onfocusout="EventArgs => { HandleFocusOut(EventArgs, formContextItem); }"></InputText>
+                                                                        <ValidationMessage For="@(() => state.CommentValue)" />
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </EditForm>
+
+                                                    }
+                                                </div>
+                                            }
+
+                                            <div class="divider-data mt-2 mb-2"></div>
+                                            <div>
+                                                @if (context.AllowJustification)
+                                                {
+                                                    <p> @context.JustificationTitle  </p>
+
+                                                    <InputText class="form-control" style="margin-bottom:5px;" @bind-Value="context.Justification"></InputText>
+                                                    <ValidationMessage For="@(() => context.Justification)" />
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p><strong> Respuesta Breve </strong> </p>
+                                        <InputTextArea class="form-control" style="margin-bottom:5px;"
+                                                       @bind-Value="context.Justification"
+                                                       @onblur="@(e => Add(e, context.Justification))"></InputTextArea>
+
+                                        @if (context.SurveyQuestionOptions != null && context.SurveyQuestionOptions.Count > 0)
+                                        {
+                                            var firstOption = context.SurveyQuestionOptions.First();
+                                            firstOption.Checked = true;
+                                            <input type="hidden" value="@firstOption.Id.ToString()" id="@($"{firstOption.Id.ToString()}")" />
+
+                                        }
+                                    }
+                                </div>
+                            </BodyTemplate>
+                        </Card>
+                    </BodyTemplate>
+
+                </ListView>
+
+                <ImagePreviewer @ref="ImagePreviewer" PreviewList="PreviewList"></ImagePreviewer>
+
+                <div class="customProgressBar" hidden="@(isHiddenDiv)">
+                    <div style="text-align:center;">
+                        <p>Respuestas @clickItems de @totalQ</p>
+                    </div>
+                    <BootstrapBlazor.Components.Progress Value="@_ProgressValue" Color="Color.Success" IsShowValue="true"></BootstrapBlazor.Components.Progress>
+                </div>
+                @* IsDisabled="@disabledSend" *@
+                <div class="containerSend">
+                    <Button Text="Enviar" Color="Color.Success" @onclick="()=>HandleSend(form)" IsDisabled="@disabledSend" />
+                </div>
+
+            </EditForm>
+
+
+
+        </div>
+    }
+}
+
+
+
+@code {
+
+}

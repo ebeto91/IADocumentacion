@@ -1,0 +1,196 @@
+﻿@page "/gestionCiudadana/solicitudes"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@inherits ControlInternalManagementListBase
+
+
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">Manejo de solicitudes</h3>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a>Gestión Ciudadana</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Solicitudes
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    @if (managementProfileInputFilterDto != null)
+                    {
+                        <div>
+                            <div class="row align-center">
+                                <div class="mt-3 col-lg-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label>Buscar solicitud por título</label>
+                                        <InputText class="form-control" @bind-Value="managementProfileInputFilterDto.Title"></InputText>
+
+                                    </div>
+                                </div>
+                                <AuthorizeScopeDirective Scope="NewProject:WorkTask">
+                                    <div class="mt-3 col-lg-6 col-sm-12 text-center">
+                                        <Button Text="Nueva Solicitud Interna" Icon="bi bi-plus" @onclick="()=>createNewInternal()" />
+                                    </div>
+                                </AuthorizeScopeDirective>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="mt-3 col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label>Filtrar por Prioridad</label>
+                                        <Select Items="listSelectPriority" @bind-Value="managementProfileInputFilterDto.Priority"></Select>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label>Filtrar por Estado</label>
+                                        <Select Items="listSelectStatus" @bind-Value="managementProfileInputFilterDto.Status"></Select>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label>Filtrar por Tipo</label>
+                                        <Select Items="listSelectType" @bind-Value="managementProfileInputFilterDto.TypeApplication"></Select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mt-3 col-lg-6 col-sm-12 text-center">
+                                    <Button Text="Buscar" Icon="bi bi-search" @onclick="()=>searchData()" />
+                                </div>
+
+                                <div class="mt-3 col-lg-6 col-sm-12 text-center">
+                                    <Button Text="Descargar" Icon="bi bi-download" @onclick="()=>downloadReportExcel()" />
+                                </div>
+
+
+                            </div>
+
+                            @if (listManagement != null && listManagement.items != null)
+                            {
+                                <div class="row container-list-task mt-3">
+                                    @foreach (var item in listManagement.items)
+                                    {
+                                        <div class="col-lg-5 col-sm-12 card custom-card">
+                                            <div class="card-header card-header-kanban-item">
+                                                <p class="card-header-kanban-item-tittle"> @item.Title </p>
+                                                <div class="item-icons">
+                                                    <AuthorizeScopeDirective Scope="Detail:Management">
+                                                        <i class="bi bi-eye-fill" style="cursor:pointer;" @onclick="()=>goToProcessDetail(item)"></i>
+                                                    </AuthorizeScopeDirective>
+
+                                                    @if (item.Status != STATUSMANAGEMENT.DONE && item.Status != STATUSMANAGEMENT.DONTAPPLY && item.WorkTaskAssignedBefore == null)
+                                                    {
+                                                        <AuthorizeScopeDirective Scope="Edit:Management">
+                                                            <i class="bi bi-pencil-square" style="cursor:pointer;" @onclick="()=>goToProcessEdit(item)"></i>
+                                                        </AuthorizeScopeDirective>
+                                                    }
+
+
+                                                </div>
+
+                                            </div>
+                                            <div class="card-body">
+                                                <p> @item.Description </p>
+                                            </div>
+
+                                            <div class="card-footer card-footer-custom text-body-secondary">
+                                                <div class="footer-card-kanban">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <p class="card-text">Fecha Creación: @getDateFormatDisplay(item.CreatedAt)</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="divider-data mt-2"></div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-sm-12">
+                                                            <p class="card-text">Prioridad: @getDisplayData(item.Priority)</p>
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-sm-12">
+                                                            <p class="card-text">Estado: @getDisplayData(item.Status)</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="divider-data mt-2"></div>
+
+                                                    <div class="row mt-1">
+                                                        <div class="col-sm-12">
+                                                            <p class="card-text">Código: @item.PrincipalNumber</p>
+                                                        </div>
+
+                                                    </div>
+                                                    <AuthorizeScopeDirective Scope="Detail:WorkTask">
+
+                                                        @if (item.WorkTaskAssignedBefore != null)
+                                                        {
+                                                            @if (item.WorkTaskAssignedBefore != null && item.Status != STATUSMANAGEMENT.DONE && item.Status != STATUSMANAGEMENT.DONTAPPLY)
+                                                            {
+                                                                <div class="row mt-1">
+                                                                    <div class="col-sm-12">
+                                                                        <Button Text="Ver Tarea Asignada" Icon="bi bi-search" @onclick="()=>goToSeeDetailWorktask(item.WorkTaskAssignedBefore)" />
+                                                                    </div>
+
+                                                                </div>
+
+
+                                                            }
+
+                                                        }
+                                                    </AuthorizeScopeDirective>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <Pagination PageCount="@totalAcountPages" PageIndex="@actualPageIndex" ShowPageInfo="true" OnPageLinkClick="@OnPageClick" Alignment="Alignment.Left" />
+                                </div>
+                            }
+
+                        </div>
+
+
+
+                    }
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+

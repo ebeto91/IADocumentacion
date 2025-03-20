@@ -1,0 +1,191 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Notifications
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Services.Contracts
+@implements IAsyncDisposable
+@inject IConfiguration configuration
+@inject INotificationService notificationService
+@inject SpinnerService spinnerService
+
+<div class="dropdown">
+    <div class="evolved-icon" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+        <a @onclick='(() => openNotifications())'>
+            <div>
+                <div id="principal-div-notification-icon">
+                    <i class="bi bi-bell icon "></i>
+                </div>
+
+                <span class="icon-badge">@NumNotifications</span>
+            </div>
+
+        </a>
+    </div>
+
+
+    <div class="dropdown-container-custom dropdown-menu border-0 rounded-0 rounded-bottom m-0 notification-body shadow notification-dropdown">
+        @{
+            <h6 class="dropdown-header">
+                Notificaciones de descargas
+            </h6>
+            <hr class="dropdown-divider">
+            if (handleNotificationDtos.Count > 0)
+            {
+                foreach (var item in handleNotificationDtos)
+                {
+                    <a class="dropdown-item">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <Light IsFlat="true"></Light>
+                            </div>
+                            <div class="ms-2">
+                                <h6 class="notification-item-text">@item.Text</h6>
+                                <small>@item.TimeAgo</small>
+                                <hr class="dropdown-divider">
+                                <div class="text-center">
+                                    <button class="btn btn-success" @onclick='(() => markAsReadNotification(item.Id, item.ToUserId))'> Leído <i class="bi bi-check2"></i></button>
+
+
+                                    <a href="@item.LinkUrl" target="_blank" class="btn btn-primary">Abrir <i class="bi bi-box-arrow-up-right"></i></a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <hr class="dropdown-divider">
+                }
+                // <a href="#" class="dropdown-item text-center">Ver todas las notificaciones</a>
+            }
+            else
+            {
+                <span class="m-3">No tienes notificaciones activas</span>
+                <hr class="dropdown-divider">
+            }
+        }
+
+    </div>
+</div>
+
+
+@code {
+    public int NumNotifications { get; set; } = 0;
+
+    private HubConnection? hubConnection;
+    private List<HandleNotificationDto> handleNotificationDtos = [];
+
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; }
+
+    [Inject]
+    private ToastService? ToastService { get; set; }
+
+    [Parameter]
+    public string? UserId { get; set; }
+
+    private IJSObjectReference? module;
+
+    protected override async Task OnInitializedAsync()
+    {
+        spinnerService.Show();
+        var baseUrl = configuration["BaseAddress:Url"];
+
+        hubConnection = new HubConnectionBuilder()
+             .WithUrl($"{baseUrl}notify-hub?userId={UserId}")
+             .WithAutomaticReconnect()
+             .Build();
+
+        hubConnection.On<string, HandleNotificationDto>("ReceiveNotification", (data, message) =>
+        {
+            handleNotificationDtos.Add(message);
+
+            handleNotificationDtos = handleNotificationDtos
+                                    .OrderByDescending(x => x.CreatedAt).ToList();
+            NumNotifications = handleNotificationDtos.Count();
+
+
+
+            InvokeAsync(StateHasChanged);
+            InvokeAsync(() =>
+            {
+                module.InvokeVoidAsync("addAnimation");
+                ToastService.Success("Notificación sistema", "Se le notifica que la descarga de su archivo de reporte fue éxistosa, por favor revisar las notificaciones(campana) del sistema", autoHide: true);
+            });
+        });
+
+        await hubConnection.StartAsync();
+
+
+        var response = await notificationService.GetAllActiveMessages(new Dto.Notifications.NotificationInputBellDto()
+            {
+                ToUserId = UserId,
+                MarkAsRead = false
+            });
+
+        if (response != null && response.definition.totalCount > 0)
+        {
+            handleNotificationDtos = response.definition.items;
+            NumNotifications = response.definition.totalCount;
+        }
+
+        spinnerService.Hide();
+    }
+
+
+
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import",
+                "./Layout/Notifications.razor.js");
+        }
+    }
+
+    public async Task openNotifications()
+    {
+        await module.InvokeVoidAsync("removeAnimation");
+
+        var response = await notificationService.GetAllActiveMessages(new Dto.Notifications.NotificationInputBellDto()
+            {
+                ToUserId = UserId,
+                MarkAsRead = false
+            });
+
+        if (response != null && response.definition.totalCount > 0)
+        {
+            handleNotificationDtos = response.definition.items;
+            NumNotifications = response.definition.totalCount;
+        }
+
+
+    }
+
+    public async Task markAsReadNotification(string idNotification, string ToUserId)
+    {
+        var response = await notificationService.MarkAsReadNotification(new Dto.Notifications.HandleNotificationMarkAsRead()
+            {
+                ToUserId = ToUserId,
+                Id = idNotification,
+                MarkAsRead = false
+            });
+
+        if (response != null && response.definition.totalCount >= 0)
+        {
+            handleNotificationDtos = response.definition.items;
+            NumNotifications = response.definition.totalCount;
+        }
+    }
+}

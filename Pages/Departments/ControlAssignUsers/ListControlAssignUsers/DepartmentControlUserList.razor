@@ -1,0 +1,138 @@
+﻿@page "/catalogo/departamentos/asignacion/{departmentId}"
+
+
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Department
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Departments.ControlAssignUsers.EditControlAssignUsers
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Departments.Create
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Departments.Edit
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Templates.TableFilters
+@inherits DepartmentControlUserListBase
+
+<div class="container-fluid">
+    @if (isLoadedData == true)
+    {
+        <!-- ========== title-wrapper start ========== -->
+        <div class="title-wrapper pt-30">
+
+            <div class="row align-items-center header-container">
+                <div class="col">
+                    <div class="title container-title">
+                        <h3 class="principal-title">Mantenimiento de departamentos</h3>
+                        <h5 class="subprincipal-title">@departmentResponseUsersDefinition.Name</h5>
+                    </div>
+                </div>
+                <!-- end col -->
+                <div class="col">
+                    <div class="breadcrumb-wrapper">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a>Cátalogo</a>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page">
+                                    Departamentos
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    Usuarios
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- ========== title-wrapper end ========== -->
+        <!-- Invoice Wrapper Start -->
+        <div class="invoice-wrapper">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="invoice-card card-style mb-30">
+                        <div class="m-2 two-buttons-in-grid">
+                            <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goToBack" Color="Color.Secondary" />
+                            <AuthorizeScopeDirective Scope="AssingUser:Department">
+                                <Button Text="Agregar" Icon="bi bi-plus" @onclick="goToCreate" />
+                            </AuthorizeScopeDirective>
+                        </div>
+
+                        <Table TItem="UserDepartmentDto" @ref=Table PageItemsSource="PageItems" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                               IsPagination="true"
+                               IsStriped="true" IsBordered="true" OnQueryAsync="@OnQueryAsync"
+                               ShowSkeleton="true">
+                            <TableColumns>
+                                @* Filterable activar filtros *@
+                                <TableColumn @bind-Field="@context.Name" Width="170" TextWrap="true" Filterable="false" Text="Nombre Colaborador">
+                                    <FilterTemplate>
+                                        <TextFilter Placeholder="Buscar por nombre"></TextFilter>
+                                    </FilterTemplate>
+                                    <Template Context="value">
+                                        <div class="table-cell is-wrap">
+                                            @value.Row.Name @value.Row.Lastname
+                                        </div>
+                                    </Template>
+                                </TableColumn>
+                                <TableColumn @bind-Field="@context.EmailAddress" Width="170" TextWrap="true" Filterable="false" Text="Correo Colaborador">
+                                    <Template Context="value">
+                                        @if (!string.IsNullOrEmpty(value.Row.EmailAddress))
+                                        {
+                                            <div class="table-cell is-wrap">
+                                                @value.Row.EmailAddress
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-cell is-wrap">
+                                                Sin Asignar
+                                            </div>
+                                        }
+                                    </Template>
+                                </TableColumn>
+                                <TableColumn @bind-Field="@context.PositionDisplay" Width="500" TextWrap="true" Filterable="false" Text="Puesto Colaborador">
+
+                                </TableColumn>
+                                <TableColumn @bind-Field="@context.Enabled" Width="120" TextWrap="true" Filterable="false" Text="Estado">
+                                    <Template Context="value">
+                                        @if (value.Row.Enabled)
+                                        {
+                                            <div class="text-success">Habilitado</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-danger">Deshabilitado</div>
+                                        }
+                                    </Template>
+                                </TableColumn>
+                                <TableColumn @bind-Field="@context.Id" Text="" Width="80">
+                                    @* Template Botones *@
+                                    <Template Context="v">
+                                        <AuthorizeScopeDirective Scope="AssingUser:Department">
+                                            <div class="custom-button-container">
+                                                <Button Text="Editar" Icon="bi bi-pencil-fill item-button" @onclick='(() => openEdit(v))' />
+                                                <Button Text="Deshabilitar" Icon="bi bi-trash-fill item-button" @onclick='(() => deleteInfo(v))' Color="Color.Danger" />
+                                            </div>
+                                        </AuthorizeScopeDirective>
+                                    </Template>
+                                </TableColumn>
+
+                            </TableColumns>
+                        </Table>
+                    </div>
+                    <!-- End Card -->
+                </div>
+                <!-- ENd Col -->
+            </div>
+
+
+        </div>
+        <Modal @ref="ModalEdit" OnShownAsync="OnShownCallbackEditAsync">
+            <ModalDialog IsCentered="true" Title="Edición usuario colaborador" ShowCloseButton="false" ShowSaveButton="false" ShowHeaderCloseButton="true" Size="Size.Large">
+                <BodyTemplate>
+                    <EditControlAssignUsers ActionChild="ActionEditComponentFather" departmentId="departmentIdModal" userDepartmentDtoForEdit="userDepartmentDtoForEdit" items="items"></EditControlAssignUsers>
+                </BodyTemplate>
+            </ModalDialog>
+        </Modal>
+    }
+</div>
+

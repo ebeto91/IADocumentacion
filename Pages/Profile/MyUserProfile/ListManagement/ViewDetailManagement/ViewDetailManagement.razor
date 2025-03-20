@@ -1,0 +1,55 @@
+﻿@page "/miperfil/detalle/{managementId}"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.FindManagementByPrincipalNumber
+
+@inherits ViewDetailManagementBase
+
+
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">Detalle seguimiento solicitudes / denuncias</h3>
+                </div>
+            </div>
+
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="m-2">
+            <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goBack" />
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    @if (ModelFirst != null)
+                    {
+
+
+                        @if (IsSecondPageReadyToLoad)
+                        {
+                            <ManagementDetailView listCatalogData="listCatalogData" listImagesSelected="listImagesSelected" ModelFirst="ModelFirst" UserCreator="UserCreator"></ManagementDetailView>
+                        }
+
+
+
+                    }
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+

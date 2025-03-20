@@ -1,0 +1,411 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Menu
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Services
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Services.Contracts
+@inherits LayoutComponentBase
+
+<div class="page">
+    @*     <div class="sidebar">
+    <NavMenu />
+    </div> *@
+    <!-- Topbar Start -->
+    <div class="w-100">
+        <!-- Topbar Start -->
+        <div class="container-fluid bg-dark px-0">
+            <div class="row g-0 d-none d-lg-flex">
+                <div class="col-lg-12 container-first-navbar">
+                    <div class="h-100 d-inline-flex align-items-center">
+                        <a href="#" class="icon-color">
+                            <div class="container-link-ref">
+
+                                <div class="icon-link-ref">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </div>
+                                <span class="text-hover"> <a href="tel:2550-4400"> <span class="text-hover"> (+506) 2550-4400</span> </a> </span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="h-100 d-inline-flex align-items-center">
+                        <a href="#" class="icon-color">
+                            <div class="container-link-ref">
+
+                                <div class="icon-link-ref">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
+                                <span class="text-hover"> portal@muni-carta.go.cr</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="icon-social-media">
+                        <div class="icon icon-facebook">
+                            <a href="https://www.facebook.com/munidecartago/" target="_blank" class="icon-color"><i class="bi bi-facebook"></i></a>
+                        </div>
+                        <div class="icon icon-twitter">
+                            <a href="https://x.com/cartagomuni" target="_blank" class="icon-color"><i class="bi bi-twitter-x "></i></a>
+                        </div>
+                        <div class="icon icon-youtube">
+                            <a href="https://www.youtube.com/channel/UCxV_61V-gV_Id3siT9wZGGQ/videos" target="_blank" class="icon-color"><i class="bi bi-youtube"></i></a>
+                        </div>
+                        <div class="icon icon-instagram">
+                            <a href="https://www.instagram.com/municartago/" target="_blank" class="icon-color"><i class="bi bi-instagram "></i></a>
+                        </div>
+                        <div class="icon icon-tiktok">
+                            <a href="https://www.tiktok.com/discover/municipalidad-de-cartago" target="_blank" class="icon-color"><i class="bi bi-tiktok "></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="container-navbar">
+                <div class="image-container">
+                    <img src="https://www.muni-carta.go.cr/wp-content/uploads/2023/10/logo-municipalidad-cartago.png" alt="logo municipalidad cartago" class="image-logo" />
+
+                    <div class="item-menu-container">
+                    </div>
+                </div>
+
+                <div class="text-principal-container">
+                    <h1>
+                        Sistema de Gestión Ciudad Municipal
+                    </h1>
+                </div>
+                <AuthorizeView>
+                    <Authorized>
+                        <div class="item-user-container">
+                        </div>
+                    </Authorized>
+                    <NotAuthorized>
+                        <div class="item-user-container item-login">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            <a style="color:white;" href="login">Ingresar</a>
+                        </div>
+                    </NotAuthorized>
+                </AuthorizeView>
+
+
+            </div>
+
+        </div>
+        <!-- Topbar End -->
+
+
+        <div>
+
+            <div class="site-mobile-menu site-navbar-target">
+                <div class="site-mobile-menu-header">
+                    <div class="site-mobile-menu-close">
+                        <span class="icofont-close js-menu-toggle"></span>
+                    </div>
+                </div>
+                <div class="site-mobile-menu-body"></div>
+            </div>
+
+
+            <!-- Navbar Start -->
+            <nav class="customNormalNav">
+                <ul class="mainUl">
+                    @if (principalMenu != null && principalMenu.menu != null)
+                    {
+                        @foreach (var item in principalMenu.menu)
+                        {
+                            if (item.children != null && item.children.Count > 0)
+                            {
+                                <li class="customLi">
+                                    <a class="customAnchor" href="@item.href">@item.title<i class="bi bi-caret-down-fill"></i></a>
+                                    <ul class="customUl">
+                                        @foreach (var child in item.children)
+                                        {
+                                            <li>
+
+                                                @if (child.children.Any())
+                                                {
+                                                    <a href="@child.href">@child.title<i class="bi bi-caret-right-fill"></i></a>
+                                                    <ul class="customUl">
+                                                        @foreach (var subChild in child.children)
+                                                        {
+                                                            <li>
+
+                                                                @if (subChild.children.Any())
+                                                                {
+                                                                    <a href="@subChild.href">@subChild.title<i class="bi bi-caret-right-fill"></i></a>
+                                                                    <ul class="customUl">
+                                                                        @foreach (var thirdChild in subChild.children)
+                                                                        {
+                                                                            <li>
+                                                                                <a href="@thirdChild.href">@thirdChild.title</a>
+                                                                                <!-- Puedes seguir anidando más niveles si es necesario -->
+                                                                            </li>
+                                                                        }
+                                                                    </ul>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="@subChild.href">@subChild.title</a>
+                                                                }
+
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@child.href">@child.title</a>
+                                                }
+
+                                            </li>
+                                        }
+                                    </ul>
+
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a href="@item.href">@item.title</a>
+                                </li>
+                            }
+
+                        }
+
+                    }
+
+                </ul>
+            </nav>
+
+            <button class="hamburger" onclick="toggleMenu()">☰</button>
+            <nav class="navLateral" id="sidebar">
+                <ul>
+                    @if (principalMenu != null && principalMenu.menu != null)
+                    {
+                        @foreach (var item in principalMenu.menu)
+                        {
+                            if (item.children != null && item.children.Count > 0)
+                            {
+                                <li class="customLi">
+                                    <a class="customAnchor" href="@item.href">@item.title</a>
+                                    <ul>
+                                        @foreach (var child in item.children)
+                                        {
+                                            <li>
+
+                                                @if (child.children.Any())
+                                                {
+                                                    <a href="@child.href">@child.title</a>
+                                                    <ul >
+                                                        @foreach (var subChild in child.children)
+                                                        {
+                                                            <li>
+
+                                                                @if (subChild.children.Any())
+                                                                {
+                                                                    <a href="@subChild.href">@subChild.title</a>
+                                                                    <ul >
+                                                                        @foreach (var thirdChild in subChild.children)
+                                                                        {
+                                                                            <li>
+                                                                                <a href="@thirdChild.href">@thirdChild.title</a>
+                                                                                <!-- Puedes seguir anidando más niveles si es necesario -->
+                                                                            </li>
+                                                                        }
+                                                                    </ul>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="@subChild.href">@subChild.title</a>
+                                                                }
+
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@child.href">@child.title</a>
+                                                }
+
+                                            </li>
+                                        }
+                                    </ul>
+
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a href="@item.href">@item.title</a>
+                                </li>
+                            }
+
+                        }
+
+                    }
+
+                </ul>
+            </nav>
+
+
+            <!-- Navbar End -->
+            <div class="content px-4 main-wrapper customClass">
+                @Body
+            </div>
+            <div style="color-scheme: light;">
+                <BlazorSpinner.Spinner Icon="loading.svg" Text="Cargando, Por Favor Espera..."></BlazorSpinner.Spinner>
+            </div>
+            <div class="njs-sticky-side body-append image_button_cover placement-right now-show">
+                <Accessibility />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="footerCustom">
+        <div class="containerMainFooter">
+            <div class="containerDivFooter">
+                <div class="logoFooter">
+                    <img src="https://www.muni-carta.go.cr/wp-content/uploads/2023/10/logo-municipalidad-cartago.png" alt="logo municipalidad cartago" class="image-logo" />
+                    <div class="icons"></div>
+                </div>
+
+                <div class="containerCard">
+                    <p>Enlaces Frecuentes</p>
+                    <div class="lineFooter"></div>
+                    <div class="contentFooter">
+                        <a href="https://www.muni-carta.go.cr">Pago de servicios públicos</a>
+                        <a href="https://www.muni-carta.go.cr">Mi Muni en casa</a>
+                        <a href="https://www.muni-carta.go.cr">Boletín informativo</a>
+                        <a href="https://www.muni-carta.go.cr">Concejo en vivo </a>
+                    </div>
+                </div>
+
+                <div class="containerCard">
+                    <p>Contáctenos</p>
+                    <div class="lineFooter"></div>
+                    <div class="contentFooter">
+                        <h6>Teléfono:   <a href="tel:2550-4400"> <span class="text-hover"> (+506) 2550-4400</span> </a> </h6>
+                        <h6>Correo electrónico: portal@muni-carta.go.cr</h6>
+                        <h6>Dirección: Frente a la Plaza Mayor, Avenida Central, Cartago</h6>
+                    </div>
+                </div>
+
+                <div class="containerCard">
+                    <p>Horarios de atención</p>
+                    <div class="lineFooter"></div>
+                    <div class="contentFooter">
+                        <h6>
+                            Plataforma de Servicios y Cajas de Banco:
+                            Lunes a Viernes de 7:00 a.m. - 3:30 p.m.
+                        </h6>
+                        <h6>
+                            Plataforma Corralillo:
+                            Lunes a Viernes de 8:00 a.m. - 5:00 p.m.
+                        </h6>
+                        <h6>
+                            Oficina Paseo Metrópoli:
+                            Lunes a Domingo de 12:00 m.d. - 8:00 p.m.
+                        </h6>
+                    </div>
+                </div>
+
+                <div class="containerCard">
+                    <p>Descargue nuestra app</p>
+                    <div class="lineFooter"></div>
+                    <div class="contentFooter">
+
+                        <div class="elementor-widget-container">
+                            <a href="https://play.google.com/store/apps/details?id=com.munimovil.cartago.android&amp;hl=es_419">
+                                <img width="193" height="63" src="https://www.muni-carta.go.cr/wp-content/uploads/2018/12/Googleplay.png" class="attachment-large size-large wp-image-8913" alt="">
+                            </a>
+                        </div>
+
+                        <div class="elementor-widget-container">
+                            <a href="https://apps.apple.com/us/app/munimóvil/id1084767159">
+                                <img width="193" height="63" src="https://www.muni-carta.go.cr/wp-content/uploads/2018/12/Appstore.png" class="attachment-large size-large wp-image-8914" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="lineFooterOutside">
+    </div>
+
+    <div class="copyCustom">
+    </div>
+
+
+</div>
+
+@code {
+    private IJSObjectReference? module;
+
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; }
+
+    [Inject]
+    private IMenuService _menuService { get; set; }
+
+    [Inject]
+    public IGZipHelper gZipHelper { get; set; }
+
+
+    [Inject]
+    public HashService _hashService { get; set; }
+    [Inject]
+    public SpinnerService spinnerService { get; set; }
+
+
+    PrincipalMenu principalMenu { get; set; } = new PrincipalMenu();
+
+    public async ValueTask DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+
+            module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import",
+                "./Layout/MainLayout.razor.js");
+            await module.InvokeVoidAsync("siteMenuClone");
+
+            spinnerService.Show();
+            var response = await _menuService.GetMenuLayout();
+            if (response != null && response.definition != null)
+            {
+                var dataDecompress = gZipHelper.DecompressData(response.definition);
+                var descript = _hashService.Base64Decode(dataDecompress);
+
+                if (!string.IsNullOrEmpty(descript))
+                {
+                    var list = descript.FromJson<PrincipalMenu>();
+                    principalMenu = list;
+
+                }
+            }
+            StateHasChanged();
+            spinnerService.Hide();
+        }
+
+    }
+
+    public async Task HandleMenuPerfil()
+    {
+        await module.InvokeVoidAsync("SeeMenu");
+    }
+
+
+}

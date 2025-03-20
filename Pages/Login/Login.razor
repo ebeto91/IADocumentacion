@@ -1,0 +1,87 @@
+﻿@inherits LoginBase
+@page "/login"
+@layout LoginLayou
+
+
+<div class="containerLogin">
+    <h3 style="text-align:center;">Iniciar Sesión </h3>
+    <div class="containerText">
+        <p>Utilice su correo electrónico y contraseña para iniciar sesión.</p>
+    </div>
+
+    <div class="containerForm">
+
+        <div class="container-register">
+            <p>¿No tiene una cuenta?</p>
+            <a style="color: #1E98D7;" href="/registro">Regístrese</a>
+        </div>
+        <EditForm Model="userCredenditialsDto" FormName="Login" Context="formContext">
+            <DataAnnotationsValidator />
+
+
+            <div class="form-group marginCustom">
+                <label for="email">Correo electrónico</label>
+                <InputText id="email" class="form-control customInput" type="email" @bind-Value="userCredenditialsDto.EmailAddress" @oninput="UpdateCharacterCount"></InputText>
+                <ValidationMessage For="@(() => userCredenditialsDto.EmailAddress)" />
+            </div>
+            @if (showDataLoginNormal)
+            {
+                <div class="form-group marginCustom">
+                    <label for="contrasena">Contraseña</label>
+                    <InputText id="contrasena" class="form-control customInput" type="password" @bind-Value="userCredenditialsDto.Password"></InputText>
+                    <ValidationMessage For="@(() => userCredenditialsDto.Password)" />
+                </div>
+
+                <div class="container-remember">
+                    <div class="ckeckRemember">
+                        @*     <Checkbox TValue="string" ShowLabel="true" Color="Color.Danger" OnStateChanged="@OnStateChanged" State="State" /> *@
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="checkbox1"
+                               @onchange="OnCheckboxChanged" />
+                        <span>Recordarme</span>
+                    </div>
+                    <a style="color: #1E98D7;" @onclick="OpenModal">¿Olvidó su contraseña?</a>
+                </div>
+
+                <div class="containerBtn">
+                    <input type="submit" class="customButton" value="Iniciar Sesión" @onclick="()=>HandleLogin(formContext)" />
+                    <i class="bi bi-lock customIcon"></i>
+                </div>
+            }
+            else
+            {
+                <div class="containerBtn">
+                    <input type="submit" class="customButton" value="Inicio Sesión" @onclick="()=>HandleLoginAzureDirective(formContext)" />
+                    <i class="bi bi-lock customIcon"></i>
+                </div>
+            }
+
+        </EditForm>
+    </div>
+</div>
+
+<Modal @ref="Modal" IsKeyboard="true">
+    <ModalDialog Title="Recuperar Contraseña" Size="Size.Medium" ShowCloseButton="false" ShowSaveButton="false" OnSaveAsync="OnSaveAsync">
+        <BodyTemplate>
+
+            <EditForm Model="regeneratePasswordDto" FormName="Recuperar" OnValidSubmit="HandleRegeneratePassword">
+                <DataAnnotationsValidator />
+
+                <div class="form-group marginCustom">
+                    <label for="emailRecuperar">Digite su correo electrónico</label>
+                    <InputText id="emailRecuperar" class="form-control customInput" type="email" @bind-Value="regeneratePasswordDto.EmailAddress"></InputText>
+                    <ValidationMessage For="@(() => regeneratePasswordDto.EmailAddress)" />
+                </div>
+                <div class="containerBtn">
+                    <input type="submit" class="customButton" value="Enviar" />
+                    <i class="bi bi-lock customIcon"></i>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+    </ModalDialog>
+</Modal>
+
+@code {
+
+}

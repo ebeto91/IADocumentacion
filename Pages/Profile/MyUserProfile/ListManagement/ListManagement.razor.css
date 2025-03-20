@@ -1,0 +1,17 @@
+﻿.container-list-task {
+    gap: 13px;
+    justify-content: center;
+    text-align: center;
+    justify-content: center
+}
+
+.footer-card-kanban {
+    flex-direction: column;
+}
+
+.custom-card {
+    padding: 0px;
+}
+.card-footer-custom {
+    border-bottom: 2px blue solid;
+}

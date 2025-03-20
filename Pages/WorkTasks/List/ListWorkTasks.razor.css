@@ -1,0 +1,119 @@
+﻿.container-cards {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+}
+
+.text-header-align-center {
+    justify-content: space-between;
+}
+
+.icon-edit {
+    font-size: 1.5em;
+}
+
+.icon-hide {
+    font-size: 1.7em;
+    cursor: pointer;
+}
+
+.container-icon :hover {
+    border-radius: 50px;
+}
+
+.container-icon :hover {
+    background-color: #d5d5d5;
+    color: #000000;
+    transition: background 0.2s ease-in-out;
+}
+
+.card-body-custom {
+    padding: 5px 15px;
+}
+.container-list-task {
+    gap: 13px;
+    justify-content: center;
+    text-align: center;
+    justify-content: center
+}
+
+.footer-card-kanban {
+    flex-direction: column;
+}
+
+.custom-card {
+    padding: 0px;
+}
+
+.card-footer-custom {
+    border-bottom: 2px blue solid;
+}
+
+.item-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.show-hide-text {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .show-hide-text a {
+        order: 2;
+    }
+
+    .show-hide-text p {
+        position: relative;
+        overflow: hidden;
+        max-height: 60px;
+        line-height: 20px;
+    }
+
+        .show-hide-text p:after {
+            content: "";
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 100px;
+            height: 20px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+
+@supports (-webkit-line-clamp: $rows) {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+    .show-hide-text p:after {
+        display: none;
+    }
+}
+
+.show-less {
+    display: none;
+}
+
+    .show-less:target {
+        display: block;
+    }
+
+        .show-less:target ~ p {
+            display: block;
+            max-height: 100%;
+        }
+
+        .show-less:target + a {
+            display: none;
+        }
+
+.wrapper {
+    max-width: 300px;
+    margin: 50px auto;
+}
+
+    .wrapper p {
+        font-size: 16px;
+        line-height: 20px;
+    }
+ 

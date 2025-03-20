@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>-->
+	  <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+	  <UserSecretsId>2366020a-653b-44f4-a75c-dd7abf62f697</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Locales\es.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Layout\MainLayout - Copia.razor.js" />
+    <None Remove="Layout\MainLayout.razor.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Layout\OpenSurveyVote.razor.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Layout\MainLayout.razor.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Layout\MainLayoutjs.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Locales\es.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+    <PackageReference Include="BlazorSpinner" Version="3.0.0" />
+    <PackageReference Include="BootstrapBlazor" Version="8.10.3" />
+    <PackageReference Include="BootstrapBlazor.FontAwesome" Version="8.2.0" />
+	  <PackageReference Include="BootstrapBlazor.BootstrapIcon" Version="8.0.3" />
+	  <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.6.0" />
+	  <PackageReference Include="LeafletForBlazor" Version="2.2.2.2" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.4" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.11" />
+	  <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.11" />
+    <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="8.0.4" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.68.0" />
+    <PackageReference Include="Microsoft.PowerBI.Api" Version="4.22.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NPOI" Version="2.7.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
+	  <PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <Folder Include="Pages\SurveyVoteQAOpen\VoteOpen\" />
+    <Folder Include="wwwroot\css\NewFolder\" />
+  </ItemGroup>
+
+</Project>

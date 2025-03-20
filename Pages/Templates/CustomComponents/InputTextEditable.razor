@@ -1,0 +1,64 @@
+﻿@inherits FilterBase
+
+@* <Select Items="@Items" @bind-Value="@Value" OnSelectedItemChanged="_ => OnFilterValueChanged()"></Select> *@
+@if (IsEditable)
+{
+    <InputText class="form-control" @bind-Value="@Value" placeholder="@Placeholder"></InputText>
+    <ValidationMessage For="@(() => Value)" />
+}
+else
+{
+    <InputText class="form-control disable" @bind-Value="@Value" readonly></InputText>
+    <ValidationMessage For="@(() => Value)" />
+}
+
+
+
+@code {
+    [Parameter]
+    public string Value { get; set; }
+
+    [Parameter]
+    public string Placeholder { get; set; }
+
+
+
+    [Parameter]
+    public bool IsEditable { get; set; }
+
+    /// <summary>
+    /// OnInitialized 方法
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    /// <summary>
+    /// 重置过滤条件方法
+    /// </summary>
+    public override void Reset()
+    {
+ 
+        StateHasChanged();
+    }
+
+    SelectedItem selectedItem { get; set; }
+    public static string OnGetDisplayText(SelectedItem foo) => foo.Text ?? "";
+    /// <summary>
+    /// 生成过滤条件方法
+    /// </summary>
+    /// <returns></returns>
+    public override FilterKeyValueAction GetFilterConditions()
+    {
+        var filter = new FilterKeyValueAction() { Filters = new() };
+        filter.Filters.Add(new FilterKeyValueAction()
+            {
+                FieldKey = FieldKey,
+                FieldValue = Value,
+                FilterAction = FilterAction.GreaterThan
+            });
+        return filter;
+    }
+
+}

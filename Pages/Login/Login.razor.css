@@ -1,0 +1,194 @@
+﻿.test{
+    color:green;
+}
+
+.containerLogin {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction:column;
+    align-items:center;
+    -webkit-box-shadow: -1px 0px 9px 3px rgba(196,196,196,1);
+    -moz-box-shadow: -1px 0px 9px 3px rgba(196,196,196,1);
+    box-shadow: -1px 0px 9px 3px rgba(196,196,196,1);
+    padding:30px;
+}
+
+    .containerLogin p {
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        text-align: center;
+    }
+
+
+
+.containerForm{
+    width:70%;
+ 
+}
+
+.marginCustom{
+    margin:0px 0 20px 0;
+}
+
+.containerForm label {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.4px;
+    color: #8C8C8C;
+    margin-bottom: 10px;
+}
+
+.marginCustom label {
+    color: var(--Login-text-color);
+}
+
+
+.containerText {
+    width: 300px;
+    margin-top: 5px;
+}
+
+.container-register {
+    display: flex;
+    justify-content: space-evenly;
+    width: 260px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .container-register p {
+        color: var(--Login-text-color);
+    }
+
+
+.containerText p {
+   
+}
+
+.modal-footer{
+    display:none !important;
+}
+.customButton {
+    width: 100%;
+    height: 45px;
+    background: #0e5396;
+    border: none;
+    color: white;
+    position: relative;
+}
+
+.customButtonRegenerate {
+    width: 200px;
+    height: 45px;
+    background: #0e5396;
+    border: none;
+    color: white;
+    position: relative;
+}
+
+.containerLogin h3 {
+    color: var( --Landing-color-blue-white);
+    
+}
+
+
+.customButton:hover {
+    background-color: rgba(0, 132, 207, 1);
+}
+
+input[type="email"] {
+    border-radius: 0px !important;
+    height: 50px;
+
+}
+.form-control {
+    border-radius: 0px !important;
+    height: 50px !important;
+}
+
+.containerBtn{
+    position:relative;
+}
+
+    .containerBtn:hover {
+        background-color:red;
+    }
+
+.customIcon {
+    position: absolute;
+    left: 20px;
+    top: 9px;
+    color: white;
+    font-size: 18px;
+}
+
+.container-remember {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-direction:column;
+    align-items:center;
+}
+
+    .container-remember span {
+        position: relative;
+        top: 1px;
+        left: 5px;
+     
+    }
+
+    .container-remember a {
+       margin-top:15px;
+    }
+.ckeckRemember {
+    display: flex;
+    align-items: center;
+}
+
+nav{
+    display:none !important;
+}
+
+
+.modal-xxl {
+    width: 50% !important;
+}
+
+.modal-dialog {
+    width: 50% !important;
+}
+
+.item-user-container {
+    display: none !important;
+}
+@media screen and (max-width: 450px) {
+    .containerLogin {
+        width:90%;
+    }
+
+    .containerForm {
+        width: 100%;
+    }
+
+    .container-register {
+        flex-direction: column;
+        align-items: center;
+        width:90%;
+    }
+
+    .containerText{
+        width:90%;
+    }
+
+    .container-remember {
+        flex-direction: column;
+        
+    }
+    }
+    
+    

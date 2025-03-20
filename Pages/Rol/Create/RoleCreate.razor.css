@@ -1,0 +1,200 @@
+﻿.input-submit-icon {
+    position: relative;
+    display: inline-block;
+}
+
+    .input-submit-icon input {
+        font-size: 16px;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        width: 150px;
+    }
+
+        .input-submit-icon input:hover {
+            background-color: #0056b3;
+        }
+
+.custom-button-close {
+    border: 2px solid var(--bb-red);
+    background-color: var(--bb-red);
+}
+
+    .custom-button-close:hover {
+        background-color: var(--bb-red-hover);
+    }
+
+.back-button {
+    border: 2px solid var(--secondary-custom);
+    background-color: var(--secondary-custom);
+    /*color : #000000*/
+}
+
+    .back-button:hover {
+        background-color: var(--secondary-custom-hover);
+    }
+
+.custom-buttons {
+    margin-top: 10px;
+    row-gap: 5px;
+}
+
+
+
+
+@media (max-width: 767px) {
+    .custom-buttons {
+        gap: 8px;
+    }
+
+    .input-submit-icon input {
+        width: 100%;
+    }
+}
+
+/*accordion*/
+.container-grid {
+    display: grid;
+    grid-template-columns: 0.2fr 1fr;
+    gap: 5px;
+    grid-template-rows: auto;
+}
+
+.showData {
+    display: block;
+}
+
+.hideData {
+    display: none;
+}
+
+.flex-accordion {
+    display: flex;
+    margin: 17px 0px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.form-switch .form-check-input {
+    width: 4em;
+    height: 1.7em;
+}
+
+.form-switch .form-check-module {
+    width: 4em;
+    height: 1.7em;
+    margin-top: -5px;
+    margin-left: 5px;
+}
+
+.accordion-item {
+    margin: 5px 0px;
+    border: 1.5px solid #1F1F38 !important;
+    border-radius: 5px;
+}
+.header-accordion-item {
+    margin: 1px;
+    background-color: var(--background-accordion);
+    border-bottom: 1px solid #1F1F38;
+}
+
+.accordion-header {
+    padding: 15px 20px !important;
+}
+
+.accordion-simulate {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 0rem;
+    font-size: 1rem;
+    color: var(--text-color-black);
+    text-align: left;
+    background-color: var(--background-accordion);
+    border: 0;
+    border-radius: 0;
+    overflow-anchor: none;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, border-radius .15s ease;
+}
+
+.item {
+    width: 310px;
+    margin: 10px;
+    display : flex;
+    align-items : center;
+}
+
+.itemGroup {
+    font-weight: 500;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+/*.TextSwitch {
+    margin-left: 4em;
+    margin-top: 5px;
+}
+
+
+}*/
+/*.TextSwitch {
+    margin-top: 5px;
+}
+
+.TextSwitchGroup {
+    margin-top: 5px;
+}*/
+    .cardGroupCategory {
+    flex: 0 1 49%; /* Toma el 49% del espacio disponible si hay más de uno */
+    box-shadow: 0px 0 30px var(--box-shadow-color-custom);
+}
+
+    .cardGroupCategory:only-child {
+        flex: 0 1 100%; /* Toma el 100% si es el único hijo */
+        box-shadow: 0px 0 30px var(--box-shadow-color-custom);
+    }
+
+.size-container-data {
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .flex-accordion {
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-direction : row;
+    }
+    .cardGroupCategory {
+        flex: 0 1 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-grid {
+        grid-template-areas: "btnBack btnAddRole";
+    }
+
+    .btnBack {
+        justify-self: flex-start;
+    }
+
+    .btnAddRole {
+        justify-self: flex-start;
+    }
+
+    .item {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575px) {
+    .container-grid {
+        grid-template-areas: "btnAddRole"
+            "btnBack";
+        grid-template-columns: 100%;
+    }
+}

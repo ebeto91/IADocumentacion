@@ -1,0 +1,501 @@
+﻿@page "/encuestas/editar/{surveyId}"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Survey
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.ControlInternalSurvey.ControlInternalSurveyCreate.ModalUpload
+
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.ControlInternalSurvey.ControlInternalSurveyCreate.SecondStepSurveyCreateItem
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.ControlInternalSurvey.ControlInternalSurveyEditProcess.SecondStepSurveyEditItem
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Templates.CustomComponents
+@inherits ControlInternalSurveyEditProcessBase
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">
+                        Editar Encuesta / Votación
+                    </h3>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a>Encuestas y votaciones</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Editar
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    @if (ModelData != null)
+                    {
+                        <div class="m-2">
+                            <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goToList" />
+                        </div>
+
+
+                        <Step @ref="@_stepper">
+                            <StepItem Text="" Title="Configuración">
+                                <EditForm Model="@ModelData" Context="formContext" OnValidSubmit="HandleValidSubmit">
+
+
+                                    <DataAnnotationsValidator />
+                                    <div class="divider-data mt-2 mb-2"></div>
+                                    <div class="text-center">
+                                        <h3 class="principal-title">
+                                            Detalle de las encuestas
+                                        </h3>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="mt-2 col-lg-4 col-sm-12">
+                                            <div class="form-group ">
+                                                <label>Título * </label>
+                                                <InputText class="form-control" @bind-Value="ModelData.Title"></InputText>
+                                                <ValidationMessage For="@(() => ModelData.Title)" />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="mt-2 col-lg-4 col-sm-12">
+                                            <div class="form-group ">
+                                                <label>Fecha de inicio * </label>
+                                                <DateTimePicker MinValue="DateTime.Today" @bind-Value="ModelData.StartDate" />
+                                                <ValidationMessage For="@(() => ModelData.StartDate)" />
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 col-lg-4 col-sm-12">
+                                            <div class="form-group ">
+                                                <label>Fecha de finalización * </label>
+                                                <DateTimePicker MinValue="ModelData.StartDate" @bind-Value="ModelData.DueRate" />
+                                                <ValidationMessage For="@(() => ModelData.DueRate)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="divider-data mt-2 mb-2"></div>
+                                    <div class="row">
+                                        <div class="mt-2 col-lg-3 col-sm-12">
+                                            <div class="form-group ">
+                                                <div class="checkbox-group">
+                                                    <input id="onlyIntern" type="checkbox" @bind="allowOnlyIntern" />
+                                                    <label for="onlyIntern">Publicación Interna</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="mt-2 col-lg-3 col-sm-12">
+                                            <div class="form-group ">
+                                                <div class="checkbox-group">
+                                                    <input id="allowOnlyExtern" type="checkbox" @bind="allowOnlyExtern" />
+                                                    <label for="allowOnlyExtern">Publicación al Ciudadano Registrado</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2 col-lg-3 col-sm-12">
+                                            <div class="form-group ">
+                                                <div class="checkbox-group">
+                                                    <input id="allowVoteOpen" type="checkbox" @bind-value="ModelData.AllowVoteOpen" checked="@ModelData.AllowVoteOpen" />
+                                                    <label for="allowVoteOpen">
+                                                        Publicación Abierta
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2 col-lg-3 col-sm-12">
+                                            <div class="form-group ">
+                                                <div class="checkbox-group">
+                                                    <input id="showResults" type="checkbox" @bind-value="ModelData.ShowResultsAlways" checked="@ModelData.ShowResultsAlways" />
+                                                    <label for="showResults">
+                                                        Mostrar resultados Siempre
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="mt-4 col-lg-6 col-sm-12">
+                                            <div class="form-group ">
+                                                <label>
+                                                    Detalle de la encuesta
+                                                </label>
+                                                <Textarea class="form-control" rows="4" @bind-Value="ModelData.Description" />
+                                                <ValidationMessage For="@(() => ModelData.Description)" />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="mt-4 col-lg-6 col-sm-12">
+                                            <div class="form-group ">
+                                                <label>
+                                                    Tipo de selección
+                                                </label>
+                                                <Select Items="listSelectType" @bind-Value="ModelData.TypeSurvey"></Select>
+                                                <ValidationMessage For="@(() => ModelData.TypeSurvey)" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="divider-data mt-2 mb-2"></div>
+                                    <div class="text-center">
+                                        <h3 class="principal-title">
+                                            Agregar Preguntas
+                                        </h3>
+                                    </div>
+                                    <div>
+                                        @if (isReadyPage)
+                                        {
+                                            <Card>
+                                                <BodyTemplate>
+
+
+                                                    <div class="divider-data mt-2 mb-2"></div>
+                                                    @if (!changeOrderEdit)
+                                                    {
+                                                        <Button Text="Cambiar Orden" Icon="bi bi-123" Color="Color.Secondary" @onclick="()=>changeOrderQuestions()" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <Button Text="Guardar Orden" Icon="bi bi-floppy2" Color="Color.Success" @onclick="()=>saveOrderQuestions()" />
+                                                    }
+                                                    <div class="divider-data mt-2 mb-2"></div>
+
+                                                    <div>
+                                                        <Row ItemsPerRow="ItemsPerRow.One">
+                                                            <ListView TItem="SurveyQuestionDto" Items="@ModelData.SurveyQuestions">
+                                                                <BodyTemplate>
+                                                                    <Card IsShadow="true">
+                                                                        <BodyTemplate>
+                                                                            <div id="@context.Id">
+                                                                                <div class="container-buttons-survey">
+                                                                                    <div class="col-lg-3 col-sm-12">
+                                                                                        <div class="form-group ">
+
+                                                                                            @if (changeOrderEdit)
+                                                                                            {
+                                                                                                <div class="form-floating">
+                                                                                                    <InputText class="form-control" @bind-Value="@context.OrderString" type="number" min="0" placeholder="Número de orden" />
+                                                                                                    <label for="floatingInput">Número de orden</label>
+                                                                                                </div>
+                                                                                                <ValidationMessage For="@(() => context.OrderString)" />
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <div class="form-floating">
+                                                                                                    <InputText class="form-control disable" @bind-Value="@context.OrderString" type="number" placeholder="Número de orden" readonly />
+                                                                                                    <label for="floatingInput">Número de orden</label>
+                                                                                                </div>
+
+
+                                                                                                <ValidationMessage For="@(() => context.OrderString)" />
+                                                                                            }
+
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <Button Text="Editar" Icon="bi bi-pencil-square" Color="Color.Secondary" @onclick="()=>startToEditItem(context)" />
+                                                                                    <Button Text="Eliminar" Icon="bi bi-x" Color="Color.Danger" @onclick="()=>deleteItem(context)" />
+                                                                                </div>
+
+                                                                                <div class="divider-data mt-2 mb-2"></div>
+
+                                                                                <div class="container-data-survey">
+
+
+                                                                                    <div class="row">
+
+                                                                                        <div class="mt-2 col-lg-12 col-sm-12">
+                                                                                            <div class="form-group ">
+                                                                                                <label>Pregunta. @context.Order * </label>
+                                                                                                @if (context.IsForEditable)
+                                                                                                {
+                                                                                                    <InputText class="form-control" @bind-Value="@context.Title" placeholder="Título pregunta"></InputText>
+                                                                                                    <ValidationMessage For="@(() => context.Title)" />
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    <InputText class="form-control disable" @bind-Value="@context.Title" readonly></InputText>
+                                                                                                }
+
+                                                                                            </div>
+                                                                                        </div>
+
+
+
+                                                                                    </div>
+
+                                                                                    <div class="row">
+                                                                                        <div class="mt-2 col-lg-12 col-sm-12">
+                                                                                            <div class="form-group ">
+                                                                                                <label>Tipo de selección </label>
+                                                                                                @if (context.IsForEditable)
+                                                                                                {
+
+                                                                                                    <div class="col-12">
+                                                                                                        <RadioList TValue="string" IsDisabled=false Items="@ListItemTipesSelection" 
+                                                                                                        @bind-Value="context.Type" Color="@Color.Primary"></RadioList>
+                                                                                                    </div>
+
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    <div class="col-12">
+                                                                                                        <RadioList IsDisabled=true TValue="string" Items="@ListItemTipesSelection" 
+                                                                                                        @bind-Value="context.Type" Color="@Color.Primary"></RadioList>
+                                                                                                    </div>
+                                                                                                }
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    @if (context.Type != SURVEYQUESTIONTYPE.SHORT_RESPONSE)
+                                                                                    {
+                                                                                        <div class="row  align-center">
+                                                                                            <div class="mt-2 col-lg-9 col-sm-12">
+                                                                                                <div class="form-group ">
+                                                                                                    <label>Nota Adicional </label>
+                                                                                                    @if (context.IsForEditable)
+                                                                                                    {
+                                                                                                        <InputText class="form-control" @bind-Value="@context.Note" placeholder="Nota pregunta"></InputText>
+                                                                                                        <ValidationMessage For="@(() => context.Note)" />
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        <InputText class="form-control disable" @bind-Value="@context.Note" readonly></InputText>
+                                                                                                    }
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="mt-2 col-lg-3 col-sm-12">
+                                                                                                @if (context.IsForEditable)
+                                                                                                {
+
+                                                                                                    <div class="form-check form-switch mt-2 item">
+                                                                                                        <input type="checkbox" id="@GetIdItem("check-item", context.Id)" @bind-value="@context.AllowOtherValue" checked="@context.AllowOtherValue" class="form-check-input" />
+                                                                                                        <span class="form-check-label TextSwitch">
+                                                                                                            Respuesta Abierta @(context.AllowOtherValue ? "Si" : "No")
+                                                                                                        </span>
+
+                                                                                                    </div>
+                                                                                                    if (context.AllowOtherValue)
+                                                                                                    {
+                                                                                                        <div class="form-group ">
+                                                                                                            <label>Descripción Respuesta Abierta </label>
+
+                                                                                                            <InputText class="form-control" @bind-Value="@context.DescriptionOtherValue" placeholder="Descripción Respuesta Abierta"></InputText>
+                                                                                                            <ValidationMessage For="@(() => context.DescriptionOtherValue)" />
+                                                                                                        </div>
+                                                                                                    }
+
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    <span class="form-check-label TextSwitch">
+                                                                                                        Respuesta Abierta @(context.AllowOtherValue ? "Si" : "No")
+                                                                                                    </span>
+                                                                                                    if (context.AllowOtherValue)
+                                                                                                    {
+                                                                                                        <div class="form-group ">
+                                                                                                            <label>Descripción Respuesta Abierta </label>
+                                                                                                            <InputText class="form-control disable" @bind-Value="@context.DescriptionOtherValue" placeholder="Descripción Respuesta Abierta" readonly></InputText>
+
+                                                                                                        </div>
+                                                                                                    }
+                                                                                                }
+
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    }
+                                                                                    <div class="row custom-margin-questions"
+                                                                                         style="@(context.Type != SURVEYQUESTIONTYPE.SHORT_RESPONSE ? "display: block" : "display:none")">
+                                                                                        @for (int i = 0; i < context.SurveyQuestionOptions.Count; i++)
+                                                                                        {
+                                                                                            var item = context.SurveyQuestionOptions[i];
+
+                                                                                            <EditForm Model="@item" Context="formContextItem">
+                                                                                                <DataAnnotationsValidator />
+                                                                                                <div class="row">
+                                                                                                    <div class="col-lg-8 col-sm-12 mt-2">
+                                                                                                        <div class="form-group">
+                                                                                                            <label> Respuesta. @item.Order </label>
+
+                                                                                                            @if (context.IsForEditable)
+                                                                                                            {
+
+                                                                                                                <InputText id="@GetIdItem("input-editable-", item.Id)" class="form-control" @bind-Value="@item.Description" placeholder="Opción"></InputText>
+                                                                                                                <ValidationMessage id="@GetIdItem("validate-input-editable-", item.Id)" For="@(() => @item.Description)" />
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+
+                                                                                                                <InputText id="@GetIdItem("input-normal-", item.Id)" class="form-control disable" @bind-Value="@item.Description" readonly></InputText>
+                                                                                                            }
+
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-lg-3 col-sm-12 container-items-response mt-2">
+                                                                                                        @if (context.IsForEditable)
+                                                                                                        {
+                                                                                                            <div>
+                                                                                                                <Button Size="Size.Small" ButtonStyle="ButtonStyle.Circle" Color="Color.Secondary" @onclick="()=> addItemOptionQuestion(context,item)"
+                                                                                                                        Icon="bi bi-plus">
+                                                                                                                </Button>
+                                                                                                            </div>
+
+                                                                                                            <div>
+                                                                                                                <Button Size="Size.Small" ButtonStyle="ButtonStyle.Circle" Color="Color.Secondary" @onclick="()=> deleteItemOptionQuestion(context,item)"
+                                                                                                                        Icon="bi bi-dash">
+                                                                                                                </Button>
+                                                                                                            </div>
+
+                                                                                                        }
+
+                                                                                                    </div>
+
+
+                                                                                                </div>
+                                                                                                <div class="divider-data mt-2 mb-2"></div>
+
+                                                                                            </EditForm>
+
+                                                                                        }
+
+                                                                                    </div>
+
+                                                                                    <div class="mt-2 col-lg-12 col-sm-12">
+                                                                                        @if (context.IsForEditable)
+                                                                                        {
+
+                                                                                            <div class="form-check form-switch mt-2 item">
+                                                                                                <input type="checkbox" id="@GetIdItem("check-item-allow-justification", context.Id)" @bind-value="@context.AllowJustification" checked="@context.AllowJustification" class="form-check-input" />
+                                                                                                <span class="form-check-label TextSwitch">
+                                                                                                    Permite Justificación @(context.AllowJustification ? "Si" : "No")
+                                                                                                </span>
+
+                                                                                            </div>
+                                                                                            if (context.AllowJustification)
+                                                                                            {
+
+                                                                                                <div class="form-group mt-2">
+                                                                                                    <div>
+                                                                                                        <label>Título de la justificación</label>
+                                                                                                    </div>
+                                                                                                    <InputText class="form-control" @bind-Value="@context.JustificationTitle" placeholder="Título justificación"></InputText>
+                                                                                                    <ValidationMessage For="@(() => context.JustificationTitle)" />
+                                                                                                </div>
+                                                                                            }
+
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <span class="form-check-label TextSwitch">
+                                                                                                Permite Justificación @(context.AllowJustification ? "Si" : "No")
+                                                                                            </span>
+                                                                                            if (context.AllowJustification)
+                                                                                            {
+                                                                                                <div class="form-group ">
+                                                                                                    <label>Título de la justificación</label>
+                                                                                                    <InputText class="form-control disable" @bind-Value="@context.JustificationTitle" placeholder="Título justificación" readonly></InputText>
+                                                                                                </div>
+                                                                                            }
+                                                                                        }
+
+
+                                                                                    </div>
+
+
+                                                                                    <div class="container-buttons-survey mt-3">
+
+                                                                                        @if (context.IsForEditable)
+                                                                                        {
+                                                                                            <Button id="@GetIdItem("save", context.Id)" Text="Guardar" Icon="bi bi-floppy2" Color="Color.Success" @onclick="()=> saveItemAndQuestion(formContext,context)" />
+                                                                                        }
+
+                                                                                        <Button id="@GetIdItem("new", context.Id)" Text="Nueva" Icon="bi bi-plus" Color="Color.Primary" @onclick="()=> addItemNewQuestion(context)" />
+                                                                                    </div>
+
+
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </BodyTemplate>
+                                                                    </Card>
+                                                                </BodyTemplate>
+
+                                                            </ListView>
+
+                                                        </Row>
+                                                    </div>
+
+
+
+                                                </BodyTemplate>
+                                            </Card>
+
+
+
+
+                                        }
+
+
+                                    </div>
+
+                                    <div class="row custom-buttons">
+                                        <div class="d-flex-end mt-2 col-12">
+                                            <AuthorizeScopeDirective Scope="Edit:Survey">
+                                                <div class="input-submit-icon button-general-form">
+                                                    <input type="submit" value="Siguiente" />
+                                                </div>
+                                            </AuthorizeScopeDirective>
+                                        </div>
+                                    </div>
+
+
+                                </EditForm>
+
+
+                            </StepItem>
+                            <StepItem Text="" Title="Subir Imagenes">
+
+                                <SecondStepSurveyEdit @ref="@secondStepSurveyEdit" ActionChild="ActionFatherBack"></SecondStepSurveyEdit>
+
+                            </StepItem>
+
+                        </Step>
+
+
+
+
+                    }
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>

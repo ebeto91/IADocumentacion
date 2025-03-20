@@ -1,0 +1,120 @@
+﻿@page "/memoria/ver/{memoryId}/{id:int?}"
+
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.CatalogDto
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Users
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.WorkTask
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.WorkTask.WorkTaskKanban
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.InstitutionalMemory.Edit.Details
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Templates.TableFilters
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.WorkTasks.Edit.Tabs.Attachments
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.WorkTasks.Edit.Tabs.Details
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.WorkTasks.Edit.Tabs.Historial
+@inherits ViewInstitutionalMemoryBase
+
+<div>
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">
+                        Memoria Institucional - Ver
+                    </h3>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                              @*   <a>Memoria Institucional</a> *@
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    <div class="mb-2">
+                        <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goToList" />
+                    </div>
+
+                    <div>
+                        <div>
+
+                            <div class="w-100">
+
+
+                                <Tab IsBorderCard="true" Text="Count" @ref="TabSetTemplate">
+                                    <TabItem Text="Detail">
+                                        <HeaderTemplate>
+                                            <div class="@GetClassString(context)" @onclick="() => OnClickTabItem(context)">
+                                                <i class="bi bi-info-lg"></i>
+                                                <h6 class="mx-2">Detalles</h6>
+                                            </div>
+                                        </HeaderTemplate>
+                                        <ChildContent>
+                                            @* userForListWithDepartment="userForListWithDepartment" *@
+                                            <EditInstitutionalMemoryDetails @ref="editWorkTasksDetails" IsActive="IsActiveDetail" memoryIdParam="memoloyId"
+                                                                            departmentListData="departmentListData"
+                                                                            listCatalogData="listCatalogData" associationResponseGroupByDistricts="associationResponseGroupByDistricts"
+                                                                            ActionChild="ActionComponentFather"
+                                                                            workTaskResponseDetail="workTaskResponseDetail" isView="true"></EditInstitutionalMemoryDetails>
+
+                                        </ChildContent>
+
+                                    </TabItem>
+                                    @*      <TabItem Text="Attachments">
+                                    <HeaderTemplate>
+                                    <div class="@GetClassString(context)" @onclick="() => OnClickTabItem(context)">
+                                    <i class="bi bi-paperclip"></i>
+                                    <h6 class="mx-2">Documentos</h6>
+
+                                    </div>
+                                    </HeaderTemplate>
+                                    <ChildContent>
+                                    <EditWorkTasksAttachments IsActive="IsActiveAttachments"></EditWorkTasksAttachments>
+                                    </ChildContent>
+                                    </TabItem>
+                                    *@
+
+
+                                </Tab>
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+
+@code {
+
+}

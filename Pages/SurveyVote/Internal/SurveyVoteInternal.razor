@@ -1,0 +1,58 @@
+﻿@page "/participacionMunicipio"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.SurveyVote.List
+@inherits SurveyVoteInternalBase
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title customBreakWord">
+                        Blog Municipal Interno
+                    </h3>
+                </div>
+            </div>
+
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    <div class="containerBtn">
+                    <Button Text="Crear Encuesta" Icon="bi bi-plus" @onclick="()=>createNewInternal()" />
+                    </div>
+                    <div class="form-group customGroupSurvey">
+                        <label for="memoria">Seleccione Participación</label>
+                        <Select Items="listSelectType" OnSelectedItemChanged="OnItemChanged" @bind-Value="surveyVoteInputFilterDto.TypeSurvey"></Select>
+
+                    </div>
+
+
+                    <ListSurveyVote SurveyVoteRegisterUserInternal="true" @ref="listSurveyVote"></ListSurveyVote>
+
+
+
+                </div>
+                <!-- End Card -->
+
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+@code {
+
+}

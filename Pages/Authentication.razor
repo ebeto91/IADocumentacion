@@ -1,0 +1,76 @@
+﻿@page "/authentication/{action}"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@layout LoginLayou
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="container-fluid text-center">
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    <div class="m-3">
+
+                        <Button Text="Volver Inicio" Icon="bi bi-arrow-left" @onclick="goToBack" />
+
+                    </div>
+
+                    <RemoteAuthenticatorView Action="@Action">
+                        <LoggingIn>
+                            <div>
+                                Cargando...
+                                <!-- SPINNING SQUARES -->
+                                <div class="spinner-box">
+                                    <div class="configure-border-1">
+                                        <div class="configure-core"></div>
+                                    </div>
+                                    <div class="configure-border-2">
+                                        <div class="configure-core"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </LoggingIn>
+                        <LogInFailed>
+                            <div>
+                                <Alert Color="Color.Danger">Error en la autenticación, operación cancelada por el usuario o información incorrecta</Alert>
+                            </div>
+                        </LogInFailed>
+
+                        <LogOutFailed>
+                            <div>
+                                Error LogOutFailed
+                            </div>
+                        </LogOutFailed>
+
+
+                    </RemoteAuthenticatorView>
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+@code {
+    [Parameter] public string? Action { get; set; }
+    private bool authenticated;
+
+    [Inject]
+    public NavigationManager _navigation { get; set; }
+
+
+    #region goTo
+    public async Task goToBack()
+    {
+        _navigation.NavigateTo("/");
+    }
+    #endregion
+}

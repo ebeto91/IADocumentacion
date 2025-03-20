@@ -1,0 +1,155 @@
+﻿@page "/opinion/resultados/{SurveyId}"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Survey
+@inherits SurveyVoteProgressBase
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title customBreakWord">
+                        Resultados
+                    </h3>
+
+                </div>
+            </div>
+      
+            <!-- end col -->
+        </div>
+
+        <div class="row">
+            <div class="containerBack">
+                <Button Icon="bi bi-arrow-left" OnClick="Back" Text="Volver"></Button>
+            </div>
+
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+
+                
+                    @if (Modeldefinition != null && Modeldefinition.SurveyQuestions != null && Modeldefinition.SurveyQuestions.Count > 0)
+                    {
+                        @foreach (var question in Modeldefinition.SurveyQuestions)
+                        {
+                            <div class="container-fluid customMargin"> 
+
+                            <p>@question.Title</p>
+                            <p>Total de respuestas: @question.TotalVotesQuestions</p>
+                          
+                            <div class="containerMainAnswer">
+                            @foreach (var answer in question.SurveyQuestionOptions)
+                            {
+                               <div class="container-fluid cardAnswer">
+                                 <p>Respuesta: @answer.Description</p>
+                                 <p>Total respuestas: @answer.Total</p>
+                                <div class="progress-container">
+                                    <svg class="progress-ring" width="100" height="100">
+                                        <circle class="progress-ring-background" cx="50" cy="50" r="45" stroke-width="8"></circle>
+                                        <circle id="@($"circle_{answer.Id.ToString()}_{answer.TotalPercentage}")" class="progress-ring-foreground circle" cx="50" cy="50" r="45" stroke-width="8"></circle>
+                                    </svg>
+                                    <div id="@($"text_circle_{answer.Id.ToString()}_{answer.TotalPercentage}")" class="progress-value">0%</div>
+                                </div>
+                                            @if (answer.SurveyQuestionOptionDocumentResponse != null && !string.IsNullOrEmpty(answer.SurveyQuestionOptionDocumentResponse.FilePath))
+                                            {
+                                                <Button class="marginCustomTop" @onclick="()=>View(answer.SurveyQuestionOptionDocumentResponse.FilePath)" Text="Ver Imagen"></Button>
+                                            }
+                                            @if (answer.IsOtherValue && answer.QuestionOptionsComments != null && answer.QuestionOptionsComments.Count>0 ) {
+                                                <Button class="marginCustomTop" OnClick="()=>OpenModal(answer.QuestionOptionsComments)" Text="Ver Comentario"></Button>
+                                            }
+
+                                 </div>
+                            }
+                                </div>
+                            </div>
+                        }
+                          
+
+                       
+
+                        <script>
+                         @*llamada despues de pintar las cards para hacer la animacion del progreso *@
+                           window.highlightElement();
+                        </script>
+                    }
+
+
+                 
+            </div>
+            <!-- End Card -->
+               
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+<div class="col-12 col-sm-4 col-lg-auto">
+    <Modal @ref="SmallFullScreenModal">
+        <ModalDialog ShowCloseButton="false" FullScreenSize="FullScreenSize.Always" Title="Comentarios">
+            <BodyTemplate>
+              <div class="container-fluid">
+
+                    <ListView TItem="QuestionComment" Items="Comments">
+                      <BodyTemplate>
+                            <div class="container-fluid">
+                                <p>@context.CommentValue</p>
+
+                                @* <AuthorizeScopeDirective Scope="CreateNewWorkTask:Survey">
+                                <Collapse>
+                                    <CollapseItems>
+                                        
+                                        @if(context.AllowForTask){
+                                        <CollapseItem Text="Enviar a tarea" hidden="@context.Hide">
+                                            <div class="form-group" style="width:100%;">
+                                                    @if (!context.Hide)
+                                                    {
+                                                        <label for="">Titulo de la Tarea(Requerido)</label>
+                                                        <InputText @bind-Value="context.Title" type="text" id="@($"title_{context.SurveyQuestionOptionUserId}")" class="form-control" > </InputText>
+                                                        <label for="">Descripción de la Tarea(Requerido)</label>
+                                                        <Textarea @bind-Value="context.Descripcion" id="@($"text_{context.SurveyQuestionOptionUserId}")" rows="3" class="form-control"></Textarea>
+                                                        <div style="margin-top:20px;">
+                                                        <Button hidden="@context.Hide" OnClick="()=>CheckSendToTask(context)" Text="Envia a tarea"></Button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>Tarea Creada</p>
+                                                    }
+                                                </div>
+                                           
+
+                                        </CollapseItem>
+                                        }
+                                        
+                                    </CollapseItems>
+                                </Collapse>
+                                </AuthorizeScopeDirective> *@
+
+                            </div>
+                      </BodyTemplate>
+                  </ListView>
+                
+                </div>
+            </BodyTemplate>
+        </ModalDialog>
+    </Modal>
+</div>
+
+
+<ImagePreviewer @ref="ImagePreviewer" PreviewList="PreviewList"></ImagePreviewer>
+
+@code {
+
+}

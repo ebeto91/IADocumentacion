@@ -1,0 +1,168 @@
+﻿@page "/catalogo/asociaciones"
+@inherits AssociationListBase
+
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.AssociationDistrict
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Associations.ControlAssign
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Associations.Create
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Associations.Edit
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Associations.LoadMassive
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Templates.TableFilters
+
+
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">Mantenimiento Asociaciones</h3>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a>Cátalogo</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Asociaciones
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    <div class="m-2 container-button-principal">
+                        <AuthorizeScopeDirective Scope="Create:Asociation">
+                            <Button Text="Agregar" Icon="bi bi-plus" @onclick="goToCreate" />
+                            <Button Text="Subir Masivo" Icon="bi bi-file-earmark-excel-fill" @onclick="openModalMassiveLoad" Color="Color.Secondary" />
+                        </AuthorizeScopeDirective>
+
+                    </div>
+                    @* @if (_getUserFilterResponse == null)
+                    {
+                    <span>No Hay Usuarios Registrados</span>
+                    }
+                    else
+                    { *@
+                    <Table TItem="AssociationResponse" @ref=Table PageItemsSource="PageItems" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                           IsPagination="true"
+                           IsStriped="true" IsBordered="true" OnQueryAsync="@OnQueryAsync"
+                           ShowSkeleton="true">
+                        <TableColumns>
+                            @* Filterable activar filtros *@
+                            <TableColumn @bind-Field="@context.Name" Width="150" TextWrap="true" Filterable="true" Text="Nombre Asociación">
+                                <FilterTemplate>
+                                    <TextFilter Placeholder="Buscar por nombre"></TextFilter>
+                                </FilterTemplate>
+                            </TableColumn>
+                            <TableColumn @bind-Field="@context.Description" Width="500" TextWrap="true" Filterable="false" Text="Detalle Asociación">
+                                @*      <FilterTemplate>
+                                <TextFilter Placeholder="Buscar por detalle"></TextFilter>
+                                </FilterTemplate> *@
+                            </TableColumn>
+
+                            <TableColumn @bind-Field="@context.DistrictLabel" Width="180" Text="Distrito">
+                                @* Template Básico *@
+                                @*     <FilterTemplate>
+                                <TextFilter Placeholder="Buscar por distrito"></TextFilter>
+                                </FilterTemplate> *@
+                            </TableColumn>
+
+                            <TableColumn @bind-Field="@context.NeighbordLabel" Width="180" Text="Barrio">
+                                <Template Context="value">
+                                    @if (!string.IsNullOrEmpty(value.Row.NeighbordCode))
+                                    {
+                                        <div class="table-cell is-wrap">
+                                            @value.Row.NeighbordLabel
+                                        </div>
+                             
+                                    }
+                                    else
+                                    {
+                                        <div class="table-cell is-wrap">
+                                            Sin barrio
+                                        </div>
+                                    }
+                                </Template>
+                            </TableColumn>
+
+                            <TableColumn @bind-Field="@context.Id" Text="" Width="80">
+                                @* Template Botones *@
+                                <Template Context="v">
+                                    <div class="custom-button-container">
+                                        <AuthorizeScopeDirective Scope="Edit:Asociation">
+                                            <Button Text="Editar" Icon="bi bi-pencil-fill item-button" @onclick='(() => openEdit(v))' />
+                                            <Button Text="Control Usuario" Icon="bi bi-person-fill-gear item-button" @onclick='(() => openControlUserAssign(v))' Color="Color.Secondary" />
+                                            <Button Text="Eliminar" Icon="bi bi-trash-fill item-button" @onclick='(() => deleteInfo(v))' Color="Color.Danger" />
+                                        </AuthorizeScopeDirective>
+                                    </div>
+                                </Template>
+                            </TableColumn>
+
+                        </TableColumns>
+                    </Table>
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+<Modal @ref="ModalCreate" OnShownAsync="OnShownCallbackAsync">
+    <ModalDialog IsCentered="true" Title="Agregar asociación" ShowCloseButton="false" ShowSaveButton="false" ShowHeaderCloseButton="true" Size="Size.Large">
+        <BodyTemplate>
+            <AssociationCreate itemsCatalogSelect="itemsCatalogSelect" itemsCatalogNeighborhoodSelect="itemsCatalogNeighborhoodSelect"  listDistrict="listDistricts" handleAssociationConfig="handleAssociationConfig" ActionChild="ActionComponentFather"></AssociationCreate>
+        </BodyTemplate>
+    </ModalDialog>
+</Modal>
+
+
+<Modal @ref="ModalEdit" OnShownAsync="OnShownCallbackEditAsync">
+    <ModalDialog IsCentered="true" Title="Editar asociación" ShowCloseButton="false" ShowSaveButton="false" ShowHeaderCloseButton="true" Size="Size.Large">
+        <BodyTemplate>
+            @* managementCatalogResponseEdit="managementCatalogResponseForEdit" *@
+            <AssociationEdit itemsCatalogSelect="itemsCatalogSelect" itemsCatalogNeighborhoodSelect="itemsCatalogNeighborhoodSelect" listDistrict="listDistricts" ActionChild="ActionEditComponentFather" handleAssociationConfigEdit="managementAssociationEditConfig"></AssociationEdit>
+        </BodyTemplate>
+    </ModalDialog>
+</Modal>
+
+<Modal @ref="ModalControlAssign" OnShownAsync="OnShownCallbackControlAssignAsync">
+    <ModalDialog IsCentered="true" Title="Configuración usuario asociación" ShowCloseButton="false" ShowSaveButton="false" ShowHeaderCloseButton="true" Size="Size.Large">
+        <BodyTemplate>
+            <AssociationControlAssign ActionChild="ActionControlAssignComponentFather"
+                                      associationListUsersResponse="associationListUsersResponse"
+                                      principalUserSelected="principalUserSelected"
+                                      associationId="associationId"></AssociationControlAssign>
+        </BodyTemplate>
+    </ModalDialog>
+</Modal>
+
+<Modal @ref="ModalLoadMassive" OnShownAsync="OnShownCallbackModalLoadAsync">
+    <ModalDialog IsCentered="true" Title="Subir información masiva" ShowCloseButton="false" ShowSaveButton="false" ShowHeaderCloseButton="true" Size="Size.ExtraLarge">
+        <BodyTemplate>
+            <AssociationLoadMassive itemsCatalogSelect="itemsCatalogSelect" listDistrict="listDistricts"
+                                    ActionChild="ActionModalAssignComponentFather" listAssociationsLoadedExcel="listAssociationsLoadedExcel"></AssociationLoadMassive>
+        </BodyTemplate>
+    </ModalDialog>
+</Modal>
+@* } *@

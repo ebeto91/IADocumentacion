@@ -1,0 +1,104 @@
+﻿@page "/perfil"
+@using Microsoft.AspNetCore.Components.Forms
+
+
+    <EditForm Model
+    ="@Model" OnValidSubmit
+    ="HandleValidSubmitAsync" OnInvalidSubmit
+    ="HandleInvalidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="profile-container">
+            <h1>Información Personal</h1>
+
+            <!-- Primera Tarjeta: Mis Datos -->
+            <div class="card">
+                <div class="form-section">
+                    <!-- Formulario de Datos -->
+                    <div class="form-fields">
+                        <div class="input-group">
+                            <label for="nombre">Nombre</label>
+                            <InputText id="nombre" @bind-Value="Model.Name" placeholder="Escribe tu nombre..." class="form-control" />
+                            <ValidationMessage For="@(() => Model.Name)" />
+                        </div>
+                        <div class="input-group">
+                            <label for="apellidos">Apellidos</label>
+                            <InputText id="apellidos" @bind-Value="Model.Lastname" placeholder="Escribe tus apellidos..." class="form-control" />
+                            <ValidationMessage For="@(() => Model.Lastname)" />
+                        </div>
+                        <div class="input-group">
+                            <label for="cedula">Cédula</label>
+                            <InputText id="cedula" @bind-Value="Model.Identification" placeholder="Escribe tu cédula..." class="form-control" disabled/>
+                            <ValidationMessage For="@(() => Model.Identification)" />
+                        </div>
+                        <div class="input-group">
+                            <label for="correo">Correo Electrónico</label>
+                        <InputText id="correo" type="email" @bind-Value="Model.EmailAddress" placeholder="Escribe tu correo..." class="form-control" disabled />
+                            <ValidationMessage For="@(() => Model.EmailAddress)" />
+                        </div>
+                    @if (isUserAssociation)
+                    {
+                        <div class="input-group">
+                            <label for="distrito">Distrito</label>
+                            <Select Items="itemsDistrito" id="distrito" Value="1" disabled></Select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="barrio">Barrio</label>
+                            <Select Items="itemsBarrio" id="barrio" Value="1" disabled></Select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="asociacion">Asociación</label>
+                            <Select Items="itemsAsociaciones" id="asociacion" Value="1" disabled></Select>
+                        </div>
+                    }
+                </div>
+
+                    <!-- Foto de Perfil -->
+                    <div class="profile-picture-section">
+
+                    <img @key="@Model.Id" src="@(Model.ImageProfile ?? ProfilePicture)" alt="Foto de perfil" />
+                        <label for="profilePictureUpload" class="upload-btn">Actualizar foto de perfil</label>
+                        <InputFile type="file" id="profilePictureUpload" OnChange="OnProfilePictureChange" hidden />
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- Segunda Tarjeta: Centro de Notificaciones y Privacidad -->
+            <div class="card">
+                <h2>Centro de Notificaciones y Privacidad</h2>
+                <div class="form-section">
+                    <h5 style="width: 100%;">Notificarme por:</h5>
+                    <div class="checkbox-group">
+                        <input id="emailNotifications" type="checkbox" @bind="NotificarPorCorreo"  />
+                        <label for="emailNotifications">Correo Electrónico</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input id="smsNotifications" type="checkbox" @bind="NotificarPorSms"  />
+                        <label for="smsNotifications">Mensaje SMS</label>
+                    </div>
+                </div>
+
+
+                <div class="form-section">
+                    <h5 style="width: 100%;">Ubicación:</h5>
+                    <div class="checkbox-group">
+                    <input id="locationSharing" type="checkbox" checked="@SharedLocation" @onchange="HandleOnChange" />
+                        <label for="locationSharing">Compartir mi ubicación.</label>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Botón de Actualizar Información -->
+            <button type="submit" class="update-btn">ACTUALIZAR INFORMACIÓN</button>
+            @* <button type="submit" class="update-btn" @onclick="ActualizarInformacion">ACTUALIZAR INFORMACIÓN</button> *@
+        </div>
+
+    </EditForm>
+

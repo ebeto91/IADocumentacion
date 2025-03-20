@@ -1,0 +1,109 @@
+﻿@page "/seguimientosolicitud"
+@layout LoginLayou
+@inherits FindManagementByPrincipalNumberBase
+
+
+<div class="content main-wrapper">
+    <div class="container-fluid">
+
+        <!-- ========== title-wrapper start ========== -->
+        <div class="title-wrapper pt-30">
+            <div class="row align-items-center header-container">
+                <div class="col">
+                    <div class="title container-title">
+                        <h3 class="principal-title">Seguimiento solicitudes / denuncias</h3>
+                    </div>
+                </div>
+
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- ========== title-wrapper end ========== -->
+        <!-- Invoice Wrapper Start -->
+        <div class="invoice-wrapper">
+            <div class="m-2">
+                <Button Text="Inicio" Icon="bi bi-arrow-left" @onclick="goToHome" />
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="invoice-card card-style mb-30">
+                        @if (ModelFirst != null)
+                        {
+
+
+                            <Step @ref="@_stepper">
+
+                                <StepItem Text="" Title="Búsqueda">
+                                    <EditForm Model="@FormObject" Context="formContext" OnValidSubmit="HandleValidSubmit">
+                                        <DataAnnotationsValidator />
+                                        <div class="divider-data mt-2 mb-2"></div>
+                                        <div class="text-center">
+                                            <h3 class="principal-title">
+                                                Búsqueda
+                                            </h3>
+                                        </div>
+                                        <div class="divider-data mt-2 mb-2"></div>
+                                        <div class="form-group item-note">
+                                            <label>
+                                                Nota: Digite el código de seguimiento para mostrar el estado de su solicitud o denuncia
+                                            </label>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-3 col-sm-12"></div>
+                                            <div class="mt-5 col-lg-6 col-sm-12">
+                                                <div class="form-group custom-input-form">
+                                                    <label class="mb-1 text-center">Ingresa el número de seguimiento </label>
+                                                    <InputText class="form-control" @bind-Value="FormObject.PrincipalNumberToFind"></InputText>
+                                                    <ValidationMessage For="@(() => FormObject.PrincipalNumberToFind)" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-sm-12"></div>
+                                        </div>
+
+                                        <div class="row custom-buttons">
+                                            <div class="d-flex-center col-12">
+                                                <div class="input-submit-icon button-general-form">
+                                                    <input type="submit" value="Buscar" />
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+
+
+                                    </EditForm>
+                                </StepItem>
+                                <StepItem Text="" Title="Detalle">
+                                    @if (IsSecondPageReadyToLoad)
+                                    {
+                                        <ManagementDetailView listCatalogData="listCatalogData" listImagesSelected="listImagesSelected" ModelFirst="ModelFirst" UserCreator="UserCreator"></ManagementDetailView>
+                                    }
+
+                                    <div class="m-2">
+                                        <Button Text="Volver a buscar" Icon="bi bi-arrow-left" @onclick="backToFirstStep" />
+                                    </div>
+
+                                </StepItem>
+
+                            </Step>
+
+
+
+                        }
+                    </div>
+                    <!-- End Card -->
+                </div>
+                <!-- ENd Col -->
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+

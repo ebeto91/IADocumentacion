@@ -1,0 +1,55 @@
+﻿@inherits ControlInternalComplaintEditModalDeniedBase
+
+
+<div>
+
+    <EditForm id="deniedForm" Model="PrincipalObject" FormName="DeniedForm" OnValidSubmit="HandleFormValid">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="mt-2 col-12">
+                <div class="form-group ">
+                    <label>
+                        Seleccionar respuesta predeterminada
+                    </label>
+
+                    <Select OnSelectedItemChanged="OnItemChanged" Items="listDefaultResponseDenied" @bind-Value="selectedItem"></Select>
+                </div>
+            </div>
+
+            <div class="mt-2 col-12">
+                <div class="form-group ">
+                    <label>
+                        Razón de Resolución
+                    </label>
+                    <Textarea class="form-control" rows="4" @bind-Value="PrincipalObject.ResolutionReason" />
+                    <ValidationMessage For="@(() => PrincipalObject.ResolutionReason)" />
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row custom-buttons">
+            <div class="d-flex-center col-md-6 col-sm-12">
+
+                <div class="input-submit-icon button-general-form">
+                    <input type="submit" value="Finalizar" />
+                </div>
+
+
+            </div>
+
+            <div class="d-flex-center col-md-6 col-sm-12">
+                <button type="button" class="custom-button-close button-general-form" @onclick="CloseModal">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+
+
+
+    </EditForm>
+
+
+
+</div>

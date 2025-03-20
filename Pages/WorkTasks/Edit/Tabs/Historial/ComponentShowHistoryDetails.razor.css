@@ -1,0 +1,22 @@
+﻿
+
+.container-message-detail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container-message-detail-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+@media (max-width: 767px) {
+
+
+    .container-message-detail {
+        flex-direction: column;
+    }
+}

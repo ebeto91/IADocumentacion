@@ -1,0 +1,332 @@
+﻿@inherits CitizenManagmentBase
+@page "/solicitud"
+@* @page "/"  *@
+@using LeafletForBlazor
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">Solicitud Ciudadana</h3>
+                </div>
+            </div>
+
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    <EditForm Model="createManagementInputDto" FormName="Login"
+                              OnValidSubmit="HandleCreateCitizenManagment">
+                        <DataAnnotationsValidator />
+
+
+                        <div class="container-grid container-fluid">
+
+                            <div class="form-group">
+                                <div class="checkbox-group" style="display:flex;">
+                                    <input id="locationSharing" type="checkbox" checked="@SharedLocation"
+                                           @onchange="HandleOnChange" />
+                                    <label for="locationSharing">
+                                        Deseo que la información que proporciono sea tratada de
+                                        manera confidencial y privada.
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nombre">Titulo de la solicitud *</label>
+                                <InputText id="nombre" maxlength="80" @bind-Value="createManagementInputDto.Title"
+                                           class="form-control" />
+                                <ValidationMessage For="@(() => createManagementInputDto.Title)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nombre">Fecha de Creación</label>
+                                <DateTimePicker IsDisabled="true" @bind-Value="citizenManagmentDto.Date" />
+
+                            </div>
+
+                            @if (isUserAssociation)
+                            {
+                                <div class="form-group customStart">
+                                    <label for="distrito">Distrito</label>
+                                    <Select Items="itemsDistrito" id="distrito" Value="1" disabled></Select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="barrio">Barrio</label>
+                                    <Select Items="itemsBarrio" id="barrio" Value="1" disabled></Select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="asociacion">Asociación</label>
+                                    <Select Items="itemsAsociaciones" id="asociacion" Value="1" disabled></Select>
+                                </div>
+                            }
+
+                            <div class="form-group textAreaCustom">
+                                <label for="nombre">Detalles de la solicitud *</label>
+                                <Textarea @bind-Value="createManagementInputDto.Description"
+                                          @oninput="UpdateCharacterCount" maxlength="280" rows="3" />
+                                <p style="display: flex;justify-content: flex-end;">
+                                    @($"{characterCount}/280")
+                                </p>
+
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="row mt-3 mb-3">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="nombre">Activar Ubicación</label>
+                                    @if (!SharedUbicationPerson)
+                                    {
+                                        <div class="form-group item-note mb-3">
+                                            <label>
+                                                Nota: en caso de dejar la ubicación por defecto se tomará como si no se hubiera seleccionado una ubicación.
+                                            </label>
+                                        </div>
+                                    }
+
+                                    <div class="buttons-map-information">
+                                        @if (!SharedUbicationPerson)
+                                        {
+                                            <Button Text="Activar Ubicación" Color="Color.Success" Icon="bi bi-geo-alt-fill" @onclick="()=>AskForActualUbication()" />
+
+                                          
+                                        }
+                                        <Button Text="Mostrar/Ocultar Mapa" Color="Color.Secondary" Icon="bi bi-info" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" />
+                                    </div>
+
+                                    <div class="collapse show mt-2" id="collapseExample">
+                                        <div class="card card-body">
+                                            <div class="col-12 mt-3">
+                                                <div id="map" height="460px" width="100%"></div>
+                                            </div>
+                                            <div class="row">
+                                                <p>Ubicación</p>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+
+                                                        <label for="lat">Latitud</label>
+                                                        <InputText id="lat" @bind-Value="createManagementInputDto.LatitudeS" class="form-control"
+                                                                   disabled />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+
+                                                        <label for="long">Longitud</label>
+                                                        <InputText id="long" @bind-Value="createManagementInputDto.LongitudeS" class="form-control"
+                                                                   disabled />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+
+                        <div class=" textAreaCustom">
+
+                            <div class="form-group textAreaCustom">
+                                <div class="text-center">
+                                    <h3 class="principal-title">
+                                        Evidencias (Permitidas 4 Imágenes)
+                                    </h3>
+                                </div>
+                                <div class="containerInput">
+                                    <InputFile style="display:none !important;" class="noShow" id="inputFile"
+                                               accept="image/*" OnChange="OnInputFileChange" multiple></InputFile>
+                                    <label for="inputFile">
+                                        <i class="bi bi-cloud-arrow-up"></i> &nbsp; Seleccione foto(s)
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="containerMainImages">
+                                @foreach (var imgE in imageDataUrl)
+                                {
+
+                                        if (imgE.Delete == false)
+                                        {
+                                            <div id="container-@imgE.Identificador" class="containerImage">
+                                                <i @onclick='()=>HandleDeleteImage(imgE.Identificador)' class="closeCustomIcon bi bi-x-circle"></i> 
+                                                <img class="customImg" src="@imgE.imageUrl" />
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                        </div>
+
+
+
+                        <div class="container-fluid customMarginCard">
+                            <p>Creado por</p>
+
+                            @if (isUserAssociation)
+                            {
+                                <div class="container-Create">
+                                    <div class="containerInfo">
+                                        <div class="form-group">
+                                            <label for="nombre">Nombre Asociación</label>
+                                            <InputText id="nombre" @bind-Value="createManagementInputDto.ManagementName"
+                                                       class="form-control" disabled />
+
+                                        </div>
+                                    </div>
+                                    <div class="containerInfo">
+                                        <div class="form-group">
+                                            <label for="nombre">Correo Electrónico</label>
+                                            <InputText id="nombre" @bind-Value="createManagementInputDto.ManagementEmail"
+                                                       class="form-control" disabled />
+
+                                        </div>
+                                    </div>
+                                    <div class="containerInfo">
+                                        <div class="form-group">
+                                            <label for="nombre">Teléfono</label>
+                                            <InputText id="nombre" @bind-Value="createManagementInputDto.ManagementPhone"
+                                                       class="form-control" disabled />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+
+                                <div class="container-Create">
+
+
+                                    <div class="containerInfo">
+                                        <div class="form-group">
+                                            <label for="nombre">Identificación</label>
+                                            <InputText id="nombre" @bind-Value="citizenManagmentDto.Identification"
+                                                       class="form-control" disabled />
+                                            <ValidationMessage For="@(() => citizenManagmentDto.Identification)" />
+                                        </div>
+                                    </div>
+                                    <div class="containerInfo">
+                                        <div class="form-group">
+                                            <label for="nombre">Nombre Completo</label>
+                                            <InputText id="nombre" @bind-Value="createManagementInputDto.ManagementName"
+                                                       class="form-control" disabled />
+                                            <ValidationMessage For="@(() => createManagementInputDto.ManagementName)" />
+                                        </div>
+                                    </div>
+                                    <div class="containerInfo">
+                                        <div class="form-group">
+                                            <label for="nombre">Correo Electrónico</label>
+                                            <InputText id="nombre" @bind-Value="createManagementInputDto.ManagementEmail"
+                                                       class="form-control" disabled />
+                                            <ValidationMessage For="@(() => createManagementInputDto.ManagementEmail)" />
+                                        </div>
+                                    </div>
+                                    <div class="containerInfo">
+                                        <div class="form-group">
+                                            <label for="nombre">Teléfono</label>
+                                            <InputText id="nombre" @bind-Value="createManagementInputDto.ManagementPhone"
+                                                       class="form-control" disabled />
+                                            <ValidationMessage For="@(() => createManagementInputDto.ManagementPhone)" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+                            <p style="margin-top:20px;">Participante</p>
+                             <div class="container-Create">
+                       
+                          <div class="containerInfo">
+                               <div class="form-group">
+                            <label for="nombre">Identificación</label>
+                            <InputText @bind-Value="Model.Identification" class="form-control" />
+                              @* <AutoFill @bind-Value="Model" id="autoFillCustom"  onblur="ClearIfNoMatch" SkipEnter="true" SkipEsc="true"  Items="users" IsLikeMatch="true" OnSelectedItemChanged="OnItemChanged" OnGetDisplayText="OnGetDisplayText" class="mb-3" IsSelectAllTextOnFocus="true">
+   <Template Context="itemValue">
+      <div class="d-flex">
+      <div>
+          <i class="bi bi-person bb-avatar"></i>
+      </div>
+      <div class="ps-2">
+          <div>@itemValue.Name &nbsp; @itemValue.Lastname</div>
+           <div class="bb-sub">@itemValue.Identification</div>
+      </div>
+  </div>
+ </Template>
+</AutoFill>
+  <ValidationMessage For="@(() => Model.Identification)" /> *@
+                                        <Button type="button" style="margin-top:10px;" OnClick="SearchCitizen">
+                                            Añadir
+                                            Participante
+                                        </Button>
+                                    </div>
+                                </div>
+                                <div class="containerInfo">
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre Completo</label>
+                                        <InputText id="nombre"
+                                                   @bind-Value="createManagementInputDto.ExternalManagementName"
+                                                   class="form-control" />
+                                        <ValidationMessage For="@(() => createManagementInputDto.ExternalManagementName)" />
+                                    </div>
+                                </div>
+                                <div class="containerInfo">
+                                    <div class="form-group">
+                                        <label for="nombre">Correo Electrónico</label>
+                                        <InputText id="nombre"
+                                                   @bind-Value="createManagementInputDto.ExternalManagementEmail"
+                                                   class="form-control" />
+                                        <ValidationMessage For="@(() => createManagementInputDto.ExternalManagementEmail)" />
+                                    </div>
+                                </div>
+                                <div class="containerInfo">
+                                    <div class="form-group">
+                                        <label for="nombre">Teléfono</label>
+                                        <InputText id="nombre"
+                                                   @bind-Value="createManagementInputDto.ExternalManagementPhone"
+                                                   class="form-control" />
+                                        <ValidationMessage For="@(() => createManagementInputDto.ExternalManagementPhone)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="containerSubmit">
+                            <input type="submit" class="customButton" value="PROCESAR SOLICITUD" />
+                        </div>
+
+                        <!-- End Card -->
+                    </EditForm>
+                </div>
+                <!-- End Card -->
+
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>

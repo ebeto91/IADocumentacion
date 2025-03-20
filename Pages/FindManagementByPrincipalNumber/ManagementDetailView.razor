@@ -1,0 +1,286 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Management
+@inherits ManagementDetailViewBase
+
+
+@* <div class="divider-data mt-2 mb-2"></div>
+<div class="text-center">
+    <h3 class="principal-title">
+        Detalle de Solicitud
+    </h3>
+</div> *@
+
+<div class="divider-data mt-2 mb-2"></div>
+
+<Card>
+    <BodyTemplate>
+        <div class="row">
+            <div class="mt-2 col-lg-6 col-sm-12">
+                <div class="form-group ">
+                    <label>Título Solicitud: </label>
+                    <label class="font-weight-bold">@ModelFirst.Title</label>
+
+                </div>
+            </div>
+            <div class="mt-2 col-lg-6 col-sm-12">
+                <div class="form-group ">
+                    <label>Fecha de Creación: </label>
+                    <label class="font-weight-bold">@ModelFirst.CreatedAt.ToString("yyyy-MM-dd hh:mm tt")</label>
+                </div>
+            </div>
+
+            @if (ModelFirst.DateIndicident.HasValue)
+            {
+                <div class="mt-2 col-lg-6 col-sm-12">
+                    <div class="form-group ">
+                        <label>Fecha del incidente: </label>
+                        <label class="font-weight-bold">@ModelFirst.DateIndicident.Value.ToString("yyyy-MM-dd")</label>
+                    </div>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(ModelFirst.NameUserIncident))
+            {
+                <div class="mt-2 col-lg-6 col-sm-12">
+                    <div class="form-group ">
+                        <label>Nombre del funcionario: </label>
+                        <label class="font-weight-bold">@ModelFirst.NameUserIncident</label>
+                    </div>
+                </div>
+            }
+
+
+
+        </div>
+
+        @if (ModelFirst.AssociationRelatedMemory != null)
+        {
+            <div class="row">
+                <div class="mt-2 col-lg-4 col-sm-12">
+                    <div class="form-group ">
+                        <label>Distrito: </label>
+                        <label class="font-weight-bold">@ModelFirst.AssociationRelatedMemory.DistrictLabel</label>
+                    </div>
+                </div>
+                <div class="mt-2 col-lg-4 col-sm-12">
+                    <div class="form-group ">
+                        <label>Barrio </label>
+                        <label class="font-weight-bold"> @validateData(ModelFirst.AssociationRelatedMemory.NeighbordLabel)  </label>
+                    </div>
+                </div>
+
+                <div class="mt-2 col-lg-4 col-sm-12">
+                    <div class="form-group ">
+                        <label>Asociación </label>
+                        <label class="font-weight-bold">@ModelFirst.AssociationRelatedMemory.Name</label>
+                    </div>
+                </div>
+            </div>
+        }
+    </BodyTemplate>
+</Card>
+
+<Card class="mt-2">
+    <BodyTemplate>
+        <div class="row">
+            <div class="mt-2 col-lg-12">
+                <div class="form-group ">
+                    <label>Detalle Solicitud: </label>
+                    <label class="font-weight-bold">@ModelFirst.Description</label>
+
+                </div>
+            </div>
+            <div class="divider-data mt-2 mb-2"></div>
+            <div class="mt-2 col-12">
+                @if (ModelFirst.AttachedDocuments != null && ModelFirst.AttachedDocuments.Count > 0)
+                {
+                    <div class="text-center">
+                        <h3 class="principal-title">
+                            Evidencias
+                        </h3>
+                    </div>
+
+                    <div>
+                        <Table TItem="ManagementAttachedDocumentDto" @ref="Table" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                               OnQueryAsync="@OnQueryAsync"
+                               IsStriped="true" IsBordered="true"
+                               ShowSkeleton="true">
+                            <TableColumns>
+                                <TableColumn @bind-Field="@context.FilePath" Width="170" TextWrap="true" Filterable="false" Text="Nombre">
+                                    <Template Context="value">
+                                        <div> <a href="@value.Row.FilePath" target=”_blank”> <i class="bi bi-box-arrow-in-up-right"></i> @value.Row.FileName </a></div>
+                                    </Template>
+                                </TableColumn>
+
+                                <TableColumn @bind-Field="@context.MimeType" Width="170" TextWrap="true" Filterable="false" Text="Tipo">
+                                    <Template Context="value">
+                                        <div>    @value.Row.MimeType  </div>
+                                    </Template>
+                                </TableColumn>
+
+
+                            </TableColumns>
+                        </Table>
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+
+    </BodyTemplate>
+</Card>
+
+
+
+
+<Card class="mt-2">
+    <BodyTemplate>
+        <div class="divider-data mt-2 mb-2"></div>
+        @if (!ModelFirst.IsAnonymous)
+        {
+            <div class="text-center">
+                <h3 class="principal-title">
+                    Información Personal
+                </h3>
+            </div>
+            <div class="divider-data mt-2 mb-2"></div>
+            <div class="text-center">
+                <h3>
+                    Creado por
+                </h3>
+            </div>
+
+
+            <div class="row">
+                <div class="mt-2 col-lg-3 col-sm-12">
+                    <div class="form-group ">
+                        <label>Cédula: </label>
+                        <label class="font-weight-bold"> @validateData(UserCreator.Identification)</label>
+                    </div>
+                </div>
+                <div class="mt-2 col-lg-3 col-sm-12">
+                    <div class="form-group ">
+                        <label>Nombre Completo: </label>
+                        <label class="font-weight-bold">@validateData(ModelFirst.ManagementName)</label>
+                        @* <InputText class="form-control disable" @bind-Value="ModelFirst.ManagementName" readonly></InputText> *@
+                    </div>
+                </div>
+
+                <div class="mt-2 col-lg-3 col-sm-12">
+                    <div class="form-group ">
+                        <label>Correo electrónico: </label>
+                        <label class="font-weight-bold"> @validateData(ModelFirst.ManagementEmail)</label>
+                        @* <InputText class="form-control disable" @bind-Value="ModelFirst.ManagementEmail" readonly></InputText> *@
+                    </div>
+                </div>
+                <div class="mt-2 col-lg-3 col-sm-12">
+                    <div class="form-group ">
+                        <label>Teléfono: </label>
+                        <label class="font-weight-bold"> @validateData(ModelFirst.ManagementPhone)</label>
+                        @* <InputText class="form-control disable" @bind-Value="ModelFirst.ManagementPhone" readonly></InputText> *@
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <h3>
+                    Participantes Externos
+                </h3>
+            </div>
+
+            <div class="row">
+                <div class="mt-2 col-lg-4 col-sm-12">
+                    <div class="form-group ">
+                        <label>
+                            Nombre Completo:
+                        </label>
+                        <label class="font-weight-bold"> @validateData(ModelFirst.ExternalManagementName)</label>
+                        @* <InputText class="form-control disable" @bind-Value="ModelFirst.ExternalManagementName" readonly></InputText> *@
+                    </div>
+                </div>
+                <div class="mt-2 col-lg-4 col-sm-12">
+                    <div class="form-group ">
+                        <label>
+                            Correo Electrónico:
+                        </label>
+                        <label class="font-weight-bold"> @validateData(ModelFirst.ExternalManagementEmail) </label>
+                        @* <InputText class="form-control disable" @bind-Value="ModelFirst.ExternalManagementEmail" readonly></InputText> *@
+                    </div>
+                </div>
+                <div class="mt-2 col-lg-4 col-sm-12">
+                    <div class="form-group ">
+                        <label>
+                            Teléfono:
+                        </label>
+                        <label class="font-weight-bold"> @validateData(ModelFirst.ExternalManagementPhone) </label>
+                        @* <InputText class="form-control disable" @bind-Value="ModelFirst.ExternalManagementPhone" readonly></InputText> *@
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </BodyTemplate>
+</Card>
+
+<Card class="mt-2">
+    <BodyTemplate>
+        <div class="divider-data mt-2 mb-2"></div>
+
+        <div class="text-center">
+            <h3 class="principal-title">
+                Detalles rellenados por el municipio
+            </h3>
+        </div>
+        <div class="divider-data mt-2 mb-2"></div>
+
+        <div class="row">
+
+            <div class="mt-2 col-lg-3 col-sm-12">
+                <div class="form-group ">
+                    <label>Estado: </label>
+                    <label class="font-weight-bold">@findStatus(ModelFirst.Status)</label>
+                </div>
+            </div>
+
+            <div class="mt-2 col-lg-9 col-sm-12">
+                <div class="form-group ">
+                    <label>Razón Resolución: </label>
+                    <label class="font-weight-bold"> @validateData(ModelFirst.ResolutionReason)</label>
+                    @* <InputText class="form-control disable" @bind-Value="ModelFirst.ManagementName" readonly></InputText> *@
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+
+
+            <div class="mt-2 col-lg-6 col-sm-12">
+                @if (ModelFirst.StartDateApplication.HasValue)
+                {
+                    <div class="form-group ">
+                        <label>Fecha de inicio de la asignación</label>
+                        <label class="font-weight-bold">@ModelFirst.StartDateApplication.Value.ToString("yyyy-MM-dd")</label>
+                    </div>
+
+                }
+
+            </div>
+            <div class="mt-2 col-lg-6 col-sm-12">
+                @if (ModelFirst.DueRateApplication.HasValue)
+                {
+                    <div class="form-group ">
+                        <label>Fecha de finalización de la asignación</label>
+                        <label class="font-weight-bold">@ModelFirst.DueRateApplication.Value.ToString("yyyy-MM-dd")</label>
+
+
+                    </div>
+
+                }
+            </div>
+
+        </div>
+    </BodyTemplate>
+</Card>

@@ -1,0 +1,229 @@
+﻿@page "/denunciaFuncionario"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.CitizenManagment
+@inherits EmployeeComplaintBase
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title customBreakWord">Formulario de Denuncia a Funcionario</h3>
+                </div>
+            </div>
+
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    <EditForm Model="denunciaFuncionario" FormName="EmployeeComplaint" OnValidSubmit="HandleEmployeeComplaint">
+                        <DataAnnotationsValidator />
+
+                        <InputText maxlength="190" hidden @bind-Value="createManagementInputDto.Title" class="form-control" />
+                        <div class="container-fluid">
+                            <h3 style="text-align:center; margin-bottom:20px;" class="customBreakWord">Detalles de la Denuncia</h3>
+                            <div class="container-grid-first-card">
+
+                                <div class="form-group">
+                                    <label>Fecha de Creación</label>
+                                    <DateTimePicker IsDisabled="true" @bind-Value="citizenManagmentDto.Date" />
+
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <label>Fecha del Incidente *</label>
+                                        <DateTimePicker @bind-Value="denunciaFuncionario.DateIndicident" MaxValue="@(DateTime.Today)" />
+                                        <ValidationMessage id="msgErrorLengt" For="@(() => denunciaFuncionario.DateIndicident)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <label for="pickDistrito">Distrito donde ocurrió el incidente *</label>
+                                        <Select Items="itemsCatalogSelect" id="pickDistrito" @bind-Value="denunciaFuncionario.DistrictCustom"></Select>
+                                        <ValidationMessage id="msgErrorLengt" For="@(() => denunciaFuncionario.DistrictCustom)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ContactPoint">Dirección exacta donde ocurrió el incidente *</label>
+                                    <InputText id="ContactPoint" maxlength="190" @bind-Value="denunciaFuncionario.ContactPointCustom" class="form-control" />
+                                    <ValidationMessage For="@(() => denunciaFuncionario.ContactPointCustom)" />
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="NameUserIncident">Nombre del funcionario</label>
+                                    <InputText id="NameUserIncident" maxlength="200" @bind-Value="denunciaFuncionario.NameUserIncident" class="form-control" />
+                                    <ValidationMessage For="@(() => denunciaFuncionario.NameUserIncident)" />
+                                </div>
+
+                                <div class="form-group textAreaCustom">
+                                    <label for="nombre">Descripción del incidente *</label>
+                                    <Textarea @bind-Value="denunciaFuncionario.Description" @oninput="UpdateCharacterCount" maxlength="280" rows="3" />
+
+                                    <ValidationMessage For="@(() => denunciaFuncionario.Description)" />
+                                    <p class="customPositionP">
+                                        @($"{characterCount}/280")
+                                    </p>
+
+
+
+                                </div>
+
+
+
+
+                            </div>
+
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="divider-data mt-2 mb-2"></div>
+                                <div class="text-center">
+                                    <h3 class="principal-title">
+                                        Evidencias
+                                    </h3>
+                                </div>
+                                <div class="row custom-buttons">
+                                    <div class="d-flex-center col-12 mt-2 mb-2">
+
+                                            <div class="containerInput">
+                                                <InputFile style="display:none !important;" class="noShow" id="inputFile" OnChange="OnInputFileChange" multiple accept=".mp4,.jpg,.jpeg,.png"></InputFile>
+                                                <label for="inputFile">
+                                                    <i class="bi bi-cloud-arrow-up"></i> &nbsp; Seleccionar nuevo(s)
+                                                </label>
+                                            </div>
+
+
+                                    </div>
+                                </div>
+                                <div>
+
+                                    <Table TItem="EvidenciaDto" @ref="Table" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                                           OnQueryAsync="@OnQueryAsync"
+                                           IsStriped="true" IsBordered="true"
+                                           ShowSkeleton="true">
+                                        <TableColumns Context="tableItem">
+                                            <TableColumn @bind-Field="@tableItem.imageUrl" Width="170" TextWrap="true" Filterable="false" Text="Nombre">
+                                                <Template Context="value">
+                                                    <div> <a href="@value.Row.imageUrl" target=”_blank”> <i class="bi bi-box-arrow-in-up-right"></i> @value.Row.FileImage.Name </a></div>
+                                                </Template>
+                                            </TableColumn>
+
+
+                                            <TableColumn @bind-Field="@tableItem.Identificador" Text="" Width="80">
+                                                @* Template Botones *@
+                                                <Template Context="item">
+                                                    <div class="custom-button-container">
+
+                                                        <Button Text="Eliminar" Icon="bi bi-trash-fill item-button" @onclick='(() => deleteInfo(item))' Color="Color.Danger" />
+
+                                                    </div>
+                                                </Template>
+                                            </TableColumn>
+
+
+                                        </TableColumns>
+                                    </Table>
+
+                                </div>
+                            </div>
+                        </div>
+
+               
+
+
+
+                        <div class="container-fluid margintopcards">
+                            <h3 style="text-align:center;margin-bottom:20px;" class="customBreakWord">Información Personal</h3>
+                            <div class="container-grid ">
+
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <label for="name">Nombre Completo</label>
+                                        <InputText id="name" maxlength="" @bind-Value="createManagementInputDto.ManagementName" class="form-control" disabled />
+                                        <ValidationMessage id="msgErrorLengt" For="@(() => createManagementInputDto.ManagementName)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Correo Electrónico</label>
+                                    <InputText id="email" maxlength="" @bind-Value="createManagementInputDto.ManagementEmail" class="form-control" disabled />
+                                    <ValidationMessage For="@(() => createManagementInputDto.ExternalManagementEmail)" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Teléfono</label>
+                                    <InputText id="phone" maxlength="8" @bind-Value="createManagementInputDto.ManagementPhone" class="form-control" disabled />
+                                    <ValidationMessage For="@(() => createManagementInputDto.ManagementPhone)" />
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="customDivMargin">
+                                <p class="customBreakWord">Autorización para Contactar</p>
+
+                                <div class="form-group customButtomMargin">
+                                    <div class="checkbox-group customCheckLabel">
+                                        <input id="isNotification" type="checkbox" class="customCheck" checked="@isNotification" @onchange="HandleNotification" />
+                                        <label for="isNotification">
+                                            Autorizo a la Oficina de Gestión al Ciudadano contactarme a traves de los datos proporcionados, con el
+                                            proposito de ampliar detalles o requerir información adicional para un tratamiento efectivo de la denuncia.
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <p class="customBreakWord">Confirmación de Confidencialidad</p>
+
+                                <div class="form-group">
+                                    <div class="checkbox-group customCheckLabel">
+                                        <input id="isAnonymous" type="checkbox" class="customCheck" checked="@isAnonymous" @onchange="HandleAnonymous" />
+                                        <label for="isAnonymous">
+                                            Deseo que mi denuncia permanezca anonima, soy consciente de que no autorizar de que se me contacte para ampliar detalles
+                                            o requerir información adicional, puede limitar una investigación efectiva por parte de la Municipalidad.
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="containerSubmit">
+
+
+                            <input type="submit" class="customButton" value="PROCESAR DENUNCIA" disabled="@(!context.IsModified() || !context.Validate())" />
+                        </div>
+                        <!-- End Card -->
+                    </EditForm>
+                </div>
+                <!-- End Card -->
+
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+@code {
+
+}

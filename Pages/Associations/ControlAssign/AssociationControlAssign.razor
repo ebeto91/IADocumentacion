@@ -1,0 +1,128 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Users
+
+@inherits AssociationControlAssignBase
+<div>
+    @if (associationListUsersResponse != null && principalUserSelected != null)
+    {
+        @if (associationListUsersResponse.UserRelated == null)
+        {
+            //la lista de usuarios con algún filtro o algo y un información cargada para saber cual es cual
+            <AutoFill TValue="UserResponse" Value="principalUserSelected" Items="associationListUsersResponse.ListUsersToJoin" SkipEnter="true" SkipEsc="true" IsLikeMatch="true" OnSelectedItemChanged="OnSelectedItemChanged"
+                      OnGetDisplayText="OnGetDisplayText" class="mb-3" IsSelectAllTextOnFocus="true">
+                <Template>
+                    <div class="d-flex">
+
+                        <div class="ps-2">
+                            <div><p class="custom-margin-0">@context.UserName</p></div>
+                            <div> <span>@context.EmailAddress</span></div>
+                            @* <div class="divider-data mt-2 mb-2"></div> *@
+                        </div>
+                    </div>
+                </Template>
+            </AutoFill>
+
+            <div class="divider-data mt-2 mb-2"></div>
+
+            <div class="text-center">
+                <p>Usuario Seleccionado</p>
+            </div>
+
+            <EditForm Model="principalUserSelected" FormName="EditFormAssing" OnValidSubmit="HandleFormAssingValid">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="mt-3 col-12">
+                        <div class="form-group marginCustom">
+                            <label>Identificación</label>
+                            <InputText class="form-control" @bind-Value="principalUserSelected.Identification" readonly></InputText>
+                        </div>
+                    </div>
+                    <div class="mt-3 col-12">
+                        <div class="form-group">
+                            <label>Nombre y apellidos</label>
+                            <InputText class="form-control" rows="4" @bind-Value="principalUserSelected.UserName" readonly />
+                            @* <ValidationMessage For="@(() => handleAssociationConfig.Description)" /> *@
+                        </div>
+                    </div>
+                    <div class="mt-3 col-12">
+                        <div class="form-group">
+                            <label>Correo eléctronico</label>
+                            <InputText class="form-control" rows="4" @bind-Value="principalUserSelected.EmailAddress" readonly />
+                            @* <ValidationMessage For="@(() => handleAssociationConfig.Description)" /> *@
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row custom-buttons">
+                    <div class="d-flex-center col-md-6 col-sm-12">
+                        <AuthorizeScopeDirective Scope="Edit:Asociation">
+                            <div class="input-submit-icon button-general-form">
+                                <input type="submit" value="Asignar nuevo">
+                            </div>
+                        </AuthorizeScopeDirective>
+                    </div>
+
+                    <div class="d-flex-center col-md-6 col-sm-12">
+                        <button type="button" class="custom-button-close button-general-form" @onclick="CloseModal">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+
+            </EditForm>
+        }
+        else
+        {
+
+ 
+            <EditForm Model="principalUserSelected" FormName="EditFormUnAssing" OnValidSubmit="HandleFormUnAssingValid">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="mt-3 col-12">
+                        <div class="form-group marginCustom">
+                            <label>Identificación</label>
+                            <InputText class="form-control" @bind-Value="principalUserSelected.Identification" readonly></InputText>
+                        </div>
+                    </div>
+                    <div class="mt-3 col-12">
+                        <div class="form-group">
+                            <label>Nombre y apellidos</label>
+                            <InputText class="form-control" rows="4" @bind-Value="principalUserSelected.UserName" readonly />
+                            @* <ValidationMessage For="@(() => handleAssociationConfig.Description)" /> *@
+                        </div>
+                    </div>
+                    <div class="mt-3 col-12">
+                        <div class="form-group">
+                            <label>Correo eléctronico</label>
+                            <InputText class="form-control" rows="4" @bind-Value="principalUserSelected.EmailAddress" readonly />
+                            @* <ValidationMessage For="@(() => handleAssociationConfig.Description)" /> *@
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row custom-buttons">
+                    <div class="d-flex-center col-md-6 col-sm-12">
+                        <AuthorizeScopeDirective Scope="Edit:Asociation">
+                            <div class="input-submit-icon button-general-form">
+                                <input type="submit" value="Desasignar">
+                            </div>
+                        </AuthorizeScopeDirective>
+                    </div>
+
+                    <div class="d-flex-center col-md-6 col-sm-12">
+                        <button type="button" class="custom-button-close button-general-form" @onclick="CloseModal">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        }
+    }
+
+
+
+</div>
+

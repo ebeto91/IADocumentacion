@@ -1,0 +1,54 @@
+﻿@* @page "/respuestasPredeterminadas/crear" *@
+@* @ref="ModalCreate" *@
+@inherits UploadPhotoModalBase
+<Modal @ref="ModalRef" OnCloseAsync="CloseModalSend">
+    <ModalDialog IsCentered="true" Title="Subir archivo" ShowCloseButton="false" ShowSaveButton="false" ShowHeaderCloseButton="true" Size="Size.Medium">
+        <BodyTemplate>
+
+            <div>
+
+                <div class="mt-2 col-lg-12">
+
+                    <div class="row custom-buttons">
+                        <div class="d-flex-center mt-2 mb-2">
+                            <div class="containerInput">
+                                <InputFile style="display:none !important;" class="noShow" id="inputFileItemModal" OnChange="OnInputFileItemChange" accept="image/*"></InputFile>
+                                <label for="inputFileItemModal">
+                                    <i class="bi bi-cloud-arrow-up"></i> &nbsp; Archivo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(_SurveyQuestionOptionDto.Url))
+                    {
+                        <div class="container-image-button">
+
+                                @* id="container-@ModelAddSurveyQuestionOptionDto.Description" *@
+                                <div class="containerImage">
+
+                                    <img class="customImg" src="@_SurveyQuestionOptionDto.Url" />
+
+                                </div>
+                     
+
+                                <Button Text="Borrar" Size="Size.Large" Color="Color.Danger" Icon="bi bi-x-circle" @onclick='()=>HandleDeleteImage()' />
+
+                  
+                         
+                        </div>
+                     
+                    }
+
+                </div>
+
+
+
+
+            </div>
+
+        </BodyTemplate>
+    </ModalDialog>
+</Modal>
+
+
+

@@ -1,0 +1,50 @@
+﻿@inherits FilterBase
+
+@* <Select Items="@Items" @bind-Value="@Value" OnSelectedItemChanged="_ => OnFilterValueChanged()"></Select> *@
+
+<div class="form-floating mb-3">
+    <InputText class="form-control" @bind-Value="@Value" placeholder="@Placeholder" />
+    <label for="floatingInput">@Placeholder</label>
+</div>
+
+
+@code {
+    private string Value = "";
+
+    [Parameter]
+    public string Placeholder { get; set; }
+
+    /// <summary>
+    /// OnInitialized 方法
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    /// <summary>
+    /// 重置过滤条件方法
+    /// </summary>
+    public override void Reset()
+    {
+        Value = "";
+
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// 生成过滤条件方法
+    /// </summary>
+    /// <returns></returns>
+    public override FilterKeyValueAction GetFilterConditions()
+    {
+        var filter = new FilterKeyValueAction() { Filters = new() };
+        filter.Filters.Add(new FilterKeyValueAction()
+            {
+                FieldKey = FieldKey,
+                FieldValue = Value,
+                FilterAction = FilterAction.GreaterThan
+            });
+        return filter;
+    }
+}

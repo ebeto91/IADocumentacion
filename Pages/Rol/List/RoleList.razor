@@ -1,0 +1,118 @@
+﻿@page "/catalogo/roles"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Roles
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Templates.TableFilters
+@inherits RoleListBase
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">Mantenimiento de Roles</h3>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a>Cátalogo</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Roles
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    <div class="m-2">
+                        <AuthorizeScopeDirective Scope="Create:Role">
+                            <Button Text="Agregar" Icon="bi bi-plus" @onclick="goToCreate" />
+                        </AuthorizeScopeDirective>
+
+                    </div>
+                    @* @if (_getUserFilterResponse == null)
+                    {
+                    <span>No Hay Usuarios Registrados</span>
+                    }
+                    else
+                    { *@
+                    <Table TItem="RoleDto" @ref=Table PageItemsSource="PageItems" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                           IsPagination="true"
+                           IsStriped="true" IsBordered="true" OnQueryAsync="@OnQueryAsync"
+                           ShowSkeleton="true">
+                        <TableColumns>
+                            @* Filterable activar filtros *@
+                            <TableColumn @bind-Field="@context.Name" Width="170" TextWrap="true" Filterable="true" Text="Nombre Rol">
+                                <FilterTemplate>
+                                    <TextFilter Placeholder="Buscar por nombre"></TextFilter>
+                                </FilterTemplate>
+                            </TableColumn>
+                            <TableColumn @bind-Field="@context.Description" Width="170" TextWrap="true" Filterable="false" Text="Descripción Rol">
+
+                            </TableColumn>
+
+                            <TableColumn @bind-Field="@context.Enabled" Width="180" Text="Estado">
+                                <Template Context="value">
+                                    @if (value.Row.Enabled)
+                                    {
+                                        <div class="text-success">Habilitado</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-danger">Deshabilitado</div>
+                                    }
+                                </Template>
+                            </TableColumn>
+
+                            <TableColumn @bind-Field="@context.Id" Text="" Width="80">
+                                @* Template Botones *@
+                                <Template Context="v">
+                                    <div class="custom-button-container">
+                                        <AuthorizeScopeDirective Scope="Edit:Role">
+                                            <Button Text="Editar" Icon="bi bi-pencil-fill item-button" @onclick='(() => openEdit(v))' />
+                                        </AuthorizeScopeDirective>
+
+
+                                        @if (v.Row.Enabled)
+                                        {
+                                            <AuthorizeScopeDirective Scope="Edit:Role">
+                                                <Button Text="Deshabilitar" Icon="bi bi-x-circle item-button" @onclick='(() => inactiveRole(v))' Color="Color.Danger" />
+                                            </AuthorizeScopeDirective>
+                                        }
+                                        else
+                                        {
+                                            <AuthorizeScopeDirective Scope="Edit:Role">
+                                                <Button Text="Habilitar" Icon="bi bi-check-circle item-button" @onclick='(() => activeRole(v))' Color="Color.Success" />
+                                            </AuthorizeScopeDirective>
+                                        }
+                                    </div>
+                                </Template>
+                            </TableColumn>
+
+                        </TableColumns>
+                    </Table>
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>

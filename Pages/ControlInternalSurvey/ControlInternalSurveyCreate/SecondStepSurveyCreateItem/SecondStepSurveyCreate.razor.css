@@ -1,0 +1,132 @@
+﻿
+.containerMainImages {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+
+
+.customImg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
+
+.containerInput {
+    min-width: 230px;
+    position: relative;
+}
+
+input[type="file"] {
+    display: none !important;
+}
+
+.noShow {
+    display: none !important;
+}
+
+.containerInput label {
+    display: flex;
+    position: relative;
+    background-color: #025bee;
+    color: white;
+    text-align: center;
+    width: 230px;
+    margin: auto;
+    border-radius: 5px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    padding: 5px;
+}
+
+.closeCustomIcon {
+    position: absolute;
+    top: -15px;
+    right: -10px;
+}
+
+
+
+
+
+.containerImage {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #e5dfdf;
+    padding: 10px;
+    /*   margin-bottom: 10px;
+    margin-top: 10px;*/
+    margin: 15px auto;
+}
+
+.container-button-delete {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+
+
+.container-Create {
+    margin-top: 20px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    row-gap: 20px;
+    column-gap: 30px;
+}
+.back-button {
+    border: 2px solid var(--secondary-custom);
+    background-color: var(--secondary-custom);
+    /*color : #000000*/
+}
+
+    .back-button:hover {
+        background-color: var(--secondary-custom-hover);
+    }
+.custom-buttons {
+    margin-top: 10px;
+    row-gap: 5px;
+}
+
+@media (max-width: 767px) {
+    .custom-buttons {
+        gap: 8px;
+    }
+
+    .input-submit-icon input {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 792px) {
+    .container-grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .containerInput {
+        min-width: 100%;
+    }
+
+    .container-buttons-survey {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .container-Create {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .containerInput label {
+        width: 100%;
+    }
+}

@@ -1,0 +1,283 @@
+﻿@inherits RoleEditBase
+@page "/catalogo/roles/editar/{roleId:int}"
+
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">Mantenimiento de roles - editar</h3>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a>Cátalogo</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Roles
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    <div class="m-2">
+                        <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goToList" />
+                    </div>
+                    @if (ModelFirst != null && ModelSecond != null)
+                    {
+                        <Step @ref="@_stepper">
+                            <StepItem Text="" Title="Configuración General">
+                                <EditForm Model="@ModelFirst" OnValidSubmit="HandleValidSubmit">
+                                    <DataAnnotationsValidator />
+                                    <div class="row">
+                                        <div class="mt-4 col-12">
+                                            <div class="form-group ">
+                                                <label>Nombre Rol * </label>
+                                                <InputText class="form-control" @bind-Value="ModelFirst.Name"></InputText>
+                                                <ValidationMessage For="@(() => ModelFirst.Name)" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="mt-4 col-12">
+                                            <div class="form-group ">
+                                                <label>Descripción</label>
+                                                <InputText class="form-control" @bind-Value="ModelFirst.Description"></InputText>
+                                                <ValidationMessage For="@(() => ModelFirst.Description)" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="mt-4 col-12">
+                                            <div class="form-group ">
+                                                <label>Roles permitidos que puede agregar este rol</label>
+                                                @* <Select Items="listRoles" @bind-Value="ModelFirst.FilterRole"></Select> *@
+                                                <MultiSelect class="custom-line-height" PlaceHolder="" Items="@listRoles" @bind-Value="@ModelFirst.FilterRole" />
+                                                <ValidationMessage For="@(() => ModelFirst.FilterRole)" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row custom-buttons">
+                                        <div class="d-flex-end mt-2 col-12">
+                                            <AuthorizeScopeDirective Scope="Edit:Role">
+                                                <div class="input-submit-icon button-general-form">
+                                                    <input type="submit" value="Siguiente" />
+                                                </div>
+                                            </AuthorizeScopeDirective>
+                                        </div>
+                                    </div>
+                                </EditForm>
+
+                            </StepItem>
+                            <StepItem Text="" Title="Permisos y vistas">
+
+
+                                <EditForm Model="@ModelSecond" OnValidSubmit="HandleValidSecondSubmit">
+                                    <DataAnnotationsValidator />
+
+                                    @foreach (var item in ModelSecond)
+                                    {
+                                        <div class="accordion-item">
+                                            <div class="header-accordion-item">
+                                                <h2 class="accordion-header" id="@item.Name">
+                                                    @if (!item.ShowSelectScopesModule && !item.ShowOnlySelectModule)
+                                                    {
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Module-@item.ModuleKeyName" aria-expanded="true" aria-controls="collapseOne">
+                                                            @item.Name
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (item.ShowSelectScopesModule)
+                                                        {
+                                                            <div class="size-container-data">
+
+                                                                <Tooltip Placement="Placement.Top" Title="Si está habilitada se le cargará al rol está opción del menú">
+                                                                    <div class="d-flex">
+                                                                        <div class="ml-3 mt-2">
+                                                                            <label class="font-weight-bold text-center"> Habilitar Opción Menú </label>
+                                                                        </div>
+
+                                                                        <div class="form-check form-switch mt-2">
+                                                                            <input type="checkbox" id="@item.ModuleKeyName" @key="item.ModuleKeyName" @bind-value="@item.Selected" checked="@item.Selected" class="form-check-input form-check-module " />
+                                                                        </div>
+                                                                    </div>
+                                                                    <button class="accordion-button collapsed mt-4" type="button" data-bs-toggle="collapse" data-bs-target="#Module-@item.ModuleKeyName" aria-expanded="true" aria-controls="collapseOne">
+                                                                        @item.Name
+                                                                    </button>
+                                                                </Tooltip>
+                                                            </div>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (item.ShowOnlySelectModule)
+                                                            {
+                                                                <div class="size-container-data">
+
+                                                                    <Tooltip Placement="Placement.Top" Title="Si está habilitada se le cargará al rol está opción del menú">
+                                                                        <div class="d-flex">
+                                                                            <div class="ml-3 mt-2">
+                                                                                <label class="font-weight-bold text-center"> Habilitar Opción Menú  </label>
+                                                                            </div>
+
+                                                                            <div class="form-check form-switch mt-2">
+                                                                                <input type="checkbox" id="@item.ModuleKeyName" @key="item.ModuleKeyName" @bind-value="@item.Selected" checked="@item.Selected" class="form-check-input form-check-module " />
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <button class="accordion-simulate" type="button">
+                                                                            @item.Name
+                                                                        </button>
+                                                                    </Tooltip>
+
+
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+
+                                                </h2>
+                                            </div>
+
+
+                                            <div id="Module-@item.ModuleKeyName" class="accordion-collapse  collapse" aria-labelledby="Module-@item.ModuleKeyName">
+                                                <div class="accordion-body @(item.ListItemModules.Count <= 0 && item.ListCategoryScopes.Count <= 0 ? "hideData" : "showData")">
+
+                                                    <div class="@(item.ListItemModules.Count > 0? "showData":"hideData")">
+                                                        <label class="font-weight-bold text-center mt-4">
+                                                            Manejo de Items de Menú
+                                                        </label>
+                                                        <div class="flex-accordion">
+                                                            @foreach (var subItem in item.ListItemModules)
+                                                            {
+                                                                <div class="form-check form-switch mt-2 item">
+                                                                    <input type="checkbox" id="@subItem.MenuModuleItemKeyName" @key="subItem.MenuModuleItemKeyName" @bind-value="@subItem.Selected" checked="@subItem.Selected" class="form-check-input" />
+                                                                    <span class="form-check-label TextSwitch">
+                                                                        @subItem.Name
+                                                                    </span>
+
+                                                                </div>
+                                                            }
+
+
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <hr class="@(item.ListItemModules.Count > 0? "showData":"hideData")">
+
+
+                                                    @if (item.ListCategoryScopes != null)
+                                                    {
+                                                        <div class="mt-4">
+                                                            <label class="font-weight-bold text-center">Manejo de permisos del rol</label>
+                                                            <div class="flex-accordion">
+                                                                @foreach (var subItem in item.ListCategoryScopes)
+                                                                {
+
+                                                                    <div class="card cardGroupCategory">
+                                                                        <div class="card-header">
+                                                                            <span class="text-card-header ">@subItem.CategoryName</span>
+
+                                                                        </div>
+                                                                        <ul class="list-group list-group-flush">
+
+                                                                            @foreach (var scope in subItem.ListScopes)
+                                                                            {
+                                                                                <li class="list-group-item">
+
+                                                                                    <Tooltip Placement="Placement.Top" Title="@scope.Description">
+                                                                                        <div class="form-check form-switch mt-2 itemGroup">
+                                                                                            <input id="@scope.Name" @key="scope.Name" type="checkbox" @bind-value="@scope.Selected" checked="@scope.Selected" class="form-check-input" />
+                                                                                            <label class="form-check-label TextSwitchGroup">
+                                                                                                <span>@scope.NameTranslate</span>
+                                                                                            </label>
+
+                                                                                        </div>
+                                                                                    </Tooltip>
+                                                                                </li>
+                                                                            }
+
+                                                                        </ul>
+                                                                    </div>
+
+                                                                }
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="row custom-buttons">
+
+                                        <div class="d-flex-center col-md-6 col-sm-12">
+                                            <button type="button" class="back-button button-general-form" @onclick="backToFirstStep">
+                                                Paso Anterior
+                                            </button>
+                                        </div>
+
+                                        <div class="d-flex-center col-md-6 col-sm-12">
+                                            <AuthorizeScopeDirective Scope="Edit:Role">
+                                                <div class="input-submit-icon button-general-form">
+                                                    <input type="submit" value="Editar" />
+                                                </div>
+                                            </AuthorizeScopeDirective>
+
+                                        </div>
+
+
+
+                                    </div>
+                                </EditForm>
+
+                            </StepItem>
+
+                        </Step>
+                    }
+
+
+
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+

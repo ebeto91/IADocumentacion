@@ -1,0 +1,687 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.WorkTask
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Templates.TableFilters
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.WorkTasks.Edit.Tabs.Details.Comments
+@inherits EditInstitutionalMemoryDetailsBase;
+@if (workTaskResponseDetail != null)
+{
+
+    <Card class="custom-card-size">
+        <BodyTemplate>
+
+            <EditForm Model="workTaskResponseDetail" FormName="EditFormUnAssing" Context="formContext">
+                <DataAnnotationsValidator />
+                <div class="divider-data mt-2 mb-2"></div>
+                <div class="row">
+                    <div class="col-lg-8 col-sm-12">
+                        <div class="text-center">
+                            <h3 class="principal-title">
+                                Detalle de Solicitud
+                            </h3>
+                        </div>
+
+                        <div class="row">
+                            <div class="mt-2 col-lg-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>Título Solicitud * </label>
+                                    <InputText class="form-control" @bind-Value="workTaskResponseDetail.Title"></InputText>
+                                    <ValidationMessage For="@(() => workTaskResponseDetail.Title)" />
+                                </div>
+                            </div>
+
+                            <div class="mt-2 col-lg-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>
+                                        Tipo de memoria
+                                    </label>
+                                    <Select Items="listSelectType" @bind-Value="workTaskResponseDetail.TypeApplication"></Select>
+                                    <ValidationMessage For="@(() => workTaskResponseDetail.TypeApplication)" />
+                                </div>
+                            </div>
+                            <div class="mt-2 col-lg-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>
+                                        Estado Solicitud
+                                    </label>
+                                    <Select Items="listSelectStatus" @bind-Value="workTaskResponseDetail.Status" OnSelectedItemChanged="OnItemChangedStatus"></Select>
+                                    <ValidationMessage For="@(() => workTaskResponseDetail.Status)" />
+                                </div>
+                            </div>
+                            <div class="mt-2 col-lg-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>
+                                        Prioridad *
+                                    </label>
+                                    <Select Items="listSelectPriority" @bind-Value="workTaskResponseDetail.Priority"></Select>
+                                    <ValidationMessage For="@(() => workTaskResponseDetail.Priority)" />
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="mt-5 col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="memoria">Distrito</label>
+                                    <Select OnSelectedItemChanged="OnItemChangedDistrict" Items="listSelectDistrict" @bind-Value="workTaskResponseDetail.District"></Select>
+
+                                </div>
+
+                                @* <div class="form-group ">
+                            <label>Barrio: </label>
+                            @if (!string.IsNullOrEmpty(workTaskResponseDetail.Neighborhood))
+                            {
+                            <label class="font-weight-bold">
+                            @findNameNeighborhood(@workTaskResponseDetail.District, @workTaskResponseDetail.Neighborhood)
+                            </label>
+                            }
+                            else
+                            {
+                            <label class="font-weight-bold">
+                            Sin barrio
+                            </label>
+                            }
+                            </div>
+
+                            @if (workTaskResponseDetail.AssociationRelatedMemory != null)
+                            {
+                            <div class="col-lg-4 col-sm-12">
+                            <div class="form-group ">
+                            <label>Asociación </label>
+                            <label class="font-weight-bold">@workTaskResponseDetail.AssociationRelatedMemory.Name</label>
+                            </div>
+
+                            </div>
+                            } *@
+
+                                <div class="form-group">
+                                    <label for="memoria">Barrio</label>
+                                    <Select Items="listSelectNeighborhood" @bind-Value="workTaskResponseDetail.Neighborhood"></Select>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="memoria">Asociación</label>
+                                    <Select Items="listSelectAssociation" @bind-Value="workTaskResponseDetail.AssociationMemory"></Select>
+
+                                </div>
+                            </div>
+
+                            <div class="mt-2 col-lg-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>
+                                        Punto de contacto (información del lugar)
+                                    </label>
+                                    <Textarea class="form-control" rows="4" @bind-Value="workTaskResponseDetail.ContactPoint" />
+                                    <ValidationMessage For="@(() => workTaskResponseDetail.ContactPoint)" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="mt-2 col-lg-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>Fecha de inicio </label>
+                                    @* OnValueChanged="@OnItemChanged" Value="workTaskResponseDetail.StartDateApplication"*@
+
+                                    @if (isReadyHolydays)
+                                    {
+                                        <DateTimePicker MinValue="DateTime.Today" OnValueChanged="@OnItemChanged" OnGetDisabledDaysCallback="OnGetDisabledDaysCallback" DisplayDisabledDayAsEmpty="true" @bind-Value="workTaskResponseDetail.StartDateApplication" />
+                                    }
+                                    <ValidationMessage For="@(() => workTaskResponseDetail.StartDateApplication)" />
+                                </div>
+                            </div>
+                            <div class="mt-2 col-lg-6 col-sm-12">
+                                <div class="form-group ">
+                                    <label>Fecha de finalización * </label>
+                                    @if (isReadyHolydays)
+                                    {
+                                        <DateTimePicker MinValue="workTaskResponseDetail.StartDateApplication" OnGetDisabledDaysCallback="OnGetDisabledDaysCallback"
+                                                        IsDisabled="!workTaskResponseDetail.StartDateApplication.HasValue" @bind-Value="workTaskResponseDetail.DueRateApplication" />
+                                    }
+                                    <ValidationMessage For="@(() => workTaskResponseDetail.DueRateApplication)" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="mt-2 col-lg-4 col-sm-12">
+                                <div class="form-group ">
+                                    <label>
+                                        Tipo de tarea *
+                                    </label>
+                                    @*              <InputText class="form-control" @bind-Value="workTaskResponseDetail.TypeWorkTask"></InputText>
+                                <ValidationMessage For="@(() => workTaskResponseDetail.TypeWorkTask)" /> *@
+
+                                    <Select Items="listWorkTaskType" @bind-Value="workTaskResponseDetail.TypeWorkTaskCustom"></Select>
+                                    <ValidationMessage For="@(() => workTaskResponseDetail.TypeWorkTaskCustom)" />
+                                </div>
+                            </div>
+
+
+                            <div class="mt-2 col-lg-4 col-sm-12">
+                                <div class="form-group ">
+                                    <label>
+                                        Monto Presupuestado (₡)
+                                    </label>
+                                    <InputText class="form-control" type="number" @bind-Value="workTaskResponseDetail.ApplicableBudget"></InputText>
+                                    <ValidationMessage For="@(() => workTaskResponseDetail.ApplicableBudget)" />
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="mt-2 col-sm-12">
+                                <div class="form-group ">
+                                    <label>
+                                        Detalle solicitud
+                                    </label>
+                                    <Textarea class="form-control " rows="4" @bind-Value="workTaskResponseDetail.Description" />
+                                    <ValidationMessage For="@(() => workTaskResponseDetail.Description)" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="mt-2 col-sm-12">
+                                <div class="form-group ">
+                                    @if (!string.IsNullOrEmpty(latitude) && !string.IsNullOrEmpty(longitude))
+                                    {
+                                        <Button Text="Mostrar/Ocultar Mapa" Color="Color.Secondary" Icon="bi bi-info" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" />
+
+                                        <div class="collapse show mt-2" id="collapseExample">
+                                            <div class="card card-body">
+                                                <div class="col-12 mt-3">
+                                                    <div id="map" height="460px" width="100%"></div>
+                                                </div>
+                                                <div class="row">
+                                                    <p>Ubicación</p>
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <div class="form-group">
+
+                                                            <label for="lat">Latitud</label>
+                                                            <InputText id="lat" @bind-Value="workTaskResponseDetail.Latitude" class="form-control"
+                                                                       disabled />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <div class="form-group">
+
+                                                            <label for="long">Longitud</label>
+                                                            <InputText id="long" @bind-Value="workTaskResponseDetail.Longitude" class="form-control"
+                                                                       disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                        @if (showButtonResolution && workTaskResponseDetail.Status != STATUSMANAGEMENT.NEW)
+                        {
+                            <div class="row">
+                                <div class="mt-2 col-12">
+                                    <div class="form-group ">
+                                        <label>Número de resolución * </label>
+                                        <InputText class="form-control" @bind-Value="workTaskResponseDetail.ResolutionNumber"></InputText>
+                                        <ValidationMessage For="@(() => workTaskResponseDetail.ResolutionNumber)" />
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        }
+
+
+                    </div>
+                    <div class="col-lg-4 col-sm-12">
+                        <div class="divider-data mt-2 mb-2"></div>
+                        <div class="text-center">
+                            <h3 class="principal-title">
+                                Documentos
+                            </h3>
+                        </div>
+                        <div class="row custom-buttons">
+                            <div class="d-flex-center col-12 mt-2 mb-2">
+                                @if (!isView)
+                                {
+                                    <AuthorizeScopeDirective Scope="Edit:WorkTask">
+                                        <div class="containerInput">
+                                            <InputFile style="display:none !important;" class="noShow" id="inputFile" OnChange="OnInputFileChange" multiple accept=".pdf,.gif,.mp4,.csv,.xlsx,.jpg,.jpeg,.png,.doc,.docx"></InputFile>
+                                            <label for="inputFile">
+                                                <i class="bi bi-cloud-arrow-up"></i> &nbsp; Seleccionar nuevo(s)
+                                            </label>
+                                        </div>
+                                    </AuthorizeScopeDirective>
+                                }
+
+
+                            </div>
+                        </div>
+                        <div>
+
+                            <Table TItem="WorkTaskAttachedDocumentDto" @ref="Table" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                                   OnQueryAsync="@OnQueryAsync"
+                                   IsStriped="true" IsBordered="true"
+                                   ShowSkeleton="true">
+                                <TableColumns>
+                                    <TableColumn @bind-Field="@context.FileName" Width="170" TextWrap="true" Filterable="false" Text="Nombre">
+                                        <Template Context="value">
+                                            <div> <a href="@value.Row.FilePath" target=”_blank”> <i class="bi bi-box-arrow-in-up-right"></i> @value.Row.FileName </a></div>
+                                        </Template>
+                                    </TableColumn>
+
+                                    <TableColumn @bind-Field="@context.MimeType" Width="170" TextWrap="true" Filterable="false" Text="Tipo">
+                                        <Template Context="value">
+                                            <div>    @value.Row.MimeType  </div>
+                                        </Template>
+                                    </TableColumn>
+
+                                    <TableColumn @bind-Field="@context.Id" Text="" Width="80">
+                                        @* Template Botones *@
+                                        <Template Context="v">
+                                            <div class="custom-button-container">
+                                                <AuthorizeScopeDirective Scope="Edit:WorkTask">
+                                                    <Button Text="Eliminar" Icon="bi bi-trash-fill item-button" @onclick='(() => deleteInfo(v))' Color="Color.Danger" />
+                                                </AuthorizeScopeDirective>
+                                            </div>
+                                        </Template>
+                                    </TableColumn>
+
+                                </TableColumns>
+                            </Table>
+
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="row custom-buttons">
+                        <div class="d-flex-center col-12 mt-2 container-buttons-complete">
+                            @if (!isView)
+                            {
+                                @if (!showButtonResolution)
+                                {
+                                    @if (canEdit)
+                                    {
+                                        <AuthorizeScopeDirective Scope="Edit:Memory">
+
+                                            <Button Text="Guardar Cambios" Color="Color.Success" Icon="bi bi-check" @onclick="()=>saveGeneralData(formContext)" />
+
+                                        </AuthorizeScopeDirective>
+                                    }
+                                    @if (canEdit)
+                                    {
+                                        <AuthorizeScopeDirective Scope="Edit:Memory">
+
+                                            <Button Text="Enviar a Tarea" Color="Color.Primary" Icon="bi bi-check" @onclick="()=>SendToTask(formContext)" />
+
+                                        </AuthorizeScopeDirective>
+                                    }
+                                }
+                                @if (showButtonResolution && workTaskResponseDetail.Status != STATUSMANAGEMENT.NEW && canEdit)
+                                {
+                                    <AuthorizeScopeDirective Scope="Edit:WorkTask">
+                                        <Button Text="Resolución" Color="Color.Primary" Icon="bi bi-send" @onclick="()=>OpenModalResolution()" />
+                                    </AuthorizeScopeDirective>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <Modal @ref="ModalReasonFinal" IsKeyboard="true">
+                    <ModalDialog Title="Seleccionar razón de resolución" Size="Size.Large" ShowCloseButton="false" ShowSaveButton="false">
+                        <BodyTemplate>
+
+                            <div class="row">
+
+                                <div class="mt-2 col-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Seleccionar respuesta predeterminada
+                                        </label>
+
+                                        <Select OnSelectedItemChanged="OnItemChanged" Items="listAutomaticResponseSelect" @bind-Value="selectedItem"></Select>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 col-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Razón de Resolución
+                                        </label>
+                                        <Textarea class="form-control" rows="4" @bind-Value="workTaskResponseDetail.ResolutionReason" />
+                                        <ValidationMessage For="@(() => workTaskResponseDetail.ResolutionReason)" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row custom-buttons">
+                                <div class="d-flex-center col-md-6 col-sm-12">
+                                    @if (listSelectStatus.Count > 2)
+                                    {
+                                        <div class="input-submit-icon button-general-form">
+                                            <input type="submit" value="Finalizar" @onclick="()=>completeCloseModal(formContext)" />
+                                        </div>
+                                    }
+
+
+
+                                </div>
+
+                                <div class="d-flex-center col-md-6 col-sm-12">
+                                    <button type="button" class="custom-button-close button-general-form" @onclick="CloseModal">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+
+                        </BodyTemplate>
+                    </ModalDialog>
+                </Modal>
+
+
+
+            </EditForm>
+
+        </BodyTemplate>
+    </Card>
+
+
+    <Card class="mt-3">
+        <BodyTemplate>
+
+            @* <EditForm Model="workTaskResponseDetail" FormName="EditFormUnAssing" Context="formContext">
+        <DataAnnotationsValidator /> *@
+            <div>
+                <div class="divider-data mt-2 mb-2"></div>
+                <div class="row">
+                    <Collapse IsAccordion="true">
+
+                        <CollapseItems>
+                            @if (string.IsNullOrEmpty(associationIdIsViewing))
+                            {
+                                <CollapseItem Text="Gestión colaboradores" class="mt-2 mb-2" IsCollapsed="false" Icon="fa-solid fa-users">
+
+                                    <div class="row mb-3">
+                                        <div class="mt-2 col-lg-5  custom-size-col-5 col-sm-12">
+                                            <div class="form-group item-note">
+                                                <label>
+                                                    Colaboradores que se pueden asignar
+                                                </label>
+
+                                            </div>
+                                            <Table TItem="WorkTaskUsersAssignedDto" @ref=TableFirstReference PageItemsSource="PageItems" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                                                   IsPagination="true"
+                                                   IsStriped="true" IsBordered="true" OnQueryAsync="@OnQueryFirstTableAsync"
+                                                   ShowSkeleton="true">
+                                                <TableColumns>
+                                                    <TableColumn @bind-Field="@context.Id" Width="75" Text="Seleccionar">
+
+                                                        <Template Context="v">
+                                                            <div class="w-100 d-flex-center">
+
+                                                                <input @key="v.Row.Id" class="form-check-input custom-check" type="checkbox" checked="@v.Row.Selected" @oninput="((e) => CheckboxChangedFirstTable(e,v))">
+                                                            </div>
+                                                        </Template>
+                                                    </TableColumn>
+                                                    @* Filterable activar filtros *@
+                                                    <TableColumn @bind-Field="@context.Name" Width="100" TextWrap="true" Filterable="false" Text="Nombre">
+                                                        <FilterTemplate>
+                                                            <TextFilter Placeholder="Buscar por nombre"></TextFilter>
+                                                        </FilterTemplate>
+                                                        <Template Context="value">
+                                                            <div class="table-cell is-wrap">
+                                                                @value.Row.Name @value.Row.Lastname
+                                                            </div>
+                                                        </Template>
+                                                    </TableColumn>
+
+                                                    <TableColumn @bind-Field="@context.EmailAddress" Width="175" TextWrap="true" Filterable="true" Text="Correo Colaborador">
+                                                        <FilterTemplate>
+                                                            <TextFilter Placeholder="Buscar por correo"></TextFilter>
+                                                        </FilterTemplate>
+                                                        <Template Context="value">
+                                                            @if (!string.IsNullOrEmpty(value.Row.EmailAddress))
+                                                            {
+                                                                <div class="table-cell is-wrap">
+                                                                    @value.Row.EmailAddress
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="table-cell is-wrap">
+                                                                    Sin Asignar
+                                                                </div>
+                                                            }
+                                                        </Template>
+                                                    </TableColumn>
+
+
+                                                    <TableColumn @bind-Field="@context.DepartmentId" Width="150" TextWrap="true" Filterable="true" Text="Departamento">
+                                                        <FilterTemplate>
+
+                                                            <AutoFillFilter Placeholder="Buscar por nombre" ListItems="listDepartmentsSelect"></AutoFillFilter>
+                                                        </FilterTemplate>
+                                                        <Template Context="value">
+                                                            <div class="table-cell is-wrap">
+                                                                @value.Row.DepartmentName
+                                                            </div>
+                                                        </Template>
+                                                    </TableColumn>
+
+                                                </TableColumns>
+                                            </Table>
+                                        </div>
+                                        <div class="mt-5 col-lg-2 custom-size-col-2 col-sm-12 d-flex-center">
+                                            <div class="align-buttons mt-2">
+                                                <AuthorizeScopeDirective Scope="Reassign:WorkTask">
+                                                    <Button Text="" Icon="bi bi-arrow-right" @onclick="()=>passToFirstToSecondTable()" />
+
+
+                                                    <Button Text="" Icon="bi bi-arrow-left" @onclick="()=>passToSecondToFirstTable()" />
+                                                </AuthorizeScopeDirective>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2 col-lg-5  custom-size-col-5 col-sm-12">
+                                            <div class="form-group item-note">
+                                                <label>
+                                                    Colaboradores activos en tarea
+                                                </label>
+                                            </div>
+                                            <Table TItem="WorkTaskUsersAssignedDto" @ref=TableSecondReference ShowFooter="true" PageItemsSource="PageItems" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                                                   IsPagination="true"
+                                                   IsStriped="true" IsBordered="true" OnQueryAsync="@OnQuerySecondTableAsync"
+                                                   ShowSkeleton="true">
+                                                <TableColumns>
+                                                    <TableColumn @bind-Field="@context.Id" Width="75" Text="Seleccionar">
+
+                                                        <Template Context="v">
+                                                            <div class="w-100 d-flex-center">
+
+                                                                <input @key="v.Row.Id" class="form-check-input custom-check" type="checkbox" checked="@v.Row.Selected" @oninput="((e) => CheckboxChangedSecondTable(e,v))">
+                                                            </div>
+                                                        </Template>
+                                                    </TableColumn>
+                                                    @* Filterable activar filtros *@
+                                                    <TableColumn @bind-Field="@context.Name" Width="100" TextWrap="true" Filterable="false" Text="Nombre">
+                                                        <FilterTemplate>
+                                                            <TextFilter Placeholder="Buscar por nombre"></TextFilter>
+                                                        </FilterTemplate>
+                                                        <Template Context="value">
+                                                            <div class="table-cell is-wrap">
+                                                                @value.Row.Name @value.Row.Lastname
+                                                            </div>
+                                                        </Template>
+                                                    </TableColumn>
+
+                                                    <TableColumn @bind-Field="@context.EmailAddress" Width="175" TextWrap="true" Filterable="false" Text="Correo Colaborador">
+                                                        <Template Context="value">
+                                                            @if (!string.IsNullOrEmpty(value.Row.EmailAddress))
+                                                            {
+                                                                <div class="table-cell is-wrap">
+                                                                    @value.Row.EmailAddress
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="table-cell is-wrap">
+                                                                    Sin Asignar
+                                                                </div>
+                                                            }
+                                                        </Template>
+                                                    </TableColumn>
+
+                                                    <TableColumn @bind-Field="@context.DepartmentName" Width="150" TextWrap="true" Filterable="false" Text="Departamento">
+                                                        <FilterTemplate>
+                                                            <TextFilter Placeholder="Buscar por nombre"></TextFilter>
+                                                        </FilterTemplate>
+                                                        <Template Context="value">
+                                                            <div class="table-cell is-wrap">
+                                                                @value.Row.DepartmentName
+                                                            </div>
+                                                        </Template>
+                                                    </TableColumn>
+
+                                                    <TableColumn @bind-Field="@context.Id" Width="190" Text="Puesto Tarea">
+                                                        @* Template Botones *@
+                                                        <Template Context="v">
+                                                            <div class="custom-button-container">
+                                                                <Select Items="listWorkTaskPosition"
+                                                                        @bind-Value="v.Row.UserPositionTask"></Select>
+
+                                                            </div>
+                                                        </Template>
+                                                    </TableColumn>
+
+                                                </TableColumns>
+                                                <FooterTemplate>
+                                                    <tr>
+                                                        <td colspan="5">
+                                                            <div style="text-align: right;">
+                                                                <label> Departamentos asignados</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5">
+                                                            <div style="text-align: right;">
+                                                                <ul>
+                                                                    @foreach (var item in listDepartmentsName)
+                                                                    {
+                                                                        <li class="font-weight-bold no-bullets">@item</li>
+                                                                    }
+
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </FooterTemplate>
+                                            </Table>
+                                        </div>
+                                    </div>
+
+                                    @if (!isView)
+                                    {
+                                        <div class="row custom-buttons">
+                                            <div class="d-flex-center col-12 mt-5">
+                                                @if (!string.IsNullOrEmpty(workTaskResponseDetail.Status) && workTaskResponseDetail.Status != STATUSMANAGEMENT.DONE && workTaskResponseDetail.Status != STATUSMANAGEMENT.DONTAPPLY)
+                                                {
+
+                                                    <AuthorizeScopeDirective Scope="Reassign:WorkTask">
+                                                        <Button Text="Guardar Usuarios" Color="Color.Success" Icon="bi bi-check" @onclick="()=>saveDataUserDepartments()" />
+                                                    </AuthorizeScopeDirective>
+                                                }
+
+
+
+                                            </div>
+                                        </div>
+                                    }
+
+                                </CollapseItem>
+                            }
+
+                            <CollapseItem Text="Comentarios" class="mt-1 custom-accordion-item-comment-worktask" IsCollapsed="false" Icon="bi bi-chat-dots-fill">
+                                <div class="container-comments">
+
+                                    <div>
+                                        <Card IsCenter="true">
+                                            <BodyTemplate>
+                                                <EditWorkTasksDetailsComments @ref=editWorkTasksDetailComponent isViewParam="isView"></EditWorkTasksDetailsComments>
+                                            </BodyTemplate>
+                                        </Card>
+                                    </div>
+
+
+
+
+                                </div>
+
+
+                            </CollapseItem>
+
+                        </CollapseItems>
+                    </Collapse>
+
+                </div>
+            </div>
+
+            @* </EditForm> *@
+
+        </BodyTemplate>
+    </Card>
+    @* <Modal id="modalMap" @ref="ModalMap" IsKeyboard="true">
+        <ModalDialog Title="Ubicación seleccionada" Size="Size.Large" ShowCloseButton="false" ShowSaveButton="false">
+            <BodyTemplate>
+
+                <div id="map" height="460px" width="100%"></div>
+
+                <div class="Coordenadas">
+                    <p>Ubicación</p>
+                    <EditForm Model="workTaskResponseDetail" FormName="latlong">
+                        <div class="grid-ubication">
+
+                            <div class="form-group">
+
+                                <label for="lat">Latitud</label>
+                                <InputText id="lat" @bind-Value="workTaskResponseDetail.Latitude" class="form-control" disabled />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="long">Longitud</label>
+                                <InputText id="long" @bind-Value="workTaskResponseDetail.Longitude" class="form-control" disabled />
+                            </div>
+                        </div>
+                    </EditForm>
+                </div>
+
+            </BodyTemplate>
+        </ModalDialog>
+    </Modal> *@
+
+
+}
+
+
+
+
+@code {
+
+}

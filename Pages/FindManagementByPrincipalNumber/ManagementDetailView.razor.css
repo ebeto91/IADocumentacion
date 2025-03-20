@@ -1,0 +1,23 @@
+﻿
+
+.containerMainImages {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.containerImage {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #e5dfdf;
+    padding: 10px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.customImg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}

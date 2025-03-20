@@ -1,0 +1,145 @@
+﻿.input-submit-icon {
+    position: relative;
+    display: inline-block;
+}
+
+    .input-submit-icon input {
+        font-size: 16px;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        width: 150px;
+    }
+
+        .input-submit-icon input:hover {
+            background-color: #0056b3;
+        }
+
+.custom-button-close {
+    border: 2px solid var(--bb-red);
+    background-color: var(--bb-red);
+}
+
+    .custom-button-close:hover {
+        background-color: var(--bb-red-hover);
+    }
+
+.custom-buttons {
+    margin-top: 10px;
+    row-gap: 5px;
+}
+
+.container-buttons-complete {
+    gap : 5px;
+}
+
+@media (max-width: 767px) {
+    .custom-buttons {
+        gap: 8px;
+    }
+
+    .input-submit-icon input {
+        width: 100%;
+    }
+    .container-buttons-complete {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+
+
+.containerInput {
+    min-width: 230px;
+    position: relative;
+}
+
+input[type="file"] {
+    display: none !important;
+}
+
+.noShow {
+    display: none !important;
+}
+
+.containerInput label {
+    display: flex;
+    position: relative;
+    background-color: #025bee;
+    color: white;
+    text-align: center;
+    width: 230px;
+    margin: auto;
+    border-radius: 5px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    padding: 5px;
+}
+
+
+
+.container-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.containerMainImages {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.containerImage {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #e5dfdf;
+    padding: 10px;
+    position: relative;
+}
+
+.customImg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
+
+.containerInput {
+    min-width: 230px;
+    position: relative;
+}
+
+
+.item-note {
+    text-align: center;
+    font-weight: 700;
+}
+
+.align-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    margin: auto 0;
+    justify-content: space-evenly;
+}
+
+#map {
+    height: 460px;
+}
+
+@media (min-width: 992px) {
+    .custom-size-col-5 {
+        flex: 0 0 auto;
+        width: 47.666667% !important;
+    }
+
+    .custom-size-col-2 {
+        flex: 0 0 auto;
+        width: 4.666667%;
+    }
+}

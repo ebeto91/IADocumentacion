@@ -1,0 +1,207 @@
+:root {
+    --font-size-h1: 2rem;
+    --font-size-h2: 1.5rem;
+    --font-size-h3: 1.17rem;
+    --font-size-h4: 1rem;
+    --font-size-h5: 0.83rem;
+    --font-size-h6: 0.67rem;
+    --font-size-p: 0.875rem;
+    /*--font-size-div: 0.75rem;*/
+    --font-size-span: 0.75rem;
+    --font-size-label: 0.8rem;
+    --font-size-a: 0.8rem;
+    --font-size-input-submit: 0.6rem;
+    --font-size-i: 1.2rem;
+    --font-size-table-text: 0.875rem;
+}
+
+
+/* Ejemplo de cambio de font-size */
+h1 {
+    font-size: var(--font-size-h1);
+    transition: font-size 0.2s ease-in-out;
+}
+
+h2 {
+    font-size: var(--font-size-h2);
+    transition: font-size 0.2s ease-in-out;
+}
+
+h3 {
+    font-size: var(--font-size-h3);
+    transition: font-size 0.2s ease-in-out;
+}
+
+h4 {
+    font-size: var(--font-size-h4);
+    transition: font-size 0.2s ease-in-out;
+}
+
+h5 {
+    font-size: var(--font-size-h5);
+    transition: font-size 0.2s ease-in-out;
+}
+
+h6 {
+    font-size: var(--font-size-h6);
+    transition: font-size 0.2s ease-in-out;
+}
+
+p {
+    font-size: var(--font-size-p);
+    transition: font-size 0.2s ease-in-out;
+}
+
+span {
+    font-size: var(--font-size-span);
+    transition: font-size 0.2s ease-in-out;
+}
+
+strong {
+}
+
+em {
+}
+
+small {
+}
+
+mark {
+}
+
+del {
+}
+
+ins {
+}
+
+sub {
+}
+
+sup {
+}
+
+ul {
+}
+
+ol {
+}
+
+li {
+}
+
+dl {
+}
+
+dt {
+}
+
+dd {
+}
+
+i {
+    font-size: var( --font-size-i);
+    transition: font-size 0.2s ease-in-out;
+}
+
+label {
+    font-size: var( --font-size-label);
+    transition: font-size 0.2s ease-in-out;
+}
+
+input[type="text"] {
+}
+
+textarea {
+}
+
+button {
+}
+
+select {
+}
+
+option {
+}
+
+fieldset {
+}
+
+legend {
+}
+
+div {
+    /*font-size: var(--font-size-div);*/
+}
+
+section {
+}
+
+article {
+}
+
+aside {
+}
+
+footer {
+}
+
+header {
+}
+
+nav {
+}
+
+main {
+}
+
+figure {
+}
+
+figcaption {
+}
+
+table {
+}
+
+th {
+}
+
+tr {
+}
+
+td {
+}
+
+caption {
+}
+
+a {
+    font-size: var( --font-size-a);
+    transition: font-size 0.2s ease-in-out;
+}
+
+input[type="submit"] {
+    font-size: var( --font-size-input-submit);
+    transition: font-size 0.2s ease-in-out;
+}
+
+blockquote {
+}
+
+code {
+}
+
+pre {
+}
+
+q {
+}
+
+abbr {
+}
+
+
+/*cite {
+    font-size: 16rem;*/ /* Ajusta el tamaño aquí */
+/*}*/

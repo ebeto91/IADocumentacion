@@ -1,0 +1,120 @@
+﻿.input-submit-icon {
+    position: relative;
+    display: inline-block;
+}
+
+    .input-submit-icon input {
+        font-size: 16px;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        width: 150px;
+    }
+
+        .input-submit-icon input:hover {
+            background-color: #0056b3;
+        }
+
+
+
+/*para el cargar el botón de input inicio */
+.container-image-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerImage {
+    border: 1px solid #e5dfdf;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.customImg {
+    width: 250px;
+    height: 250px;
+}
+
+.noShow {
+    display: none !important;
+}
+
+.custom-buttons {
+    margin-top: 10px;
+    row-gap: 5px;
+}
+
+.containerInput {
+    min-width: 230px;
+    position: relative;
+}
+
+    .containerInput label {
+        display: flex;
+        position: relative;
+        background-color: #025bee;
+        color: white;
+        text-align: center;
+        width: 230px;
+        margin: auto;
+        border-radius: 5px;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        height: fit-content;
+        padding: 5px;
+    }
+
+
+
+.container-Create {
+    margin-top: 20px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    row-gap: 20px;
+    column-gap: 30px;
+}
+
+.custom-size-close {
+    width: 230px;
+    min-width: 230px;
+}
+
+@media screen and (max-width: 792px) {
+    .container-grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .containerInput {
+        min-width: 100%;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .container-Create {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .containerInput label {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 767px) {
+    .custom-buttons {
+        gap: 8px;
+    }
+
+    .input-submit-icon input {
+        width: 100%;
+    }
+}
+/*para el cargar el botón de input fin */

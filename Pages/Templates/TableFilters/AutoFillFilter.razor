@@ -1,0 +1,78 @@
+﻿@inherits FilterBase
+
+@* <Select Items="@Items" @bind-Value="@Value" OnSelectedItemChanged="_ => OnFilterValueChanged()"></Select> *@
+
+<div class="mb-3">
+    @* <InputText class="form-control" @bind-Value="@Value" placeholder="@Placeholder" /> *@
+    <label>@Placeholder</label>
+@*     <Select Items="ListItems" @bind-Value="Value"></Select> *@
+
+    <AutoFill TValue="SelectedItem" Value="selectedItem" Items="ListItems" SkipEnter="true" SkipEsc="true" IsLikeMatch="true" OnSelectedItemChanged="OnSelectedItemChanged"
+              OnGetDisplayText="OnGetDisplayText" class="mb-3" IsSelectAllTextOnFocus="true">
+        <Template>
+            <div class="d-flex">
+
+                <div class="ps-2">
+                    <div><p class="custom-margin-0">@context.Text</p></div>
+                    @* <div class="divider-data mt-2 mb-2"></div> *@
+                </div>
+            </div>
+        </Template>
+    </AutoFill>
+
+</div>
+
+
+@code {
+    private string Value = "";
+
+    [Parameter]
+    public string Placeholder { get; set; }
+
+    [Parameter]
+    public List<SelectedItem> ListItems { get; set; }
+
+    /// <summary>
+    /// OnInitialized 方法
+    /// </summary>
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    /// <summary>
+    /// 重置过滤条件方法
+    /// </summary>
+    public override void Reset()
+    {
+        Value = "";
+        selectedItem = new SelectedItem();
+        StateHasChanged();
+    }
+
+    SelectedItem selectedItem { get; set; }
+    public static string OnGetDisplayText(SelectedItem foo) => foo.Text ?? "";
+    /// <summary>
+    /// 生成过滤条件方法
+    /// </summary>
+    /// <returns></returns>
+    public override FilterKeyValueAction GetFilterConditions()
+    {
+        var filter = new FilterKeyValueAction() { Filters = new() };
+        filter.Filters.Add(new FilterKeyValueAction()
+            {
+                FieldKey = FieldKey,
+                FieldValue = Value,
+                FilterAction = FilterAction.GreaterThan
+            });
+        return filter;
+    }
+
+    public Task OnSelectedItemChanged(SelectedItem foo)
+    {
+        selectedItem = Utility.Clone(foo);
+        Value = foo.Value;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+}

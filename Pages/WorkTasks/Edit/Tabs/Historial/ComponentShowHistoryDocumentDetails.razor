@@ -1,0 +1,70 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.WorkTask.WorkTaskHistory
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@if (ItemData != null)
+{
+    <Table TItem="WorkTaskHistoryAttachedDocumentResponse" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+           IsPagination="false"
+           IsStriped="true" IsBordered="true" Items="@ItemData"
+           ShowSkeleton="true">
+        <TableColumns>
+
+            <TableColumn @bind-Field="@context.Details" Width="170" TextWrap="true" Filterable="false"  Text="Usuario">
+                <Template Context="value">
+
+                    <div class="container-message-detail ">
+                        <div class="container-message-detail-profile">
+                            <div>
+                                @{
+                                    var image = !string.IsNullOrEmpty(value.Row.CreatedImageProfile) ? value.Row.CreatedImageProfile : ImageProfile.ImageDefault;
+                                }
+                                <Avatar Url="@image" Size="Size.Medium" IsCircle="true" />
+
+                            </div>
+                            <div>
+                                <h6 class="font-weight-bold">@value.Row.CreatedUserName</h6>
+                                <h6>@UtilMethods.getType(value.Row.Action)</h6>
+                                <h6>Fecha ejecución: @value.Row.CreatedAtHistory.ToString("yyyy-MM-dd hh:mm tt")</h6>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </Template>
+            </TableColumn>
+
+            <TableColumn @bind-Field="@context.EmailAddress" Width="170" TextWrap="true" Text="Detalle">
+                <Template Context="value">
+                    <div style="padding:15px;">
+                        <div>
+                            @((MarkupString)@value.Row.Details)
+                        </div>
+                    </div>
+
+                </Template>
+            </TableColumn>
+
+
+
+
+
+        </TableColumns>
+    </Table>
+
+
+}
+
+
+
+
+@code {
+
+    public List<WorkTaskHistoryAttachedDocumentResponse> ItemData { get; set; }
+
+    public void updateData(List<WorkTaskHistoryAttachedDocumentResponse> item)
+    {
+        ItemData = item;
+        StateHasChanged();
+    }
+}
+
+

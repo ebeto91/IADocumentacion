@@ -1,0 +1,115 @@
+﻿@page "/memoriaInstitucional"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.InstitutionalMemory.List
+@inherits InstitutionalMemoryBase
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title customBreakWord">Memorias Institucionales</h3>
+                </div>
+            </div>
+      
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+
+                    <div class="gridConatinerSearch">
+
+                        <div class="form-group">
+                            <label for="memoria">Buscar Memoria</label>
+                            <InputText id="memoria" maxlength="190" @bind-Value="managementProfileInputFilterDto.Title" class="form-control" />
+
+                        </div>
+
+                        <div class="btns-search">
+                        <div class="text-center">
+                                <Button Text="Nueva Memoria" OnClick="CreateInstitutionalMemory" Icon="bi bi-plus" />
+                        </div>
+                        <div class=" text-center">
+                                <Button Text="Descargar" OnClick="DownloadMemory" Icon="bi bi-download" />
+                        </div>
+                        </div>
+                </div>
+
+                <h4>Filtrar Por</h4>
+
+
+                    <div class="gridConatiner">
+
+                        <div class="form-group">
+                            <label for="memoria">Prioridad</label>
+                            <Select Items="listSelectPriority" @bind-Value="managementProfileInputFilterDto.Priority"></Select>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="memoria">Estado</label>
+                            <Select Items="listSelectStatus" @bind-Value="managementProfileInputFilterDto.Status"></Select>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="memoria">Tipo de memoria</label>
+                            <Select Items="listSelectType" @bind-Value="managementProfileInputFilterDto.TypeApplication"></Select>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="memoria">Distrito</label>
+                            <Select Items="listSelectDistrict"  OnSelectedItemChanged="OnItemChanged" @bind-Value="managementProfileInputFilterDto.District"></Select>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="memoria">Asociación</label>
+                            <Select Items="listSelectAssociation" @bind-Value="managementProfileInputFilterDto.AssociationRelatedMemoryId"></Select>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="memoria">Fecha Desde</label>
+                            <DateTimePicker  @bind-Value="managementProfileInputFilterDto.StartDate" />
+
+                        </div>
+                        <div class="form-group">
+                            <label for="memoria">Fecha Hasta</label>
+                            <DateTimePicker  @bind-Value="managementProfileInputFilterDto.FinishDate" />
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 text-center" style="margin-top:15px;">
+                            <Button Text="Buscar" Icon="bi bi-search" OnClick="Search" />
+                        </div>
+                    </div>
+                 
+                    <ListInstitutionalMemory isFromPerfilNavigation="false" autoLoad="true" @ref="listInstitutionalMemory"></ListInstitutionalMemory>
+                 
+            </div>
+            <!-- End Card -->
+               
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+@code {
+
+}

@@ -1,0 +1,55 @@
+﻿@page "/weather"
+@inherits AccessDirectiveCallbackBase
+@layout LoginLayou
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Weather</h1>
+
+
+
+
+<div class="container-fluid text-center">
+
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    @if (isReadyData)
+                    {
+                        <p> Hola, @preferredUsernameClaim</p>
+                    }
+
+                    <p>¡En unos segundos serás llevado a la plataforma, muchas gracias por la espera!</p>
+                    <button class="nav-link btn btn-link mt-5" @onclick="Data">Data</button>
+
+
+                    <div class="spinner-box">
+                        <div class="configure-border-1">
+                            <div class="configure-core"></div>
+                        </div>
+                        <div class="configure-border-2">
+                            <div class="configure-core"></div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+

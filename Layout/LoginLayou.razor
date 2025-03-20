@@ -1,0 +1,140 @@
+﻿@inherits LayoutComponentBase
+<div class="page">
+    @*     <div class="sidebar">
+    <NavMenu />
+    </div> *@
+    <!-- Topbar Start -->
+    <div class="w-100">
+        <!-- Topbar Start -->
+        <div class="container-fluid bg-dark px-0">
+            <div class="row g-0 d-none d-lg-flex">
+                <div class="col-lg-12 container-first-navbar">
+                    <div class="h-100 d-inline-flex align-items-center">
+                        <a href="#" class="icon-color">
+                            <div class="container-link-ref">
+
+                                <div class="icon-link-ref">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </div>
+                                <span class="text-hover"> <a class="icon-color" href="tel:2550-4400"> <span class="text-hover"> (+506) 2550-4400</span> </a> </span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="h-100 d-inline-flex align-items-center">
+                        <a href="#" class="icon-color">
+                            <div class="container-link-ref">
+
+                                <div class="icon-link-ref">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
+                                <span class="text-hover"> portal@muni-carta.go.cr</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="icon-social-media">
+                        <div class="icon icon-facebook">
+                            <a href="https://www.facebook.com/munidecartago/" target="_blank" class="icon-color"><i class="bi bi-facebook"></i></a>
+                        </div>
+                        <div class="icon icon-twitter">
+                            <a href="https://x.com/cartagomuni" target="_blank" class="icon-color"><i class="bi bi-twitter-x "></i></a>
+                        </div>
+                        <div class="icon icon-youtube">
+                            <a href="https://www.youtube.com/channel/UCxV_61V-gV_Id3siT9wZGGQ/videos" target="_blank" class="icon-color"><i class="bi bi-youtube"></i></a>
+                        </div>
+                        <div class="icon icon-instagram">
+                            <a href="https://www.instagram.com/municartago/" target="_blank" class="icon-color"><i class="bi bi-instagram "></i></a>
+                        </div>
+                        <div class="icon icon-tiktok">
+                            <a href="https://www.tiktok.com/discover/municipalidad-de-cartago" target="_blank" class="icon-color"><i class="bi bi-tiktok "></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="container-navbar">
+                <div class="image-container">
+                    <img src="https://www.muni-carta.go.cr/wp-content/uploads/2023/10/logo-municipalidad-cartago.png" alt="logo municipalidad cartago" class="image-logo" />
+
+                    <div class="item-menu-container">
+
+                    @*     <a href="#"
+                           class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+                           data-toggle="collapse"
+                           data-target="#main-navbar">
+                            <span></span>
+                        </a> *@
+                        @*
+                        <button type="button" class="navbar-toggler me-0 site-menu-toggle js-menu-toggle" data-bs-toggle="collapse" data-bs-target="#main-navbar">
+                        <i class="bi bi-list"></i>
+                        </button>
+                        *@
+                        @*          <button type="button" class="navbar-toggler me-0" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <i class="bi bi-list"></i>
+                        </button> *@
+                    </div>
+                </div>
+
+                <div class="text-principal-container">
+                    <h1>
+                        Sistema de Gestión Ciudad Municipal
+                    </h1>
+                </div>
+
+               
+
+
+            </div>
+
+        </div>
+        <!-- Topbar End -->
+
+
+        <div>
+
+            <div class="content px-4">
+                @Body
+            </div>
+            <div style="color-scheme: light;">
+                <BlazorSpinner.Spinner Icon="loading.svg" Text="Cargando, Por Favor Espera..."></BlazorSpinner.Spinner>
+            </div>
+            <div class="njs-sticky-side body-append image_button_cover placement-right now-show">
+                <Accessibility />
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+@code {
+    private IJSObjectReference? module;
+
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; }
+
+
+    public async ValueTask DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import",
+                "./Layout/MainLayout.razor.js");
+            await module.InvokeVoidAsync("siteMenuClone");
+        }
+
+    }
+
+}

@@ -1,0 +1,206 @@
+﻿@page "/miperfil"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.InstitutionalMemory.List
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Profile.MyUserProfile.ListComplaints
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Profile.MyUserProfile.ListManagement
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Profile.MyUserProfile.ListWorkTask
+@inherits MyUserProfileBase
+@if (Model != null)
+{
+
+    <div class="container-fluid container-fluid-custom">
+
+
+        <!-- ========== title-wrapper start ========== -->
+        <div class="title-wrapper pt-30">
+            <div class="row align-items-center header-container">
+                <div class="col-lg-6 col-sm-12">
+                    <!-- Foto de Perfil -->
+                    <div class="profile-picture-section">
+                        <img src="@(Model.ImageProfile ?? ProfilePicture)" alt="Foto de perfil" />
+                        <div class="d-flex-center gap-10">
+                            <a href="perfil">  <i class="bi bi-wrench-adjustable"></i> </a>
+                            <p> @Model.UserName </p>
+                        </div>
+                        @if (!string.IsNullOrEmpty(associationId))
+                        {
+                            <p class="principal-title">Asociación: @Model.AssociationRelated.Name</p>
+                        }
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6 col-sm-12 container-profile-data">
+                    <div class="title container-title">
+                        @if (!string.IsNullOrEmpty(associationId))
+                        {
+                            <h3 class="principal-title">Perfil Asociación</h3>
+                        }
+                        else
+                        {
+                            <h3 class="principal-title">Mi Perfil </h3>
+                        }
+                    </div>
+
+                    <div class="buttons-select-profile">
+                        @if (string.IsNullOrEmpty(associationId))
+                        {
+                            <Button Text="Participación Ciudadana" OnClick="HandleGoToSurvey" />
+                        }
+
+                        <Button Text="Crear Nueva Solicitud" OnClick="HandleCreateCitizenManagment" />
+
+                        @if (string.IsNullOrEmpty(associationId))
+                        {
+                            <Button Text="Denunciar Funcionario" OnClick="HandleEmployeeComplaintCallView" />
+                        }
+
+                        @if (Model.RoleName == ROLEAUDITORIA.Usuario && !string.IsNullOrEmpty(associationId))
+                        {
+                            <Button Text="Crear Memoria" OnClick="HandleCreateMemory" />
+                        }
+
+
+                        <Button Text="Seguimiento Solicitud" OnClick="FollowManagement" />
+
+                    </div>
+                </div>
+                <!-- end col -->
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- ========== title-wrapper end ========== -->
+        <!-- Invoice Wrapper Start -->
+        <div class="divider-data mt-2 mb-2"></div>
+        <div class="invoice-wrapper">
+            <div class="row">
+                <div class="col-12">
+                    <div class="container-fluid container-fluid-custom invoice-card card-style mb-30">
+                        <div class="m-2">
+                            <div class="m-2">
+                                @if (Model.RoleName == ROLEAUDITORIA.Usuario)
+                                {
+                                    <div class="w-100">
+                                        <Tab @ref="TabSetTemplate" Placement="Placement.TopCenter" IsCard="true">
+                                            <TabItem Text="Gestiones" Icon="bi bi-envelope-paper-fill">
+
+                                                <ListManagement userId="@userId" associationId="@associationId" listManagement="ListManagement" totalAcountPages="totalAcountPages"></ListManagement>
+                                            </TabItem>
+                                            @if (!string.IsNullOrEmpty(associationId))
+                                            {
+                                                <TabItem Text="Memorias" Icon="bi bi-list-task">
+                                                    <HeaderTemplate>
+                                                        <div class="@GetClassString(context)" @onclick="() => OnClickTabItem(context)">
+                                                            <i class="bi bi-journal"></i>
+                                                            <h6 class="mx-2">Memorias</h6>
+                                                        </div>
+                                                    </HeaderTemplate>
+                                                    <ChildContent>
+                                                        @* userForListWithDepartment="userForListWithDepartment" *@
+                                                        <ListInstitutionalMemory @ref="listInstitutionalMemory"></ListInstitutionalMemory>
+
+                                                    </ChildContent>
+
+                                                </TabItem>
+                                            }
+                                            else
+                                            {
+                                                <TabItem Text="Denuncias" Icon="bi bi-send-exclamation">
+
+                                                    <ListComplaint userId="@userId" listManagement="ListComplaints" totalAcountPages="totalAcountPagesComplaints"></ListComplaint>
+
+                                                </TabItem>
+                                            }
+                                        </Tab>
+
+                                    </div>
+
+                                }
+                                else
+                                {
+                                    <div class="w-100">
+                                        <Tab @ref="TabSetTemplate" Placement="Placement.TopCenter" IsCard="true">
+                                            <TabItem Text="Gestiones" Icon="bi bi-envelope-paper-fill">
+                                                <ListManagement userId="@userId" associationId="@associationId" listManagement="ListManagement" totalAcountPages="totalAcountPages"></ListManagement>
+                                            </TabItem>
+                                            <TabItem Text="Tareas asignadas" Icon="bi bi-list-task">
+                                                <ListWorkTask userId="@userId" listWorktask="ListWorktask" totalAcountPages="totalAcountPagesWorkTask"></ListWorkTask>
+                                            </TabItem>
+
+                                            <TabItem Text="Denuncias" Icon="bi bi-send-exclamation">
+
+                                                <ListComplaint userId="@userId" listManagement="ListComplaints" totalAcountPages="totalAcountPagesComplaints"></ListComplaint>
+
+                                            </TabItem>
+
+                                            <TabItem Text="Memorias" Icon="bi bi-list-task">
+                                                <HeaderTemplate>
+                                                    <div class="@GetClassString(context)" @onclick="() => OnClickTabItem(context)">
+                                                        <i class="bi bi-journal"></i>
+                                                        <h6 class="mx-2">Memorias</h6>
+                                                    </div>
+                                                </HeaderTemplate>
+                                                <ChildContent>
+                                                    @* userForListWithDepartment="userForListWithDepartment" *@
+                                                    <ListInstitutionalMemory isFromPerfilNavigation="true" autoLoad="false" @ref="listInstitutionalMemory"></ListInstitutionalMemory>
+
+                                                </ChildContent>
+
+                                            </TabItem>
+                                        </Tab>
+
+                                    </div>
+
+
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- End Card -->
+                </div>
+                <!-- ENd Col -->
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+}
+
+
+
+<Modal @ref="Modal" OnCloseAsync="CloseModal" IsKeyboard="true">
+    <ModalDialog ShowFooter="false" ShowHeader="false" Size="Size.Large" ShowCloseButton="false" ShowSaveButton="false">
+        <BodyTemplate>
+
+            <h3 class="customText">Formulario de Denuncia Ciudadana</h3>
+
+            <p class="customP">Si desea reportar un supuesto acto de corrupción o fraude. Por favor complete el siguiente formulario. Puede elegir hacerlo de manera anónima; sin embargo, si desea recibir una respuesta sobre su denuncia, le solicitaremos algunos datos de contacto. La Información que usted ingrese será tratada de forma confidencial.</p>
+
+            <p class="customP">Estimado ciudadano, toda denuncia por un supuesto acto de corrupción o fraude debe cumplir una serie de requisitos para ser admisible. La dependencia municipal encargada, aplicará el procedimiento de admisibilidad previo a darle curso a su denuncia.</p>
+
+            <div class="form-group">
+                <div class="checkbox-group customCheckLabel">
+                    <input id="isAllow" type="checkbox" class="customCheck" checked="@isAllow" @onchange="HandleAllow" />
+                    <label for="isAllow">
+                        He leído y acepto proceder con el formulario 'Denunciar Funcionario'.
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="containerSubmit">
+
+
+                <input type="button" @onclick="HandleComplaint" class="customButton" value="Continuar" />
+
+                <input type="button" @onclick="HandleCloseModal" class="custonButtomCloseModal" value="Cancelar" />
+            </div>
+
+        </BodyTemplate>
+    </ModalDialog>
+</Modal>

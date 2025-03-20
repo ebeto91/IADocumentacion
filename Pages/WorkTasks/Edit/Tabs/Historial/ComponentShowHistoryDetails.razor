@@ -1,0 +1,26 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.WorkTask.WorkTaskHistory
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@if (ItemData != null)
+{
+    <div style="padding:15px;">
+        <div>
+            @((MarkupString)ItemData.Details)
+        </div>
+    </div>
+}
+
+
+
+
+@code {
+
+    public WorkTaskHistoryResponse ItemData { get; set; }
+
+    public void updateData(WorkTaskHistoryResponse item)
+    {
+        ItemData = item;
+        StateHasChanged();
+    }
+}
+
+

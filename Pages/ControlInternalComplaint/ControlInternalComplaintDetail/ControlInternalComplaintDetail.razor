@@ -1,0 +1,313 @@
+﻿@page "/gestionCiudadana/denuncias/detalle/{managementId}"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Department
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Management
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.ControlInternalManagement.ControlInternalManagementEdit.ControlInternalManagementEditModal
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.ControlInternalManagement.ControlInternalManagementEdit.ControlInternalManagementEditModalDenied
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Templates.TableFilters
+@inherits ControlInternalComplaintDetailBase
+
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">Manejo de denuncias - detalle</h3>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a>Gestión Ciudadana</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Denuncias/ Detalle
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    @if (ModelFirst != null)
+                    {
+                        <div class="m-2">
+                            <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goToList" />
+                        </div>
+                        <EditForm Model="@ModelFirst" Context="formContext">
+
+                            <DataAnnotationsValidator />
+                            <div class="divider-data mt-2 mb-2"></div>
+                            <div class="text-center">
+                                <h3 class="principal-title">
+                                    Detalle de las Denuncias
+                                </h3>
+                            </div>
+
+                            <div class="row">
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Distrito donde ocurrió el incidente * </label>
+                                        <Select Items="listDistricts" class="disable" @bind-Value="ModelFirst.District" disabled></Select>
+                                        <ValidationMessage For="@(() => ModelFirst.District)" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Dirección exacta donde ocurrió el incidente *
+                                        </label>
+                                        <Textarea class="form-control disable" rows="4" @bind-Value="ModelFirst.ContactPoint" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Fecha de creación *
+                                        </label>
+                                        <DateTimePicker IsDisabled="true" Value="ModelFirst.CreatedAt" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Fecha del incidente *
+                                        </label>
+                                        <DateTimePicker IsDisabled="true" Value="ModelFirst.DateIndicident" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Permitir contacto  </label>
+                                        <input class="form-check-input custom-check" type="checkbox" checked="@ModelFirst.AllowContact" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Nombre del funcionario  </label>
+                                        @* <InputText class="form-control disable" @bind-Value="ModelFirst.Title" readonly></InputText> *@
+                                        <InputText class="form-control disable" @bind-Value="ModelFirst.NameUserIncident" readonly></InputText>
+                                        <ValidationMessage For="@(() => ModelFirst.NameUserIncident)" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            @if (!ModelFirst.IsAnonymous)
+                            {
+                                <div class="row">
+                                    <div class="mt-2 col-lg-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>Nombre denunciante  </label>
+                                            @* <InputText class="form-control disable" @bind-Value="ModelFirst.Title" readonly></InputText> *@
+                                            <InputText class="form-control disable" @bind-Value="ModelFirst.ManagementName" readonly></InputText>
+                                            <ValidationMessage For="@(() => ModelFirst.ManagementName)" />
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 col-lg-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>
+                                                Correo electrónico denunciante
+                                            </label>
+                                            <InputText class="form-control disable" @bind-Value="ModelFirst.ManagementEmail" readonly></InputText>
+                                            <ValidationMessage For="@(() => ModelFirst.ManagementEmail)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2 col-lg-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>
+                                                Teléfono denunciante
+                                            </label>
+                                            <InputText class="form-control disable" @bind-Value="ModelFirst.ManagementPhone" readonly></InputText>
+                                            <ValidationMessage For="@(() => ModelFirst.ManagementPhone)" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="divider-data mt-2 mb-2"></div>
+                                <div class="text-center">
+                                    <h3>
+                                        Participantes Externos
+                                    </h3>
+                                </div>
+
+                                <div class="row">
+                                    <div class="mt-2 col-lg-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>
+                                                Nombre Completo
+                                            </label>
+                                            <InputText class="form-control disable" @bind-Value="ModelFirst.ExternalManagementName" readonly></InputText>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 col-lg-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>
+                                                Correo Electrónico
+                                            </label>
+                                            <InputText class="form-control disable" @bind-Value="ModelFirst.ExternalManagementEmail" readonly></InputText>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 col-lg-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>
+                                                Teléfono
+                                            </label>
+                                            <InputText class="form-control disable" @bind-Value="ModelFirst.ExternalManagementPhone" readonly></InputText>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="row">
+                                <div class="mt-2 col-lg-12 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Descripción del incidente  </label>
+                                        @* <InputText class="form-control" @bind-Value="ModelFirst.Description"></InputText> *@
+                                        <Textarea class="form-control disable" rows="4" @bind-Value="ModelFirst.Description" readonly />
+                                        <ValidationMessage For="@(() => ModelFirst.Description)" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            @if (ModelFirst.AttachedDocuments != null && ModelFirst.AttachedDocuments.Count > 0)
+                            {
+                                <div class="row">
+                                    <div class="mt-2 col-lg-12 col-sm-12">
+                                        <div class="divider-data mt-2 mb-2"></div>
+                                        <div class="text-center">
+                                            <h3 class="principal-title">
+                                                Evidencias
+                                            </h3>
+                                        </div>
+
+                                        <div>
+
+                                            <Table TItem="ManagementAttachedDocumentDto" @ref="Table" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                                                   OnQueryAsync="@OnQueryAsync"
+                                                   IsStriped="true" IsBordered="true"
+                                                   ShowSkeleton="true">
+                                                <TableColumns>
+                                                    <TableColumn @bind-Field="@context.FilePath" Width="170" TextWrap="true" Filterable="false" Text="Nombre">
+                                                        <Template Context="value">
+                                                            <div> <a href="@value.Row.FilePath" target=”_blank”> <i class="bi bi-box-arrow-in-up-right"></i> @value.Row.FileName </a></div>
+                                                        </Template>
+                                                    </TableColumn>
+
+                                                    <TableColumn @bind-Field="@context.MimeType" Width="170" TextWrap="true" Filterable="false" Text="Tipo">
+                                                        <Template Context="value">
+                                                            <div>    @value.Row.MimeType  </div>
+                                                        </Template>
+                                                    </TableColumn>
+
+
+                                                </TableColumns>
+                                            </Table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            }
+                        
+                            <div class="divider-data mt-2 mb-2"></div>
+
+                            <div class="text-center">
+                                <h3 class="principal-title">
+                                    Procesar denuncia
+                                </h3>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Clasificar tipo denuncia * </label>
+                                        <Select Items="listSelectType" class="disable" @bind-Value="ModelFirst.TypeApplication" disabled></Select>
+                                        <ValidationMessage For="@(() => ModelFirst.TypeApplication)" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Clasificar estado gestión * </label>
+                                        <Select Items="listSelectStatus" class="disable" @bind-Value="ModelFirst.Status" disabled></Select>
+                                        <ValidationMessage For="@(() => ModelFirst.Status)" />
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Clasificar estado prioridad * </label>
+                                        <Select Items="listSelectPriority" @bind-Value="ModelFirst.Priority" disabled></Select>
+                                        <ValidationMessage For="@(() => ModelFirst.Priority)" />
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="mt-2 col-lg-6 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Código Oficio Inicio </label>
+                                        <InputText class="form-control" @bind-Value="ModelFirst.OfficeCodeNumber" readonly></InputText>
+                                        <ValidationMessage For="@(() => ModelFirst.OfficeCodeNumber)" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-6 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Código Oficio Resolución </label>
+                                        <InputText class="form-control" @bind-Value="ModelFirst.ResolutionNumber" readonly></InputText>
+                                        <ValidationMessage For="@(() => ModelFirst.ResolutionNumber)" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="mt-2 col-lg-6 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Razón brindada</label>
+                                        <Textarea class="form-control" @bind-Value="ModelFirst.ResolutionReason" readonly rows="4"></Textarea>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+
+
+                        </EditForm>
+
+
+                    }
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+

@@ -1,0 +1,93 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@inherits ListInstitutionalMemoryBase
+@if (listManagement != null && listManagement.items != null)
+{
+    <div class="row container-list-task mt-3">
+        @foreach (var item in listManagement.items)
+        {
+            <div class="col-lg-5 col-sm-12 card custom-card">
+                <div class="card-header card-header-kanban-item">
+                    <p class="card-header-kanban-item-tittle"> @item.Title </p>
+                    <div class="item-icons">
+
+                        @if (item.ApplyToTask == false)
+                        {
+                            <AuthorizeScopeDirective Scope="Detail:Memory">
+                                <i class="bi bi-eye-fill" style="cursor:pointer;" @onclick="()=>goToProcessDetail(item)"></i>
+                            </AuthorizeScopeDirective>
+
+                            @if (justComments)
+                            {
+
+                                <i class="bi bi-pencil-square" style="cursor:pointer;" @onclick="()=>goToProcessEdit(item.WorkTaskAssignedBefore.ToString())"></i>
+
+                            }
+
+
+
+                        }
+
+
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <p> @item.Description </p>
+                </div>
+
+                <div class="card-footer card-footer-custom text-body-secondary">
+                    <div class="footer-card-kanban">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p class="card-text">Fecha Creación: @getDateFormatDisplay(item.CreatedAt)</p>
+                            </div>
+                        </div>
+                        <div class="divider-data mt-2"></div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-12">
+                                <p class="card-text">Prioridad: @getDisplayData(item.Priority)</p>
+                            </div>
+
+                            <div class="col-lg-6 col-sm-12">
+                                <p class="card-text">Estado: @getDisplayData(item.Status)</p>
+                            </div>
+                        </div>
+                        <div class="divider-data mt-2"></div>
+
+                        <div class="row mt-1">
+                            <div class="col-sm-12">
+                                <p class="card-text">Código: @item.PrincipalNumber</p>
+                            </div>
+
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-sm-12 col-lg-6">
+                                <AuthorizeScopeDirective Scope="Detail:WorkTask">
+                                    @if (item.WorkTaskAssignedBefore != null && item.ApplyToTask)
+                                    {
+                                        <Button Text="Ver Tarea Asignada" Icon="bi bi-search" @onclick="()=>goToSeeDetailWorktask(item.WorkTaskAssignedBefore)" />
+                                    }
+                                </AuthorizeScopeDirective>
+                            </div>
+
+                            <div class="col-sm-12 col-lg-6">
+                                <AuthorizeScopeDirective Scope="Edit:WorkTask">
+                                    @if (item.WorkTaskAssignedBefore != null && item.ApplyToTask)
+                                    {
+                                        <Button Text="Editar Tarea" Icon="bi bi-search" @onclick="()=>goToEditWorktask(item.WorkTaskAssignedBefore)" />
+                                    }
+                                </AuthorizeScopeDirective>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+        <Pagination PageCount="@totalAcountPages" PageIndex="@actualPageIndex" ShowPageInfo="true" OnPageLinkClick="@OnPageClick" Alignment="Alignment.Left" />
+    </div>
+}
+@code {
+
+}

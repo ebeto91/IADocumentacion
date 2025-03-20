@@ -1,0 +1,62 @@
+﻿.container-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.containerMainImages {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.containerImage {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #e5dfdf;
+    padding: 10px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.customImg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
+
+.containerInput {
+    min-width: 230px;
+    position: relative;
+}
+
+
+.custom-buttons {
+    margin-top: 10px;
+    row-gap: 5px;
+}
+
+.back-button {
+    border: 2px solid var(--secondary-custom);
+    background-color: var(--secondary-custom);
+    /*color : #000000*/
+}
+
+    .back-button:hover {
+        background-color: var(--secondary-custom-hover);
+    }
+
+.item-note {
+    text-align: center;
+    font-weight: 700;
+}
+
+.align-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    margin: auto 0;
+    justify-content: space-evenly;
+}

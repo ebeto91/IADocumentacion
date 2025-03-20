@@ -1,0 +1,120 @@
+﻿@inherits ListSurveyVoteBase
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@if (ModelDefinition != null && ModelDefinition.items != null)
+{
+    <div class="row container-list-task mt-3">
+        @foreach (var item in ModelDefinition.items)
+        {
+            <div class="col-lg-5 col-sm-12 card custom-card">
+                <div class="card-header card-header-kanban-item">
+                    <div class="customDivHeaderSurverText">
+                        @if (item.TypeSurvey == "SURVEY")
+                        {
+                            <p class="card-header-kanban-item-tittle"> Encuesta </p>
+                        }else{
+                        <p class="card-header-kanban-item-tittle"> Votación </p>
+                        }
+                        <p class="card-header-kanban-item-tittle" style="word-break: break-all;"> @item.Title </p>
+                    </div>
+                   
+                    @if (item.IsVoteRegister)
+                    {
+                        <div class="item-icons">
+                             <Tooltip Placement="Placement.Top" Title="Realizada">
+                            <i class="bi bi-check-circle-fill" style="color:green;"></i>
+                            </Tooltip>
+                            @if (item.ShowResultsAlways)
+                            {
+                                <Tooltip Placement="Placement.Top" Title="Resultado(s)">
+                                    <i class="bi bi-graph-up-arrow" @onclick="()=>SurveyOrVoteStats(item)" style="cursor:pointer;"></i>
+                                </Tooltip>
+                            }
+                            else
+                            {
+                                if (item.DueRate < DateTime.Today)
+                                {
+                                    <Tooltip Placement="Placement.Top" Title="Resultado(s)">
+                                        <i class="bi bi-graph-up-arrow" @onclick="()=>SurveyOrVoteStats(item)" style="cursor:pointer;"></i>
+                                    </Tooltip>
+                                }
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="item-icons">
+
+                            @if (item.StartDate <= DateTime.Today)
+                            {
+                                @if (item.DueRate > DateTime.Today)
+                                {
+                                    <Tooltip Placement="Placement.Top" Title="Participar">
+                                        <i class="bi bi-hand-index" @onclick="()=>SurveyOrVote(item)" style="cursor:pointer;"></i>
+                                    </Tooltip>
+                                }
+                            }
+                            @if (item.ShowResultsAlways)
+                            {
+                                <Tooltip Placement="Placement.Top" Title="Resultado(s)">
+                                    <i class="bi bi-graph-up-arrow" @onclick="()=>SurveyOrVoteStats(item)" style="cursor:pointer;"></i>
+                                </Tooltip>
+                            }
+                            else
+                            {
+                                if (item.DueRate < DateTime.Today)
+                                {
+                                    <Tooltip Placement="Placement.Top" Title="Resultado(s)">
+                                        <i class="bi bi-graph-up-arrow" @onclick="()=>SurveyOrVoteStats(item)" style="cursor:pointer;"></i>
+                                    </Tooltip>
+                                }
+                            }
+                        </div>
+                    }
+
+                  
+
+                </div>
+                <div class="card-body">
+                    <p> @item.Description </p>
+                </div>
+
+                <div class="card-footer card-footer-custom text-body-secondary">
+                    <div class="footer-card-kanban">
+                        <div class="row">
+                            <div class="col-sm-12">
+                              
+                            </div>
+                        </div>
+                        <div class="divider-data mt-2"></div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-12">
+                                <p class="card-text">Fecha Inicio: @getDateFormatDisplay(item.StartDate)</p>
+                            </div>
+
+                            <div class="col-lg-6 col-sm-12">
+                                <p class="card-text">Fecha Finalización: @getDateFormatDisplay(item.DueRate)</p>
+                            </div>
+                        </div>
+                        <div class="divider-data mt-2"></div>
+
+                        <div class="row mt-1">
+                            <div class="col-sm-12">
+                              
+                            </div>
+
+                        </div>
+                    
+
+                    </div>
+                </div>
+            </div>
+        }
+        <Pagination PageCount="@totalAcountPages" PageIndex="@actualPageIndex" ShowPageInfo="true" OnPageLinkClick="@OnPageClick" Alignment="Alignment.Left" />
+    </div>
+}
+
+@code {
+
+}

@@ -1,0 +1,64 @@
+﻿@* @page "/counter" *@
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject Microsoft.AspNetCore.Components.NavigationManager Navigation
+@inject NavigationManager Navigation
+@inject HttpClient HttpClient
+@layout LoginLayou
+
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<div>
+
+    <button class="nav-link btn btn-link" @onclick="BeginLogIn">Ingresar</button>
+    <button class="nav-link btn btn-link mt-5" @onclick="BeginLogOut">Log out</button>
+
+    <AuthorizeView>
+        <Authorized>
+            <p> Hello, @context.User.Identity?.Name!</p>
+        </Authorized>
+        <NotAuthorized>
+            <p> No autorizado</p>
+        </NotAuthorized>
+
+    </AuthorizeView>
+
+</div>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+    public void BeginLogIn()
+    {
+        InteractiveRequestOptions requestOptions = new()
+            {
+                Interaction = InteractionType.SignIn,
+                ReturnUrl = "/weather",
+            };
+
+        var a = Uri.EscapeDataString(Navigation.Uri);
+        Navigation.NavigateToLogin("authentication/login", requestOptions);
+    }
+
+    public void BeginLogOut()
+    {
+        Navigation.NavigateToLogout("authentication/logout");
+    }
+
+
+    public void ConsultUser(AuthenticationState authenticationState)
+    {
+
+    }
+
+}

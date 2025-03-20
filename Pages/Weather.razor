@@ -1,0 +1,101 @@
+﻿@* @page "/weather2" *@
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject Microsoft.AspNetCore.Components.NavigationManager Navigation
+@inject NavigationManager Navigation
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager;
+@layout LoginLayou
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Weather</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+<AuthorizeView>
+    <Authorized>
+        <p> Hello, @context.User.Identity?.Name!</p>
+    </Authorized>
+    <NotAuthorized>
+        <p> No autorizado</p>
+    </NotAuthorized>
+
+</AuthorizeView>
+
+<button class="nav-link btn btn-link mt-5" @onclick="Data">Data</button>
+@*
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+} *@
+
+@code {
+    private WeatherForecast[]? forecasts;
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+
+    protected override async Task OnAfterRenderAsync(bool isFirstRender)
+    {
+
+    }
+
+    public class WeatherForecast
+    {
+        public DateOnly Date { get; set; }
+
+        public int TemperatureC { get; set; }
+
+        public string? Summary { get; set; }
+
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+
+    public void ConsultUser(AuthenticationState authenticationState)
+    {
+
+    }
+
+    public async Task Data()
+    {
+
+
+        var t = await AuthState;
+        var c = t.User.Identity.IsAuthenticated;
+
+        var preferredUsernameClaim = t.User.Claims.FirstOrDefault(c => c.Type.Equals("preferred_username"));
+        var preferredUsernameClaim2 = t.User.Claims.FirstOrDefault(c => c.Type.Equals("oid"));
+
+        //GraphServiceClient gr = new GraphServiceClient();
+        //var users = gr.
+        // if (preferredUsernameClaim != null)
+        // {
+        //     return user.Claims.FirstOrDefault(p => p.Type.Equals("name")).Value;
+        // }
+
+    }
+}

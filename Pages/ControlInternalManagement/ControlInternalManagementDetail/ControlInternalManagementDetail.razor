@@ -1,0 +1,341 @@
+﻿@page "/gestionCiudadana/solicitudes/detalle/{managementId}"
+@inherits ControlInternalManagementDetailBase
+
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title">Manejo de solicitudes - detalle</h3>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a>Gestión Ciudadana</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Solicitudes/Detalle
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    @if (ModelFirst != null)
+                    {
+                        <div class="m-2">
+                            <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goToList" />
+                        </div>
+                        <EditForm Model="@ModelFirst" Context="formContext">
+
+
+
+                            <DataAnnotationsValidator />
+                            <div class="divider-data mt-2 mb-2"></div>
+                            <div class="text-center">
+                                <h3 class="principal-title">
+                                    Detalle de Solicitud
+                                </h3>
+                            </div>
+
+                            <div class="row">
+                                <div class="mt-2 col-lg-6 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Título Solicitud * </label>
+                                        <InputText class="form-control disable" @bind-Value="ModelFirst.Title" readonly></InputText>
+                                        <ValidationMessage For="@(() => ModelFirst.Title)" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-6 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Fecha de Creación * </label>
+                                        <DateTimePicker IsDisabled="true" Value="ModelFirst.CreatedAt" />
+                                    </div>
+                                </div>
+                            </div>
+                            @if (ModelFirst.AssociationRelatedMemory != null)
+                            {
+                                <div class="row">
+                                    <div class="mt-2 col-lg-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>Distrito </label>
+                                            <InputText class="form-control disable" @bind-Value="ModelFirst.AssociationRelatedMemory.DistrictLabel" readonly></InputText>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 col-lg-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>Barrio </label>
+                                            <InputText class="form-control disable" @bind-Value="ModelFirst.AssociationRelatedMemory.NeighbordLabel" readonly></InputText>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2 col-lg-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>Asociación </label>
+                                            <InputText class="form-control disable" @bind-Value="ModelFirst.AssociationRelatedMemory.Name" readonly></InputText>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="row">
+                                <div class="mt-2 col-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Detalle Solicitud
+                                        </label>
+                                        <Textarea class="form-control disable" rows="4" @bind-Value="ModelFirst.Description" readonly />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-12">
+                              
+                                    @if (ModelFirst.AttachedDocuments != null && ModelFirst.AttachedDocuments.Count > 0)
+                                    {
+                                        <div class="text-center">
+                                            <h3 class="principal-title">
+                                                Evidencias
+                                            </h3>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <Button OnClick="ShowImagePreviewer" Text="Ver imagenes"></Button>
+                                        </div>
+
+                                        <ImagePreviewer @ref="ImagePreviewer" PreviewList="listImagesSelected"></ImagePreviewer>
+
+                                        <div class="containerMainImages">
+                                            @foreach (var imgE in ModelFirst.AttachedDocuments)
+                                            {
+
+
+                                                <div id="container-@imgE.Id" class="containerImage">
+                                                    @* <i @onclick='()=>HandleDeleteImage(imgE.Identificador)' class="closeCustomIcon bi bi-x-circle"></i> *@
+                                                    <img class="customImg" src="@imgE.FilePath" />
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+
+                            <div class="divider-data mt-2 mb-2"></div>
+
+                            <div class="text-center">
+                                <h3 class="principal-title">
+                                    Información Personal
+                                </h3>
+                            </div>
+                            <div class="divider-data mt-2 mb-2"></div>
+                            <div class="text-center">
+                                <h3>
+                                    Creado por
+                                </h3>
+                            </div>
+
+                            <div class="row">
+                                @if (!ModelFirst.IsAnonymous)
+                                {
+                                    <div class="mt-2 col-lg-3 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>Cédula </label>
+                                            <InputText class="form-control disable" @bind-Value="UserCreator.Identification" readonly></InputText>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="mt-2 col-lg-3 col-sm-12">
+                                        <div class="form-group ">
+                                            <label>Cédula </label>
+                                           <input type="text" class="form-control disable" value="" readonly />
+                                        </div>
+                                    </div>
+                                }
+                             
+                                <div class="mt-2 col-lg-3 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Nombre Completo </label>
+                                        <InputText class="form-control disable" @bind-Value="ModelFirst.ManagementName" readonly></InputText>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 col-lg-3 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Correo electrónico </label>
+                                        <InputText class="form-control disable" @bind-Value="ModelFirst.ManagementEmail" readonly></InputText>
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-3 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Teléfono </label>
+                                        <InputText class="form-control disable" @bind-Value="ModelFirst.ManagementPhone" readonly></InputText>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <h3>
+                                    Participantes Externos
+                                </h3>
+                            </div>
+
+                            <div class="row">
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Nombre Completo
+                                        </label>
+                                        <InputText class="form-control disable" @bind-Value="ModelFirst.ExternalManagementName" readonly></InputText>
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Correo Electrónico
+                                        </label>
+                                        <InputText class="form-control disable" @bind-Value="ModelFirst.ExternalManagementEmail" readonly></InputText>
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Teléfono
+                                        </label>
+                                        <InputText class="form-control disable" @bind-Value="ModelFirst.ExternalManagementPhone" readonly></InputText>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="divider-data mt-2 mb-2"></div>
+
+                            <div class="text-center">
+                                <h3 class="principal-title">
+                                    Detalles a rellenar solicitud
+                                </h3>
+                            </div>
+
+                            <div class="row">
+                                @* cambiar para el de verdad *@
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Clasificar Tipo Solicitud
+                                        </label>
+                                        <Select class="disable" Items="listSelectType" @bind-Value="ModelFirst.TypeApplication" disabled></Select>
+                                        <ValidationMessage For="@(() => ModelFirst.TypeApplication)" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Clasificar Estado Solicitud
+                                        </label>
+                                        <Select class="disable" Items="listSelectStatus" @bind-Value="ModelFirst.Status" disabled></Select>
+                                        <ValidationMessage For="@(() => ModelFirst.Status)" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Clasificar Prioridad *
+                                        </label>
+                                        <Select class="disable" Items="listSelectPriority" @bind-Value="ModelFirst.Priority" disabled></Select>
+                                        <ValidationMessage For="@(() => ModelFirst.Priority)" />
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Detalles Adicionales
+                                        </label>
+                                        <Textarea class="form-control disable" rows="4" @bind-Value="ModelFirst.AditionalInformation" readonly />
+                                        <ValidationMessage For="@(() => ModelFirst.AditionalInformation)" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Código Oficio Inicio
+                                        </label>
+                                        <InputText class="form-control disable" @bind-Value="ModelFirst.OfficeCodeNumber" readonly></InputText>
+                                        <ValidationMessage For="@(() => ModelFirst.OfficeCodeNumber)" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Código Oficio Resolución
+                                        </label>
+                                        <InputText class="form-control disable" @bind-Value="ModelFirst.ResolutionNumber" readonly></InputText>
+                                        <ValidationMessage For="@(() => ModelFirst.ResolutionNumber)" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>
+                                            Razón Resolución
+                                        </label>
+                                        <Textarea class="form-control disable" rows="4" @bind-Value="ModelFirst.ResolutionReason" readonly />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Fecha de inicio de tarea * </label>
+                                        <DateTimePicker Value="ModelFirst.StartDateApplication" IsDisabled="true" />
+                                        <ValidationMessage For="@(() => ModelFirst.StartDateApplication)" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 col-lg-4 col-sm-12">
+                                    <div class="form-group ">
+                                        <label>Fecha de finalización * </label>
+                                        <DateTimePicker IsDisabled="true" Value="ModelFirst.DueRateApplication" />
+                                        <ValidationMessage For="@(() => ModelFirst.DueRateApplication)" />
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                        </EditForm>
+
+
+                    }
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+</div>
+

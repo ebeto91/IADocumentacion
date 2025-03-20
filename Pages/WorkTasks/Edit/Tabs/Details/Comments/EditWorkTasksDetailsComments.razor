@@ -1,0 +1,85 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.WorkTask.WorkTaskComments
+@inherits EditWorkTasksDetailsCommentsBase
+<div class="container-box">
+    @if (UserProfile != null)
+    {
+        <div class="container-button">
+            <Button Text="Actualizar" Color="Color.Primary" Icon="bi bi-arrow-clockwise" @onclick="()=>updateButton()" />
+        </div>
+
+       
+
+        <EditForm Model="ModelComment" FormName="EditFormUnAssing" Context="formContext">
+            <DataAnnotationsValidator />
+            <div>
+                <div class="row align-center-comment">
+                    <div class="col-lg-1 col-sm-12">
+                        <Avatar Url="@UserProfile.ImageProfile" Size="Size.ExtraLarge" IsCircle="true" />
+                    </div>
+
+                    <div class="col-lg-11 col-sm-12">
+                        <div class="form-group">
+                            <label class="font-weight-bold">Crear comentario * </label>
+                            <Textarea class="form-control" rows="4" @bind-Value="ModelComment.Comment" />
+                            <ValidationMessage For="@(() => ModelComment.Comment)" />
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            @if (!isViewParam)
+            {
+                <div class="row custom-buttons">
+                    <div class="d-flex-center col-12">
+                    <AuthorizeScopeDirective Scope="CreateComment:WorkTask">
+                        <Button Text="Guardar Comentario" Color="Color.Primary" Icon="bi bi-plus" @onclick="()=>saveComment(formContext)" />
+                    </AuthorizeScopeDirective>
+
+                </div>
+            </div>
+            }
+
+        </EditForm>
+
+    }
+
+</div>
+
+<div class="divider-data mt-2 mb-2"></div>
+
+<div class="container-list">
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 ">
+            @if (listComments != null && listComments.WorkTaskComments != null)
+            {
+                @foreach (var item in listComments.WorkTaskComments)
+                {
+                    <div class="container-message-detail ">
+                        <div class="container-message-detail-profile">
+                            <div>
+                                <Avatar Url="@getUserProfile(item.ImageProfile)" IsCircle="true" />
+                            </div>
+                            <div>
+                                <h6>@item.Name @item.Lastname</h6>
+                            </div>
+
+                        </div>
+                        <div>
+
+                            <h6 class="font-weight-bold">@item.TimeAgo</h6>
+                        </div>
+
+                    </div>
+                    <div>
+                        <Textarea class="form-control disable" rows="4" @bind-Value="@item.Comment" readonly />
+                    </div>
+                    <div class="divider-data mt-2 mb-2"></div>
+                }
+            }
+
+
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+
+<Button class="btn-accessibility btn-theme" @onclick="changeColorTheme"> <i class="bi @(_icon)"></i> </Button>
+
+<Button class="btn-accessibility btn-zoom-in" @onclick="plusFontSize"> <i class="bi bi-zoom-in"></i></Button>
+
+<Button class="btn-accessibility btn-zoom-out" @onclick="minusFontSize"> <i class="bi bi-zoom-out"></i> </Button>
+@* <Button class="btn-size">Book Now</Button> *@
+
+
+@code {
+
+    public string _themeApplied { get; set; }
+    public string _icon { get; set; }
+    [Inject]
+    [System.Diagnostics.CodeAnalysis.NotNull]
+    private IThemeProvider? _themeProvider { get; set; }
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _themeApplied = await _themeProvider.GetThemeAsync();
+        _icon = _themeApplied == COLORTHEME.Light ? "bi-sun-fill" : "bi-moon-fill";
+    }
+
+    #region change theme
+    public async Task changeColorTheme()
+    {
+        _themeApplied = _themeApplied == COLORTHEME.Light ? COLORTHEME.Dark : COLORTHEME.Light;
+        _icon = _themeApplied == COLORTHEME.Light ? "bi-sun-fill" : "bi-moon-fill";
+        await _themeProvider.SetThemeAsync(_themeApplied);
+
+    }
+    #endregion
+
+    #region change size
+    public async Task plusFontSize()
+    {
+        await _jsRuntime.InvokeVoidAsync("plusFontSize");
+    }
+    public async Task minusFontSize()
+    {
+        await _jsRuntime.InvokeVoidAsync("minusFontSize");
+    }
+
+    #endregion
+}

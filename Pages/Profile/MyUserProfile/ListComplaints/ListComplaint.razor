@@ -1,0 +1,86 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Profile.MyUserProfile.ModalRatingItem
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@inherits ListComplaintBase
+<div>
+    <div class="row align-center">
+        <div class="mt-3 col-lg-4 col-sm-12">
+            <h3 class="principal-title">Mis Denuncias Realizadas</h3>
+        </div>
+        <div class="mt-3 col-lg-4 col-sm-12">
+            <div class="form-group">
+                <label>Buscar denuncias por título</label>
+                <InputText class="form-control" @bind-Value="managementProfileInputFilterDto.Title"></InputText>
+
+            </div>
+        </div>
+        <div class="mt-3 col-lg-4 col-sm-12">
+            <div class="form-group">
+                <label>Filtrar por estado</label>
+                <Select Items="listSelect" id="tipoCedula" @bind-Value="managementProfileInputFilterDto.Status"></Select>
+            </div>
+        </div>
+        <div class="mt-3 col-12 text-center">
+            <Button Text="Buscar" Icon="bi bi-search" @onclick="()=>searchData()" />
+        </div>
+    </div>
+    @if (listManagement != null && listManagement.items != null)
+    {
+        <div class="row container-list-task mt-3">
+            @foreach (var item in listManagement.items)
+            {
+                <div class="col-lg-5 col-sm-12 card custom-card">
+                    <div class="card-header card-header-kanban-item">
+                        <p class="card-header-kanban-item-tittle"> @item.Title </p>
+                        <i class="bi bi-eye-fill" style="cursor:pointer;" @onclick="()=>goToProcessDetail(item)"></i>
+                    </div>
+                    <div class="card-body">
+                        <p> @item.Description </p>
+                    </div>
+
+                    <div class="card-footer card-footer-custom text-body-secondary">
+                        <div class="footer-card-kanban">
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    <p class="card-text">Fecha Creación: @getDateFormatDisplay(item.CreatedAt)</p>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <p class="card-text">Estado: @getStatusDisplay(item.Status)</p>
+                                </div>
+                            </div>
+                            <div class="divider-data mt-2"></div>
+
+                            <div class="row mt-1">
+                                <div class="col-sm-12">
+                                    <p class="card-text">Código: @item.PrincipalNumber</p>
+                                </div>
+
+                            </div>
+                            @if (item.Rating == 0 && (item.Status == STATUSMANAGEMENT.DONE || item.Status == STATUSMANAGEMENT.DONTAPPLY))
+                            {
+                                <div class="row mt-1">
+                                    <div class="col-sm-12">
+                                        <Button Text="Clasificar" Icon="bi bi-star-fill" @onclick="()=>OpenModal(item)" />
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                @if (item.Rating > 0)
+                                {
+
+                                    <Rate Value="@item.Rating" IsReadonly=true />
+
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+            <Pagination PageCount="@totalAcountPages" PageIndex="@actualPageIndex" ShowPageInfo="true" OnPageLinkClick="@OnPageClick" Alignment="Alignment.Left" />
+        </div>
+    }
+      <ModalRating @ref="ModalRatingRef" ActionChild="ActionComponentFather"></ModalRating>
+</div>
+
+

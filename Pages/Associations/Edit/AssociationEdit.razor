@@ -1,0 +1,66 @@
+﻿@* @page "/respuestasPredeterminadas/crear" *@
+
+@inherits AssociationEditBase
+<div>
+
+    <EditForm Model="handleAssociationConfigEdit" FormName="CreateForm" OnValidSubmit="HandleFormValid">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="mt-3 col-12">
+                <div class="form-group marginCustom">
+                    <label for="tipoCedula">Distrito Asociado *</label>
+                    <Select Items="itemsCatalogSelect" id="tipoCedula" @bind-Value="handleAssociationConfigEdit.DistrictCode" OnSelectedItemChanged="OnItemChanged"></Select>
+                    <ValidationMessage For="@(() => handleAssociationConfigEdit.DistrictCode)" />
+                </div>
+            </div>
+
+            <div class="mt-3 col-12">
+                <div class="form-group marginCustom">
+                    <label for="tipoCedula">Barrio Asociado</label>
+                    <Select Items="itemsCatalogNeighborhoodSelect" @bind-Value="handleAssociationConfigEdit.NeighbordCode"></Select>
+                    <ValidationMessage For="@(() => handleAssociationConfigEdit.NeighbordCode)" />
+                </div>
+            </div>
+
+            <div class="mt-3 col-12">
+                <div class="form-group marginCustom">
+                    <label>Nombre asociación *</label>
+                    <InputText class="form-control" @bind-Value="handleAssociationConfigEdit.Name"></InputText>
+                    <ValidationMessage For="@(() => handleAssociationConfigEdit.Name)" />
+                </div>
+            </div>
+            <div class="mt-3 col-12">
+                <div class="form-group">
+                    <label>Detalle asociación *</label>
+                    <Textarea class="form-control" rows="4" @bind-Value="handleAssociationConfigEdit.Description" />
+                    <ValidationMessage For="@(() => handleAssociationConfigEdit.Description)" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row custom-buttons">
+            <div class="d-flex-center col-md-6 col-sm-12">
+                <AuthorizeScopeDirective Scope="Edit:Asociation">
+                    <div class="input-submit-icon button-general-form">
+                        <input type="submit" value="Editar">
+                    </div>
+                </AuthorizeScopeDirective>
+            </div>
+
+            <div class="d-flex-center col-md-6 col-sm-12">
+                <button type="button" class="custom-button-close button-general-form" @onclick="CloseModal">
+                    @* <i class="bi bi-x"></i> *@
+                    Cancelar
+                </button>
+            </div>
+        </div>
+
+
+
+    </EditForm>
+
+
+
+</div>
+

@@ -1,0 +1,58 @@
+﻿
+@* @page "/respuestasPredeterminadas/crear" *@
+
+@inherits CatalogResponseCreateBase
+<div>
+
+    <EditForm Model="managementCatalogResponse" FormName="CreateForm" OnValidSubmit="HandleFormValid">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="mt-3 col-12">
+                <div class="form-group marginCustom">
+                    <label for="tipoCedula">Tipo de estado *</label>
+                    <Select Items="itemsCatalogSelect" id="tipoCedula" @bind-Value="managementCatalogResponse.Code"></Select>
+                    <ValidationMessage For="@(() => managementCatalogResponse.Code)" />
+                </div>
+            </div>
+            <div class="mt-3 col-12">
+                <div class="form-group marginCustom">
+                    <label>Título respuesta *</label>
+                    @* <InputText class="form-control" @bind-Value="managementCatalogResponse.DisplayLabel"></InputText> *@
+                    <InputText class="form-control" @bind-Value="managementCatalogResponse.DisplayLabel"> </InputText>
+                    <ValidationMessage For="@(() => managementCatalogResponse.DisplayLabel)" />
+                </div>
+            </div>
+            <div class="mt-3 col-12">
+                <div class="form-group">
+                    <label>Detalle respuesta *</label>
+                    <Textarea class="form-control" rows="4" @bind-Value="managementCatalogResponse.Description" />
+                    <ValidationMessage For="@(() => managementCatalogResponse.Description)" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row custom-buttons">
+            <div class="d-flex-center col-md-6 col-sm-12">
+                <AuthorizeScopeDirective Scope="Create:CatalogResponse">
+                    <div class="input-submit-icon button-general-form">
+                        <input type="submit" value="Agregar">
+                    </div>
+                 </AuthorizeScopeDirective>
+            
+            </div>
+
+            <div class="d-flex-center col-md-6 col-sm-12">
+                <button type="button" class="custom-button-close button-general-form" @onclick="CloseModal">
+                    @* <i class="bi bi-x"></i> *@
+                    Cancelar
+                </button>
+            </div>
+        </div>
+
+    </EditForm>
+
+
+
+</div>
+

@@ -1,0 +1,253 @@
+﻿.container-grid {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    column-gap: 40px;
+    row-gap: 20px;
+}
+
+.textAreaCustom {
+    grid-column: 1/4;
+}
+
+.containerMainImages {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.containerImage {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #e5dfdf;
+    padding: 10px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.customImg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
+
+.containerInput {
+    min-width: 230px;
+    position: relative;
+}
+
+input[type="file"] {
+    display: none !important;
+}
+
+.noShow {
+    display: none !important;
+}
+
+.containerInput label {
+    display: flex;
+    position: relative;
+    background-color: #025bee;
+    color: white;
+    text-align: center;
+    width: 230px;
+    margin: auto;
+    border-radius: 5px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    padding: 5px;
+}
+
+.closeCustomIcon {
+    position: absolute;
+    top: -15px;
+    right: -10px;
+}
+
+.container-Create {
+    margin-top: 20px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    row-gap: 20px;
+    column-gap: 30px;
+}
+
+.Coordenadas {
+    text-align: center;
+}
+
+.grid-ubication {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.containerSubmit {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-top: 30px;
+}
+
+.customButton {
+    width: fit-content;
+    height: 45px;
+    background: #63A103;
+    border: none;
+    color: white;
+    position: relative;
+}
+
+.customButtonMapButton {
+    width: 150px;
+    height: 45px;
+    background: #63A103;
+    border: none;
+    color: white;
+    position: relative;
+    font-size: var(--font-size-input-submit) !important;
+}
+
+.customMarginCard {
+    margin-top: 20px;
+}
+
+.bottomMap {
+    width: 140px;
+}
+
+.customStart {
+    grid-column: 1/2;
+}
+
+.containerBtn {
+    position: relative;
+    width: 250px;
+}
+
+.customIcon {
+    position: absolute;
+    left: 20px;
+    top: 9px;
+    color: white;
+    font-size: 18px;
+}
+
+
+.back-button {
+    border: 2px solid var(--secondary-custom);
+    background-color: var(--secondary-custom);
+    /*color : #000000*/
+}
+
+    .back-button:hover {
+        background-color: var(--secondary-custom-hover);
+    }
+
+.container-passAssing {
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media screen and (max-width: 792px) {
+    .container-grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .containerInput {
+        min-width: 100%;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .container-Create {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .containerInput label {
+        width: 100%;
+    }
+}
+
+
+#map {
+    height: 460px;
+}
+
+
+
+.custom-buttons {
+    margin-top: 10px;
+    row-gap: 5px;
+}
+
+
+@media (max-width: 767px) {
+    .custom-buttons {
+        gap: 8px;
+    }
+
+    .input-submit-icon input {
+        width: 100%;
+    }
+
+
+}
+
+
+
+.containerInput {
+    min-width: 230px;
+    position: relative;
+}
+
+
+.noShow {
+    display: none !important;
+}
+
+
+.item-note {
+    text-align: center;
+    font-weight: 700;
+}
+
+.align-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    margin: auto 0;
+    justify-content: space-evenly;
+}
+
+
+@media (min-width: 992px) {
+    .custom-size-col-5 {
+        flex: 0 0 auto;
+        width: 47.666667% !important;
+    }
+
+    .custom-size-col-2 {
+        flex: 0 0 auto;
+        width: 4.666667%;
+    }
+}
+
+.item-note {
+    font-weight: 700;
+}

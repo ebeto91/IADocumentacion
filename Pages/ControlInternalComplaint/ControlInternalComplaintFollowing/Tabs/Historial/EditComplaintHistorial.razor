@@ -1,0 +1,198 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.WorkTask.WorkTaskHistory
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+
+@inherits EditComplaintHistorialBase;
+
+
+<Card class="mt-3">
+    <BodyTemplate>
+        <div>
+            <div class="divider-data mt-2 mb-2"></div>
+            <div class="text-center">
+                <h3 class="principal-title">
+                    Historial
+                </h3>
+            </div>
+            <div class="container-button">
+                <Button Text="Actualizar" Color="Color.Primary" Icon="bi bi-arrow-clockwise" @onclick="()=>updateButton()" />
+            </div>
+            <div class="row">
+                <Collapse IsAccordion="true">
+
+                    <CollapseItems>
+
+
+                        <CollapseItem Text="Denuncia General" class="mt-2 mb-2 custom-accordion-item-comment-worktask" IsCollapsed="false" Icon="bi bi-list-task">
+                            @if (listHistoryWorkTask != null)
+                            {
+
+                                <div class="border split-demo split-demo-horizontal">
+                                    @* OnResizedAsync="OnResizedAsync" *@
+                                    <Split ShowBarHandle="true" IsCollapsible="true">
+                                        <FirstPaneTemplate>
+
+                                            <ListView class="custom-list-view" TItem="WorkTaskHistoryResponse" Items="@listHistoryWorkTask" OnListViewItemClick="OnListViewItemClick">
+                                                <HeaderTemplate>
+                                                    <div>Historial</div>
+                                                </HeaderTemplate>
+                                                <BodyTemplate>
+                                                    <Card>
+                                                        <BodyTemplate>
+
+                                                            <div class="container-message-detail ">
+                                                                <div class="container-message-detail-profile">
+                                                                    <div>
+                                                                        @{
+                                                                            var image = !string.IsNullOrEmpty(context.CreatedImageProfile) ? context.CreatedImageProfile : ImageProfile.ImageDefault;
+                                                                        }
+                                                                        <Avatar Url="@image" Size="Size.Medium" IsCircle="true" />
+
+                                                                    </div>
+                                                                    <div>
+                                                                        <h6 class="font-weight-bold">@context.CreatedUserName</h6>
+                                                                        <h6>@UtilMethods.getType(context.Action)</h6>
+                                                                        <h6>Fecha ejecución: @context.CreatedAtHistory.ToString("yyyy-MM-dd hh:mm tt")</h6>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </BodyTemplate>
+                                                    </Card>
+                                                </BodyTemplate>
+
+                                            </ListView>
+
+                                        </FirstPaneTemplate>
+                                        <SecondPaneTemplate>
+                                            <div class="custom-list-view">
+                                                <ComponentShowHistoryDetails @ref="componentShowHistoryDetails"></ComponentShowHistoryDetails>
+                                            </div>
+                                         
+                                        </SecondPaneTemplate>
+                                    </Split>
+                                </div>
+
+
+
+                            }
+
+
+                        </CollapseItem>
+
+
+                         <CollapseItem Text="Documentos " class="mt-2 mb-2 custom-accordion-item-comment-worktask" IsCollapsed="false" Icon="bi bi-file-earmark-break">
+
+                            @if (workTaskHistoryDocumentItemWithLists != null)
+                            {
+
+                                <div class="border split-demo split-demo-horizontal">
+                                    @* OnResizedAsync="OnResizedAsync" *@
+                                    <Split ShowBarHandle="true" IsCollapsible="true">
+                                        <FirstPaneTemplate>
+
+                                            <ListView class="custom-list-view" TItem="WorkTaskHistoryDocumentItemWithList" Items="@workTaskHistoryDocumentItemWithLists" OnListViewItemClick="OnListViewItemDocumentClick">
+                                                <HeaderTemplate>
+                                                    <div>Historial</div>
+                                                </HeaderTemplate>
+                                                <BodyTemplate>
+                                                    <Card>
+                                                        <BodyTemplate>
+
+                                                            <div class="container-message-detail ">
+                                                                <div class="container-message-detail-profile">
+                                                                  
+                                                                    <div>
+                                                                        <h6 class="font-weight-bold">@context.ActualFileName</h6>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </BodyTemplate>
+                                                    </Card>
+                                                </BodyTemplate>
+
+                                            </ListView>
+
+                                        </FirstPaneTemplate>
+                                        <SecondPaneTemplate>
+                                            <div class="custom-list-view">
+                                                <ComponentShowHistoryDocumentDetails @ref="componentShowHistoryDocumentDetails"></ComponentShowHistoryDocumentDetails>
+                                            </div>
+
+                                        </SecondPaneTemplate>
+                                    </Split>
+                                </div>
+
+
+
+                            }
+
+
+
+                        </CollapseItem>
+
+                        <CollapseItem Text="Usuarios asignados" class="mt-2 mb-2 custom-accordion-item-comment-worktask" IsCollapsed="false" Icon="bi bi-people-fill">
+
+                            @if (workTaskHistoryUserAssignedItemWithLists != null)
+                            {
+
+                                <div class="border split-demo split-demo-horizontal">
+                                    @* OnResizedAsync="OnResizedAsync" *@
+                                    <Split ShowBarHandle="true" IsCollapsible="true">
+                                        <FirstPaneTemplate>
+
+                                            <ListView class="custom-list-view" TItem="WorkTaskHistoryUserAssignedItemWithList" Items="@workTaskHistoryUserAssignedItemWithLists" OnListViewItemClick="OnListViewItemWorkTaskUserAssignedClick">
+                                                <HeaderTemplate>
+                                                    <div>Historial</div>
+                                                </HeaderTemplate>
+                                                <BodyTemplate>
+                                                    <Card>
+                                                        <BodyTemplate>
+
+                                                            <div class="container-message-detail ">
+                                                                <div class="container-message-detail-profile">
+
+                                                                    <div>
+                                                                        <h6 class="font-weight-bold">@context.UserName</h6>
+                                                                        <h6 class="font-weight-bold">@context.EmailAddress</h6>
+                                                                        <h6 class="font-weight-bold">@getUserPosition(context.UserPositionTask)</h6>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </BodyTemplate>
+                                                    </Card>
+                                                </BodyTemplate>
+
+                                            </ListView>
+
+                                        </FirstPaneTemplate>
+                                        <SecondPaneTemplate>
+                                            <div class="custom-list-view">
+                                                <ComponentShowHistoryUserAssignedDetails @ref="componentShowHistoryUserAssignedDetails"></ComponentShowHistoryUserAssignedDetails>
+                                            </div>
+
+                                        </SecondPaneTemplate>
+                                    </Split>
+                                </div>
+
+
+
+                            }
+
+
+                        </CollapseItem>
+
+
+
+
+                    </CollapseItems>
+                </Collapse>
+
+            </div>
+        </div>
+
+        @* </EditForm> *@
+
+    </BodyTemplate>
+</Card>

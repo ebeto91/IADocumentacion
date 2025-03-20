@@ -1,0 +1,87 @@
+﻿.progress-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+    .progress-ring circle {
+        fill: none;
+        stroke-width: 8;
+        stroke-linecap: round;
+    }
+
+.progress-ring-background {
+    stroke: #e6e6e6;
+}
+
+.progress-ring-foreground {
+    stroke: #4caf50;
+    stroke-dasharray: 314; /* Total circumference (2 * π * r) */
+    stroke-dashoffset: 314; /* Start fully hidden */
+    transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+.progress-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+.containerMainAnswer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    column-gap: 40px;
+    row-gap: 20px;
+}
+
+.cardAnswer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.customMargin {
+    margin-bottom: 20px
+}
+
+
+.marginCustomTop {
+    margin-top: 5px;
+}
+
+.containerBack {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+
+.containerGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    column-gap: 40px;
+    row-gap: 20px;
+    margin-bottom:10px;
+}
+
+@media (max-width:360px) {
+    .containerMainAnswer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .containerGrid{
+        display:flex;
+        flex-direction:column;
+    }
+}

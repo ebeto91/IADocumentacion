@@ -1,0 +1,65 @@
+﻿@* @page "/respuestasPredeterminadas/crear" *@
+
+@inherits AssociationCreateBase
+<div>
+
+    <EditForm Model="handleAssociationConfig" FormName="CreateForm" OnValidSubmit="HandleFormValid">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="mt-3 col-12">
+                <div class="form-group marginCustom">
+                    <label for="tipoCedula">Distrito Asociado *</label>
+                    <Select Items="itemsCatalogSelect" id="tipoCedula" @bind-Value="handleAssociationConfig.DistrictCode" OnSelectedItemChanged="OnItemChanged"></Select>
+                    <ValidationMessage For="@(() => handleAssociationConfig.DistrictCode)" />
+                </div>
+            </div>
+
+            <div class="mt-3 col-12">
+                <div class="form-group marginCustom">
+                    <label for="tipoCedula">Barrio Asociado</label>
+                    <Select Items="itemsCatalogNeighborhoodSelect" @bind-Value="handleAssociationConfig.NeighbordCode" ></Select>
+                    <ValidationMessage For="@(() => handleAssociationConfig.NeighbordCode)" />
+                </div>
+            </div>
+            <div class="mt-3 col-12">
+                <div class="form-group marginCustom">
+                    <label>Nombre asociación *</label>
+                    <InputText class="form-control" @bind-Value="handleAssociationConfig.Name"></InputText>
+                    <ValidationMessage For="@(() => handleAssociationConfig.Name)" />
+                </div>
+            </div>
+            <div class="mt-3 col-12">
+                <div class="form-group">
+                    <label>Detalle asociación *</label>
+                    <Textarea class="form-control" rows="4" @bind-Value="handleAssociationConfig.Description" />
+                    <ValidationMessage For="@(() => handleAssociationConfig.Description)" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row custom-buttons">
+            <div class="d-flex-center col-md-6 col-sm-12">
+                <AuthorizeScopeDirective Scope="Create:Asociation">
+                    <div class="input-submit-icon button-general-form">
+                        <input type="submit" value="Agregar">
+                    </div>
+                </AuthorizeScopeDirective>
+            </div>
+
+            <div class="d-flex-center col-md-6 col-sm-12">
+                <button type="button" class="custom-button-close button-general-form" @onclick="CloseModal">
+                    @* <i class="bi bi-x"></i> *@
+                    Cancelar
+                </button>
+            </div>
+        </div>
+
+
+
+    </EditForm>
+
+
+
+</div>
+

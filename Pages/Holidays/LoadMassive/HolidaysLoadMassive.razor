@@ -1,0 +1,124 @@
+﻿@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Holidays
+@inherits HolidaysLoadMassiveBase
+
+<Modal @ref="ModalRef" OnCloseAsync="CloseModalSend">
+    <ModalDialog IsCentered="true" Title="Subir masivo" ShowCloseButton="false" ShowSaveButton="false" ShowHeaderCloseButton="true" Size="Size.ExtraLarge">
+
+
+        <BodyTemplate>
+            <div>
+
+                <div class="row">
+                    <div class="mt-3 col-12">
+                        <div class="form-group container-download">
+                            <label class="font-weight-bold">Presiona el botón para descargar la plantilla</label>
+                            @* <label class="font-weight-bold">Presiona el botón para descargar la plantilla</label> *@
+                            <div>
+                                <Button Text="Descargar Plantilla" Icon="bi bi-file-earmark-arrow-down" @onclick="GenerateFileExcel" Color="Color.Secondary" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider-data mt-2 mb-2"></div>
+
+                    <div class="mt-3 col-12">
+                        <div class="form-group container-download">
+                            <div class="text-center">
+                                <p class="font-weight-bold">Subir Información</p>
+                            </div>
+                            <div>
+                                <InputFile OnChange="OnFileSelected" accept=".xlsx" />
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="divider-data mt-2 mb-2"></div>
+
+                    <div class="mt-3 col-12">
+                        <div class="form-group">
+                            <div class="text-center">
+                                <p class="font-weight-bold">Información Cargada</p>
+                            </div>
+                            <div>
+                                @if (listHolidays == null || listHolidays.Count() == 0)
+                                {
+                                    <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Width="133" Text="Sin Información Agregada" />
+                                }
+                                else
+                                {
+                                    <Table TItem="HolidayExcel" @ref=Table PageItemsSource="PageItems" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                                           IsPagination="true"
+                                           IsStriped="true" IsBordered="true" OnQueryAsync="@OnQueryAsync"
+                                           ShowSkeleton="true">
+                                        <TableColumns>
+                                            <TableColumn @bind-Field="@context.Description" Width="170" TextWrap="true" Filterable="false" Text="Descripción Fecha De Cierre">
+                                    
+
+                                            </TableColumn>
+                                            <TableColumn @bind-Field="@context.Date" Width="170" TextWrap="true" Filterable="false" Text="Fecha De Cierre">
+                                  
+
+                                                <Template Context="value">
+                                                    <div class="table-cell is-wrap">
+
+
+                                                        @value.Row.Date.ToString("yyyy-MM-dd")
+
+
+                                                    </div>
+                                                </Template>
+
+                                            </TableColumn>
+
+                                            <TableColumn @bind-Field="@context.Date" Width="170" TextWrap="true" Filterable="false" Text="Mes">
+
+                                                <Template Context="value">
+                                                    <div class="table-cell is-wrap">
+                                                        @value.Row.Date.ToString("MMMM")
+
+                                                    </div>
+                                                </Template>
+
+                                            </TableColumn>
+                                        </TableColumns>
+                                    </Table>
+
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row custom-buttons">
+                    @if (listHolidays.Count() > 0)
+                    {
+                        <div class="d-flex-center col-md-6 col-sm-12">
+                            <AuthorizeScopeDirective Scope="Create:CatalogResponse">
+                                <button type="button" class="button-save button-general-form" @onclick="UploadDataMassive">
+                                    Agregar
+                                </button>
+                            </AuthorizeScopeDirective>
+
+                        </div>
+                    }
+
+
+                    <div class="d-flex-center col-md-6 col-sm-12">
+                        <button type="button" class="custom-button-close button-general-form" @onclick="CloseModal">
+                            @* <i class="bi bi-x"></i> *@
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+        </BodyTemplate>
+    </ModalDialog>
+</Modal>
+
+

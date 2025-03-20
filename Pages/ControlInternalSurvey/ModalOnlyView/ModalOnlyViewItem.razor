@@ -1,0 +1,40 @@
+﻿@* @page "/respuestasPredeterminadas/crear" *@
+@* @ref="ModalCreate" *@
+@inherits ModalOnlyViewItemBase
+<Modal @ref="ModalRef" OnCloseAsync="CloseModalSend">
+    <ModalDialog IsCentered="true" Title="Subir archivo" ShowCloseButton="false" ShowSaveButton="false" ShowHeaderCloseButton="true" Size="Size.Medium">
+        <BodyTemplate>
+
+            <div>
+
+                <div class="mt-2 col-lg-12">
+
+                    @if (!string.IsNullOrEmpty(Url))
+                    {
+                        <div class="container-image-button">
+
+                            @* id="container-@ModelAddSurveyQuestionOptionDto.Description" *@
+                            <div class="containerImage">
+
+                                <img class="customImg" src="@Url" />
+
+                            </div>
+
+
+                        </div>
+
+                    }
+
+                </div>
+
+
+
+
+            </div>
+
+        </BodyTemplate>
+    </ModalDialog>
+</Modal>
+
+
+

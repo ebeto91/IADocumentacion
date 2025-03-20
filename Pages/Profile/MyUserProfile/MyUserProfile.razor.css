@@ -1,0 +1,235 @@
+﻿/* Contenedor Principal */
+.profile-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+/* Título Principal */
+h1 {
+    text-align: center;
+    color: var(--Landing-color-blue-white);
+    margin-bottom: 20px;
+}
+
+.customText {
+    text-align: center !important;
+    margin-bottom: 20px !important;
+   
+}
+
+
+.containerSubmit{
+    display:flex !important;
+    justify-content: space-between!important;
+    width:50% !important;
+    margin-right:auto !important;
+    margin-left:auto !important;
+    margin-top:25px;
+    
+}
+
+.customButton {
+    width: fit-content;
+    background: #63A103;
+    border: none;
+    color: white;
+    position: relative;
+    font-size: var(--font-size-input-submit) !important;
+    font-weight: 800;
+    padding: 20px;
+}
+
+.custonButtomCloseModal {
+    width: fit-content;
+    background: #ff0000;
+    border: none;
+    color: white;
+    position: relative;
+    font-size: var(--font-size-input-submit) !important;
+    font-weight: 800;
+    padding: 20px;
+}
+
+.customCheck {
+    position: relative !important;
+    top: -3px !important;
+}
+
+.customP {
+   
+}
+/* Tarjetas */
+.card {
+    /* background: #fff;*/
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+/* Secciones del Formulario */
+.form-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 26px;
+}
+
+    .form-section > h5 {
+        width: 100%;
+        margin: 0px;
+    }
+
+.form-fields {
+    flex: 2;
+    min-width: 300px;
+}
+
+.profile-picture-section {
+    flex: 1;
+    text-align: center;
+}
+
+/* Grupos de Entrada */
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Imagen de Perfil */
+img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid #ccc;
+}
+
+.upload-btn {
+    display: inline-block;
+    cursor: pointer;
+    color: var(--Landing-color-blue-white);
+    text-decoration: underline;
+}
+
+/* Checkboxes */
+.checkbox-group {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Botón de Actualizar */
+.update-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #6eaa3b;
+    color: #fff;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+    .update-btn:hover {
+        background: #5b8c33;
+    }
+
+.container-profile-data {
+
+    display: flex;
+    flex-direction: column;
+    gap: 90px;
+}
+.buttons-select-profile {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+@media (max-width: 1200px) {
+
+
+    .buttons-select-profile {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+}
+
+@media (max-width: 1024px) {
+    .container-profile-data {
+        gap: 15px;
+    }
+
+
+    .container-fluid-custom {
+        padding: 0px;
+    }
+
+}
+
+
+
+@media (max-width: 550px) {
+    .containerSubmit{
+        width:90% !important;
+    }
+}
+
+    @media (max-width: 600px) {
+        .profile-container {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .form-section {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .form-fields,
+        .profile-picture-section {
+            min-width: 100%;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            width: 88%;
+        }
+
+        img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .update-btn {
+            font-size: 14px;
+            padding: 8px;
+        }
+    }

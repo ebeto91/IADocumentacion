@@ -1,0 +1,438 @@
+﻿@page "/crearMemoriaInstitucional"
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Department
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Helpers
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Templates.TableFilters
+@inherits CreateInstitutionalMemoryBase
+
+<div class="container-fluid">
+
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center header-container">
+            <div class="col">
+                <div class="title container-title">
+                    <h3 class="principal-title customBreakWord">Crear Memoria Institucional</h3>
+                </div>
+            </div>
+
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+    <!-- Invoice Wrapper Start -->
+    <div class="invoice-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-card card-style mb-30">
+                    <div class="mb-2">
+                        <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goToList" />
+                    </div>
+                    <div class="container-fluid">
+                        <EditForm Model="createManagementInputDto" FormName="Login" OnValidSubmit="HandleCreateInstitutionalMemory">
+                            <DataAnnotationsValidator />
+                            <div class="containerGrid3">
+
+                                <div class="form-group">
+                                    <label for="memoria">Fecha Creación</label>
+                                    <DateTimePicker IsDisabled="true" @bind-Value="createManagementInputDto.CreationDate" />
+
+                                </div>
+                                @if (string.IsNullOrEmpty(associatedId))
+                                {
+                                    <div class="form-group">
+                                        <label for="memoria">Tipo de Memoria</label>
+                                        <Select Items="listSelectType" @bind-Value="createManagementInputDto.TypeApplication"></Select>
+
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    <label for="memoria">Título de la Memoria *</label>
+                                    <InputText id="memoria" maxlength="190" @bind-Value="createManagementInputDto.Title" class="form-control" />
+                                    <ValidationMessage For="@(() => createManagementInputDto.Title)" />
+                                </div>
+
+
+                            </div>
+
+                            <div class="containerGrid3">
+
+                                <div class="form-group">
+                                    <label for="memoria">Estado de la Memoria</label>
+                                    <Select Items="listSelectStatus" @bind-Value="createManagementInputDto.Status"></Select>
+
+                                </div>
+                                @if (string.IsNullOrEmpty(associatedId))
+                                {
+                                    <div class="form-group">
+                                        <label for="memoria">Prioridad</label>
+                                        <Select Items="listSelectPriority" @bind-Value="createManagementInputDto.Priority"></Select>
+
+                                    </div>
+                                }
+
+                                @if (string.IsNullOrEmpty(associatedId))
+                                {
+                                    <div class="form-group">
+                                        <label for="memoria">Monto Presupuestado (₡)</label>
+                                        <InputText id="memoria" maxlength="190" type="number" @bind-Value="createManagementInputDto.ApplicableBudget" class="form-control" />
+
+                                    </div>
+                                }
+
+                            </div>
+
+                            <div class="containerGrid3">
+                                <div class="form-group">
+                                    <label for="memoria">Punto de Contacto (información del lugar)</label>
+                                    <InputText id="memoria" maxlength="190" @bind-Value="createManagementInputDto.ContactPoint" class="form-control" />
+
+                                </div>
+                                @if (string.IsNullOrEmpty(associatedId))
+                                {
+                                    <div class="form-group">
+                                        <label for="memoria">Fecha Desde</label>
+
+                                        @if (isReadyHolydays)
+                                        {
+                                            <DateTimePicker MinValue="DateTime.Today" OnGetDisabledDaysCallback="OnGetDisabledDaysCallback" DisplayDisabledDayAsEmpty="true" @bind-Value="createManagementInputDto.StartDateApplication" OnValueChanged="@OnItemChanged" />
+                                        }
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="memoria">Fecha Hasta</label>
+                                        @if (isReadyHolydays)
+                                        {
+                                            <DateTimePicker MinValue="createManagementInputDto.StartDateApplication" @bind-Value="createManagementInputDto.DueRateApplication" OnGetDisabledDaysCallback="OnGetDisabledDaysCallback"
+                                                            IsDisabled="!createManagementInputDto.DueRateApplication.HasValue" />
+                                        }
+
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="containerGrid3">
+                                <div class="form-group">
+                                    <label for="memoria">Distrito</label>
+                                    <Select OnSelectedItemChanged="OnItemChanged" Items="listSelectDistrict" @bind-Value="createManagementInputDto.District" IsDisabled="isDisabledSelect"></Select>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="memoria">Barrio</label>
+                                    <Select Items="listSelectNeighborhood" @bind-Value="createManagementInputDto.Neighborhood"></Select>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="memoria">Asociación</label>
+                                    <Select Items="listSelectAssociation" @bind-Value="createManagementInputDto.AssociationRelatedMemoryId" IsDisabled="isDisabledSelect"></Select>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="memoria">Fecha de Recordatorio</label>
+                                    <DateTimePicker MinValue="DateTime.Today" @bind-Value="createManagementInputDto.FollowDateReminderToCreatorUser" />
+
+                                </div>
+                            </div>
+
+                            <div class="containerGrid3">
+                                <div class="form-group textAreaCustom">
+                                    <label for="nombre">Detalles de la solicitud *</label>
+                                    <Textarea @bind-Value="createManagementInputDto.Description" @oninput="UpdateCharacterCount" maxlength="280" rows="3" />
+                                    <p style="display: flex;justify-content: flex-end;">
+                                        @($"{characterCount}/280")
+                                    </p>
+
+                                </div>
+                            </div>
+
+
+                            <div class="row mt-3 mb-3">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="nombre">Activar Ubicación</label>
+                                        @if (!SharedUbicationPerson)
+                                        {
+                                            <div class="form-group item-note mb-3">
+                                                <label>
+                                                    Nota: en caso de dejar la ubicación por defecto se tomará como si no se hubiera seleccionado una ubicación.
+                                                </label>
+                                            </div>
+                                        }
+
+                                        <div class="buttons-map-information">
+                                            @if (!SharedUbicationPerson)
+                                            {
+                                                <Button Text="Activar Ubicación" Color="Color.Success" Icon="bi bi-geo-alt-fill" @onclick="()=>AskForActualUbication()" />
+
+                                               
+                                            }
+                                            <Button Text="Mostrar/Ocultar Mapa" Color="Color.Secondary" Icon="bi bi-info" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="collapse show mt-2" id="collapseExample">
+                                    <div class="card card-body">
+                                        <div class="col-12 mt-3">
+                                            <div id="map" height="460px" width="100%"></div>
+                                        </div>
+                                        <div class="row">
+                                            <p>Ubicación</p>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-group">
+
+                                                    <label for="lat">Latitud</label>
+                                                    <InputText id="lat" @bind-Value="createManagementInputDto.LatitudeS" class="form-control"
+                                                               disabled />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-group">
+
+                                                    <label for="long">Longitud</label>
+                                                    <InputText id="long" @bind-Value="createManagementInputDto.LongitudeS" class="form-control"
+                                                               disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="containerGrid3">
+                                <div class=" textAreaCustom">
+
+                                    <div class="form-group textAreaCustom">
+                                        <div class="text-center">
+                                            <h3 class="principal-title">
+                                                Evidencias
+                                            </h3>
+                                        </div>
+                                        <div class="containerInput">
+                                            <InputFile style="display:none !important;" class="noShow" id="inputFile" accept="image/*" OnChange="OnInputFileChange" multiple></InputFile>
+                                            <label for="inputFile">
+                                                <i class="bi bi-cloud-arrow-up"></i> &nbsp; Seleccione foto(s)
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="containerMainImages">
+                                        @foreach (var imgE in imageDataUrl)
+                                        {
+
+
+                                            <div id="container-@imgE.Identificador" class="containerImage">
+                                                <i @onclick='()=>HandleDeleteImage(imgE.Identificador)' class="closeCustomIcon bi bi-x-circle"></i>
+                                                <img class="customImg" src="@imgE.imageUrl" />
+                                            </div>
+                                        }
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="containerSubmit">
+                                <input type="submit" class="customButton" value="PROCESAR SOLICITUD" />
+                            </div>
+
+                            <!-- End Card -->
+                        </EditForm>
+                        @if (string.IsNullOrEmpty(associatedId))
+                        {
+                            <div class="row">
+                                <div class="mt-2 col-lg-5 custom-size-col-5 col-sm-12">
+                                    <div class="form-group item-note">
+                                        <label>
+                                            Colaboradores
+                                        </label>
+
+                                    </div>
+                                    <Table TItem="UserDepartmentDto" @ref=Table PageItemsSource="PageItems" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                                           IsPagination="true"
+                                           IsStriped="true" IsBordered="true" OnQueryAsync="@OnQueryAsync"
+                                           ShowSkeleton="true">
+                                        <TableColumns>
+                                            <TableColumn @bind-Field="@context.Id" Width="75" Text="Seleccionar">
+
+                                                <Template Context="v">
+                                                    <div class="w-100 d-flex-center">
+
+                                                        <input @key="v.Row.Id" class="form-check-input custom-check" type="checkbox" checked="@v.Row.Selected" @oninput="((e) => CheckboxChanged(e,v))">
+                                                    </div>
+                                                </Template>
+                                            </TableColumn>
+                                            @* Filterable activar filtros *@
+                                            <TableColumn @bind-Field="@context.Name" Width="100" TextWrap="true" Filterable="false" Text="Nombre">
+
+                                                <Template Context="value">
+                                                    <div class="table-cell is-wrap">
+                                                        @value.Row.Name @value.Row.Lastname
+                                                    </div>
+                                                </Template>
+                                            </TableColumn>
+
+                                            <TableColumn @bind-Field="@context.EmailAddress" Width="175" TextWrap="true" Filterable="true" Text="Correo Colaborador">
+                                                <FilterTemplate>
+                                                    <TextFilter Placeholder="Buscar por correo"></TextFilter>
+                                                </FilterTemplate>
+
+                                                <Template Context="value">
+                                                    @if (!string.IsNullOrEmpty(value.Row.EmailAddress))
+                                                    {
+                                                        <div class="table-cell is-wrap">
+                                                            @value.Row.EmailAddress
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="table-cell is-wrap">
+                                                            Sin Asignar
+                                                        </div>
+                                                    }
+                                                </Template>
+                                            </TableColumn>
+
+                                            <TableColumn @bind-Field="@context.DepartmentId" Width="100" TextWrap="true" Filterable="true" Text="Departamento">
+                                                <FilterTemplate>
+
+                                                    <AutoFillFilter Placeholder="Buscar por nombre" ListItems="listDepartmentsSelect"></AutoFillFilter>
+                                                </FilterTemplate>
+                                                <Template Context="value">
+                                                    <div class="table-cell is-wrap">
+                                                        @value.Row.NameDepartment
+                                                    </div>
+                                                </Template>
+                                            </TableColumn>
+
+                                        </TableColumns>
+                                    </Table>
+                                </div>
+                                <div class="mt-5 col-lg-2  custom-size-col-2  col-sm-12 d-flex-center">
+                                    <div class="align-buttons customCustomBtn">
+                                        <Button Text="" class="marginCustomBtnPass" Icon="bi bi-arrow-right" @onclick="()=>passToFirstToSecondTable()" />
+
+
+                                        <Button Text="" Icon="bi bi-arrow-left" @onclick="()=>passToSecondToFirstTable()" />
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 col-lg-5 custom-size-col-5 col-sm-12">
+                                    <div class="form-group item-note">
+                                        <label>
+                                            Colaboradores asignados
+                                        </label>
+                                    </div>
+                                    <Table TItem="UserDepartmentDto" @ref=TableSecond ShowFooter=true PageItemsSource="PageItems" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                                           IsPagination="true"
+                                           IsStriped="true" IsBordered="true" OnQueryAsync="@OnQuerySecondTableAsync"
+                                           ShowSkeleton="true">
+                                        <TableColumns>
+                                            <TableColumn @bind-Field="@context.Id" Width="75" Text="Seleccionar">
+
+                                                <Template Context="v">
+                                                    <div class="w-100 d-flex-center">
+
+                                                        <input @key="v.Row.Id" class="form-check-input custom-check" type="checkbox" checked="@v.Row.Selected" @oninput="((e) => CheckboxChangedSecondTable(e,v))">
+                                                    </div>
+                                                </Template>
+                                            </TableColumn>
+                                            @* Filterable activar filtros *@
+                                            <TableColumn @bind-Field="@context.Name" Width="100" TextWrap="true" Filterable="false" Text="Nombre">
+                                                <FilterTemplate>
+                                                    <TextFilter Placeholder="Buscar por nombre"></TextFilter>
+                                                </FilterTemplate>
+                                                <Template Context="value">
+                                                    <div class="table-cell is-wrap">
+                                                        @value.Row.Name @value.Row.Lastname
+                                                    </div>
+                                                </Template>
+                                            </TableColumn>
+
+                                            <TableColumn @bind-Field="@context.EmailAddress" Width="175" TextWrap="true" Filterable="false" Text="Correo Colaborador">
+                                                <Template Context="value">
+                                                    @if (!string.IsNullOrEmpty(value.Row.EmailAddress))
+                                                    {
+                                                        <div class="table-cell is-wrap">
+                                                            @value.Row.EmailAddress
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="table-cell is-wrap">
+                                                            Sin Asignar
+                                                        </div>
+                                                    }
+                                                </Template>
+                                            </TableColumn>
+
+                                            <TableColumn @bind-Field="@context.NameDepartment" Width="100" TextWrap="true" Filterable="false" Text="Departamento">
+                                                <FilterTemplate>
+                                                    <TextFilter Placeholder="Buscar por nombre"></TextFilter>
+                                                </FilterTemplate>
+                                                <Template Context="value">
+                                                    <div class="table-cell is-wrap">
+                                                        @value.Row.NameDepartment
+                                                    </div>
+                                                </Template>
+                                            </TableColumn>
+
+                                            <TableColumn @bind-Field="@context.Id" Width="170" Text="Puesto Tarea">
+                                                @* Template Botones *@
+                                                <Template Context="v">
+                                                    <div class="custom-button-container">
+                                                        <Select Items="listWorkTaskPosition"
+                                                                @bind-Value="v.Row.Position"></Select>
+
+                                                    </div>
+                                                </Template>
+                                            </TableColumn>
+
+                                        </TableColumns>
+                                        <FooterTemplate>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <div style="text-align: right;">
+                                                        <label> Departamentos asignados</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <div style="text-align: right;">
+                                                        <ul>
+                                                            @foreach (var item in listDepartmentsName)
+                                                            {
+                                                                <li class="font-weight-bold no-bullets">@item</li>
+                                                            }
+
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </FooterTemplate>
+
+                                    </Table>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!-- End Card -->
+
+            </div>
+            <!-- ENd Col -->
+        </div>
+
+
+
+
+    </div>
+
+
+</div>

@@ -1,0 +1,134 @@
+﻿@page "/catalogo/departamentos/asignacion/asignar/{departmentId}"
+
+
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Department
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Dto.Users
+@using RAS823_MC_CiudadMunicipal_FrontEnd.Pages.Templates.TableFilters
+@inherits CreateControlAssignUsersBase
+
+<div class="container-fluid">
+    @if (isLoadedData == true)
+    {
+        <!-- ========== title-wrapper start ========== -->
+        <div class="title-wrapper pt-30">
+
+            <div class="row align-items-center header-container">
+                <div class="col">
+                    <div class="title container-title">
+                        <h3 class="principal-title">Mantenimiento de departamentos - agregar usuarios</h3>
+                        <h5 class="subprincipal-title">@nameDepartment</h5>
+                    </div>
+                </div>
+                <!-- end col -->
+                <div class="col">
+                    <div class="breadcrumb-wrapper">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a>Cátalogo</a>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page">
+                                    Departamentos
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    Usuarios
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- ========== title-wrapper end ========== -->
+        <!-- Invoice Wrapper Start -->
+        <div class="invoice-wrapper">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="invoice-card card-style mb-30">
+                        <div class="m-2 two-buttons-in-grid">
+                            <Button Text="Volver" Icon="bi bi-arrow-left" @onclick="goToBack" Color="Color.Secondary" />
+                            <AuthorizeScopeDirective Scope="AssingUser:Department">
+                                <Button Text="Asignar Nuevos Usuarios" Icon="bi bi-person-plus-fill" @onclick="assignUsersToAdd" Color="Color.Primary" />
+                            </AuthorizeScopeDirective>
+
+                        </div>
+
+                        <Table TItem="UserResponseAssing" @ref=Table PageItemsSource="PageItems" TableSize="TableSize.Normal" RenderMode="TableRenderMode.Table"
+                               IsPagination="true"
+                               IsStriped="true" IsBordered="true" OnQueryAsync="@OnQueryAsync"
+                               ShowSkeleton="true">
+                            <TableColumns>
+                                <TableColumn @bind-Field="@context.Id" Width="50" Text="Seleccionar">
+                                    @* Template Botones *@
+                                    <Template Context="v">
+                                        <div class="w-100 d-flex-center">
+                                            @* IMPORTANTE EL CHECKED HACE QUE APARAZCA EN LA VISTA SELECCIONADO, EL BIND NO LE GUSTA *@
+                                            <input @key="v.Row.Id" class="form-check-input custom-check" type="checkbox" checked="@v.Row.Selected" @oninput="((e) => CheckboxChanged(e,v))">
+                                        </div>
+                                    </Template>
+                                </TableColumn>
+                                @* Filterable activar filtros *@
+                                <TableColumn @bind-Field="@context.Name" Width="170" TextWrap="true" Filterable="false" Text="Nombre">
+                                    <FilterTemplate>
+                                        <TextFilter Placeholder="Buscar por nombre"></TextFilter>
+                                    </FilterTemplate>
+                                    <Template Context="value">
+                                        <div class="table-cell is-wrap">
+                                            @value.Row.UserName
+                                        </div>
+                                    </Template>
+                                </TableColumn>
+
+                                <TableColumn @bind-Field="@context.Identification" Width="170" TextWrap="true" Filterable="false" Text="Cédula">
+                                    <FilterTemplate>
+                                        <TextFilter Placeholder="Buscar por nombre"></TextFilter>
+                                    </FilterTemplate>
+                                    <Template Context="value">
+                                        <div class="table-cell is-wrap">
+                                            @value.Row.Identification
+                                        </div>
+                                    </Template>
+                                </TableColumn>
+
+                                <TableColumn @bind-Field="@context.EmailAddress" Width="170" TextWrap="true" Filterable="false" Text="Correo Colaborador">
+                                    <Template Context="value">
+                                        @if (!string.IsNullOrEmpty(value.Row.EmailAddress))
+                                        {
+                                            <div class="table-cell is-wrap">
+                                                @value.Row.EmailAddress
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-cell is-wrap">
+                                                Sin Asignar
+                                            </div>
+                                        }
+                                    </Template>
+                                </TableColumn>
+
+                                <TableColumn @bind-Field="@context.Id" Width="150" Text="Puesto Colaborador">
+                                    @* Template Botones *@
+                                    <Template Context="v">
+                                        <div class="custom-button-container">
+                                            <Select Items="items"
+                                                    @bind-Value="v.Row.Position"></Select>
+
+                                        </div>
+                                    </Template>
+                                </TableColumn>
+                            </TableColumns>
+                        </Table>
+                    </div>
+                    <!-- End Card -->
+                </div>
+                <!-- ENd Col -->
+            </div>
+
+        </div>
+    }
+</div>
+
